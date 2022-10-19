@@ -1,58 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import Authorization from './pages/AuthorizationPage/Authorization';
+import { Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './theme/theme';
+import MainPage from './pages/MainPage/MainPage';
+import AdminPage from './pages/AdminPage/AdminPage';
+import MainLayout from './components/layout/MainLayout';
+import Movies from './components/adminPage/movies/Movies';
+import Sessions from './components/adminPage/sessions/Sessions';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<MainPage />} />
+          <Route path="auth" element={<Authorization />} />
+          <Route path="admin/" element={<AdminPage />}>
+            <Route path="movies" element={<Movies />} />
+            <Route path="sessions" element={<Sessions />} />
+          </Route>
+        </Route>
+      </Routes>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
