@@ -1,7 +1,7 @@
 import Auth from '../../components/authorization/Auth';
 import { styled } from '@mui/material';
 
-const DivWrapper = styled('div')({
+const DivWrapper = styled('main')({
   maxWidth: '1200px',
   margin: 'auto',
 });

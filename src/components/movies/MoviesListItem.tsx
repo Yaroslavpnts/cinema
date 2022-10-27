@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ImdbImg from '../../assets/img/imdb.png';
-import { ApiResponseMovie } from '../../api/apiMethods';
+import { IApiResponseMovie } from '../../api/apiMethods';
 import {
   BackSide,
   Card,
@@ -19,7 +19,7 @@ import {
 import { theme } from '../../theme/theme';
 
 type MoviesListItemProps = {
-  movie: ApiResponseMovie;
+  movie: IApiResponseMovie;
 };
 
 const MoviesListItem: React.FC<MoviesListItemProps> = ({ movie }) => {

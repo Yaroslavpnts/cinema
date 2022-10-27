@@ -14,8 +14,7 @@ import {
   StyledSwiperSlide,
 } from './Slider.styled';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getMovies, moviesSelector } from '../../redux/slices/moviesSlice';
-import { ApiResponseMovie } from '../../api/apiMethods';
+import { IApiResponseMovie } from '../../api/apiMethods';
 
 // const movies = [
 //   {
@@ -41,7 +40,7 @@ import { ApiResponseMovie } from '../../api/apiMethods';
 // ];
 
 interface SliderProps {
-  movies: Array<ApiResponseMovie>;
+  movies: Array<IApiResponseMovie>;
 }
 
 const Slider: React.FC<SliderProps> = ({ movies }) => {

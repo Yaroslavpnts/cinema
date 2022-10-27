@@ -1,24 +1,12 @@
-import { useFormik } from 'formik';
-import React from 'react';
+import MovieForm from './movieForm/MovieForm';
+import { MoviesBlockStyled } from './Movies.styled';
 
 const Movies = () => {
-  const initialValues = {
-    name: '',
-    description: '',
-    genres: [],
-    actors: [],
-    directors: [],
-    rating: '',
-    imdb_rating: '',
-    poster_src: '',
-  };
-
-  const formik = useFormik({
-    initialValues,
-    onSubmit: values => {},
-  });
-
-  return <div>Movies</div>;
+  return (
+    <MoviesBlockStyled>
+      <MovieForm />
+    </MoviesBlockStyled>
+  );
 };
 
 export default Movies;

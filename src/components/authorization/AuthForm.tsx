@@ -4,7 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userDataType } from '../../api/apiMethods';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { isAuthSelector, logInApp, signUp } from '../../redux/slices/authorizationSlice';
+import {
+  isAuthSelector,
+  logInAppAction,
+  signUpAction,
+} from '../../redux/slices/authorizationSlice';
 import {
   BtnSendValues,
   BtnShowForm,
@@ -58,7 +62,7 @@ const AuthForm: React.FC = props => {
         userData: values,
         setStatus,
       };
-      dispatch(logInApp(payload));
+      dispatch(logInAppAction(payload));
       setSubmitting(false);
     },
   });
@@ -71,7 +75,7 @@ const AuthForm: React.FC = props => {
         userData: values,
         setStatus,
       };
-      dispatch(signUp(payload));
+      dispatch(signUpAction(payload));
       setSubmitting(false);
     },
   });

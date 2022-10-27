@@ -10,7 +10,6 @@ export type ApiResponseToken = {
 };
 
 export interface IPosition {
-  actor_id: number;
   name: string;
   birthday: string;
   city: string;
@@ -18,13 +17,35 @@ export interface IPosition {
   photo_src: string;
 }
 
+export interface IApiResponseActor extends IPosition {
+  actor_id: number;
+}
+
+export interface IApiResponseDirector extends IPosition {
+  id: number;
+}
+
 export type GenreType = {
   id: number;
   name: string;
 };
 
-export interface ApiResponseMovie {
+export interface ICreateMovieAsync {
+  name: string;
+  description: string;
+  genres: number[];
+  actors: number[];
+  directors: number[];
+  rating: string;
+  imdb_rating: string;
+  poster_src: string;
+}
+
+export interface IApiResponseMovie extends IMovie {
   id: string;
+}
+
+export interface IMovie {
   name: string;
   description: string;
   rating: string;
@@ -33,6 +54,14 @@ export interface ApiResponseMovie {
   actors: Array<IPosition>;
   directors: Array<IPosition>;
   genres: Array<GenreType>;
+}
+
+export interface ICategory {
+  name: string;
+}
+
+export interface IApiResponseCategory extends ICategory {
+  id: number;
 }
 
 export const Api = {
@@ -44,11 +73,39 @@ export const Api = {
     return instance.post<ApiResponseToken>('auth/registration', data);
   },
 
-  getMovies() {
-    return instance.get<Array<ApiResponseMovie>>('movies');
+  fetchMovies() {
+    return instance.get<IApiResponseMovie[]>('movies');
   },
 
-  getCategories() {
-    return instance.get('movies/categories');
+  createMovie(movie: ICreateMovieAsync) {
+    return instance.post<IApiResponseMovie>('movies', movie);
+  },
+
+  fetchCategories() {
+    return instance.get<IApiResponseCategory[]>('movies/categories');
+  },
+
+  createCategory(name: ICategory) {
+    return instance.post<IApiResponseCategory>('movies/categories', name);
+  },
+
+  createActor(actor: IPosition) {
+    return instance.post<IApiResponseActor>('/actors', actor);
+  },
+
+  fetchActors() {
+    return instance.get<IApiResponseActor[]>('/actors');
+  },
+
+  fetchDirectors() {
+    return instance.get<IApiResponseDirector[]>('/directors');
+  },
+
+  createDirector(director: IPosition) {
+    return instance.post<IApiResponseDirector>('/directors', director);
+  },
+
+  deleteDirector(id: number) {
+    return instance.delete;
   },
 };

@@ -15,13 +15,16 @@ const NavbarAdmin = () => {
         <StyledNav>
           <StyledList>
             <StyledListItem>
+              <StyledListLink to="actors">Актори</StyledListLink>
+            </StyledListItem>
+            <StyledListItem>
               <StyledListLink to="movies">Фільми</StyledListLink>
             </StyledListItem>
             <StyledListItem>
-              <StyledListLink to="123">Сеанси</StyledListLink>
+              <StyledListLink to="sessions">Сеанси</StyledListLink>
             </StyledListItem>
             <StyledListItem>
-              <StyledListLink to="123">Кінотеатри</StyledListLink>
+              <StyledListLink to="cinemas">Кінотеатри</StyledListLink>
             </StyledListItem>
           </StyledList>
         </StyledNav>

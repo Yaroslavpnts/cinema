@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { Api, userDataType } from '../../api/apiMethods';
 import { RootState } from '../store';
 import { fetchStatus } from '../types';
@@ -9,7 +9,7 @@ type SignUpPayloadType = {
   setStatus: (status: string) => void;
 };
 
-export const logInApp = createAsyncThunk(
+export const logInAppAction = createAsyncThunk(
   'auth/login',
   async ({ userData, setStatus }: SignUpPayloadType, { rejectWithValue }) => {
     try {
@@ -31,7 +31,7 @@ export const logInApp = createAsyncThunk(
   }
 );
 
-export const signUp = createAsyncThunk(
+export const signUpAction = createAsyncThunk(
   'auth/signUp',
   async ({ userData, setStatus }: SignUpPayloadType, { rejectWithValue }) => {
     try {
@@ -73,24 +73,24 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(logInApp.pending, state => {
+      .addCase(logInAppAction.pending, state => {
         state.status = fetchStatus.Pending;
       })
-      .addCase(logInApp.fulfilled, state => {
-        state.status = fetchStatus.Idle;
+      .addCase(logInAppAction.fulfilled, state => {
+        state.status = fetchStatus.Success;
         state.isAuth = true;
       })
-      .addCase(logInApp.rejected, state => {
+      .addCase(logInAppAction.rejected, state => {
         state.status = fetchStatus.Error;
       })
-      .addCase(signUp.pending, state => {
+      .addCase(signUpAction.pending, state => {
         state.status = fetchStatus.Pending;
       })
-      .addCase(signUp.fulfilled, state => {
-        state.status = fetchStatus.Idle;
+      .addCase(signUpAction.fulfilled, state => {
+        state.status = fetchStatus.Success;
         state.isAuth = true;
       })
-      .addCase(signUp.rejected, (state, { error }) => {
+      .addCase(signUpAction.rejected, (state, { error }) => {
         state.status = fetchStatus.Error;
       });
   },

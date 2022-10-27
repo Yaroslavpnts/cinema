@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import { ApiResponseMovie } from '../../api/apiMethods';
+import { IApiResponseMovie } from '../../api/apiMethods';
 import { MoviesContainer } from './MoviesList.styled';
 import MoviesListItem from './MoviesListItem';
 
 interface SliderProps {
-  movies: Array<ApiResponseMovie>;
+  movies: Array<IApiResponseMovie>;
 }
 
 const MoviesList: React.FC<SliderProps> = ({ movies }) => {

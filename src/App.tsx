@@ -17,6 +17,7 @@ const App: React.FC = () => {
           <Route index element={<MainPage />} />
           <Route path="auth" element={<Authorization />} />
           <Route path="admin/" element={<AdminPage />}>
+            <Route path="actors" element={<div>Незабаром тут щось буде</div>} />
             <Route path="movies" element={<Movies />} />
             <Route path="sessions" element={<Sessions />} />
           </Route>
