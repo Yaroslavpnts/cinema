@@ -34,9 +34,9 @@ export const createDirectorAction = createAsyncThunk<
     state: RootState;
     rejectValue: string;
   }
->('actors/createActor', async (actor, { rejectWithValue }) => {
+>('actors/createDirector', async (director, { rejectWithValue }) => {
   try {
-    const { data } = await Api.createDirector(actor);
+    const { data } = await Api.createDirector(director);
 
     return data;
   } catch (error) {
@@ -49,6 +49,27 @@ export const createDirectorAction = createAsyncThunk<
     }
 
     return rejectWithValue('Інша помилка');
+  }
+});
+
+export const deleteDirectorAction = createAsyncThunk<
+  number,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>('actors/deleteDirector', async (name, { getState, rejectWithValue }) => {
+  const directors = getState().directors.directors;
+
+  const directorForDelete = directors.find(director => director.name === name);
+  try {
+    await Api.deleteActor(directorForDelete!.id);
+
+    return directorForDelete!.id;
+  } catch (error) {
+    return rejectWithValue('Помилка видалення режисера');
   }
 });
 
@@ -77,7 +98,7 @@ const directorsSlice = createSlice({
       .addCase(createDirectorAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
         state.directors.push(action.payload);
-        state.responseMessage = 'Актор створений';
+        state.responseMessage = 'Директор створений';
       })
       .addCase(createDirectorAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
@@ -96,6 +117,16 @@ const directorsSlice = createSlice({
       })
       .addCase(fetchDirectorsAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
+      })
+      .addCase(deleteDirectorAction.pending, (state, action) => {
+        state.status = fetchStatus.Pending;
+      })
+      .addCase(deleteDirectorAction.fulfilled, (state, action) => {
+        state.status = fetchStatus.Success;
+        state.directors = state.directors.filter(director => director.id !== action.payload);
+      })
+      .addCase(deleteDirectorAction.rejected, (state, action) => {
+        state.status = fetchStatus.Error;
       });
   },
 });
@@ -103,6 +134,15 @@ const directorsSlice = createSlice({
 export default directorsSlice.reducer;
 
 export const directorsSelector = (state: RootState) => state.directors.directors;
+
+export const directorsForTable = createSelector(directorsSelector, directors => {
+  return directors.map(director => ({
+    name: director.name,
+    birthday: director.birthday,
+    city: director.city,
+    country: director.country,
+  }));
+});
 
 export const directorsNamesSelector = createSelector(directorsSelector, directors => {
   return directors.map(director => ({ id: director.id, name: director.name }));

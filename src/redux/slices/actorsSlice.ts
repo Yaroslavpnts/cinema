@@ -54,6 +54,27 @@ export const createActorAction = createAsyncThunk<
   }
 });
 
+export const deleteActorAction = createAsyncThunk<
+  number,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>('actors/deleteActor', async (name, { getState, rejectWithValue }) => {
+  const actors = getState().actors.actors;
+
+  const actorForDelete = actors.find(actor => actor.name === name);
+  try {
+    await Api.deleteActor(actorForDelete!.actor_id);
+
+    return actorForDelete!.actor_id;
+  } catch (error) {
+    return rejectWithValue('Помилка видалення актора');
+  }
+});
+
 type initialStateType = {
   status: fetchStatus;
   responseMessage: string;
@@ -98,6 +119,16 @@ const actorsSlice = createSlice({
       })
       .addCase(fetchActorsAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
+      })
+      .addCase(deleteActorAction.pending, (state, action) => {
+        state.status = fetchStatus.Pending;
+      })
+      .addCase(deleteActorAction.fulfilled, (state, action) => {
+        state.status = fetchStatus.Success;
+        state.actors = state.actors.filter(actor => actor.actor_id !== action.payload);
+      })
+      .addCase(deleteActorAction.rejected, (state, action) => {
+        state.status = fetchStatus.Error;
       });
   },
 });
@@ -105,6 +136,15 @@ const actorsSlice = createSlice({
 export default actorsSlice.reducer;
 
 export const actorsSelector = (state: RootState) => state.actors.actors;
+
+export const actorsForTable = createSelector(actorsSelector, actors => {
+  return actors.map(actor => ({
+    name: actor.name,
+    birthday: actor.birthday,
+    city: actor.city,
+    country: actor.country,
+  }));
+});
 
 export const actorsNamesSelector = createSelector(actorsSelector, actors => {
   return actors.map(actor => ({ id: actor.actor_id, name: actor.name }));

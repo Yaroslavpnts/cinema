@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Api, IApiResponseMovie, IMovie } from '../../api/apiMethods';
-import { ICreateMovie } from '../../components/adminPage/movies/movieForm/MovieForm';
+import { TCreateMovie } from '../../components/adminPage/movies/movieForm/MovieForm';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
@@ -17,28 +17,56 @@ const initialState: initialStateType = {
   movies: [],
 };
 
+export const fetchMoviesAction = createAsyncThunk(
+  'movies/fetchMovies',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await Api.fetchMovies();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const createMovieAction = createAsyncThunk<
   IApiResponseMovie,
-  ICreateMovie,
+  TCreateMovie,
   {
     dispatch: AppDispatch;
     state: RootState;
     rejectValue: string;
   }
 >(`movies/createMovie`, async (movie, { rejectWithValue, getState }) => {
-  const genres = getState().genres.genres.map(genre => {
+  const genres = [] as number[];
+  const actors = [] as number[];
+  const directors = [] as number[];
+
+  getState().genres.genres.forEach(genre => {
     if (movie.genres.includes(genre.name)) {
-      return genre.id;
+      genres.push(genre.id);
     }
-  }) as number[];
+  });
 
-  const actors = getState().actors.actors.map(actor => {
+  getState().actors.actors.forEach(actor => {
     if (movie.actors.includes(actor.name)) {
-      return actor.actor_id;
+      actors.push(actor.actor_id);
     }
-  }) as number[];
+  });
 
-  const newMovie = { ...movie, genres, actors, directors: [1] };
+  getState().directors.directors.forEach(director => {
+    if (movie.directors.includes(director.name)) {
+      directors.push(director.id);
+    }
+  });
+
+  const newMovie = {
+    ...movie,
+    genres,
+    actors,
+    directors,
+    imdb_rating: movie.imdb_rating.toString(),
+  };
 
   try {
     const { data } = await Api.createMovie(newMovie);
@@ -58,17 +86,26 @@ export const createMovieAction = createAsyncThunk<
   }
 });
 
-export const fetchMoviesAction = createAsyncThunk(
-  'movies/fetchMovies',
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await Api.fetchMovies();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+export const deleteMovieAction = createAsyncThunk<
+  number,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
   }
-);
+>('actors/deleteMovie', async (name, { getState, rejectWithValue }) => {
+  const movies = getState().movies.movies;
+
+  const movieForDelete = movies.find(movie => movie.name === name);
+  try {
+    await Api.deleteMovie(movieForDelete!.id);
+
+    return movieForDelete!.id;
+  } catch (error) {
+    return rejectWithValue('Помилка видалення фільму');
+  }
+});
 
 const moviesSlice = createSlice({
   name: 'movies',
@@ -96,13 +133,30 @@ const moviesSlice = createSlice({
       })
       .addCase(createMovieAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
+      })
+      .addCase(deleteMovieAction.pending, (state, action) => {
+        state.status = fetchStatus.Pending;
+      })
+      .addCase(deleteMovieAction.fulfilled, (state, action) => {
+        state.status = fetchStatus.Success;
+        state.movies = state.movies.filter(movie => movie.id !== action.payload);
+      })
+      .addCase(deleteMovieAction.rejected, (state, action) => {
+        state.status = fetchStatus.Error;
       });
   },
 });
 
 export const moviesSelector = (state: RootState) => state.movies.movies;
 
-export default moviesSlice.reducer;
+export const moviesForTable = createSelector(moviesSelector, movies => {
+  return movies.map(movie => ({
+    name: movie.name,
+    imdb_rating: Number(movie.imdb_rating),
+  }));
+});
 
 export const moviesStatusSelector = (state: RootState) => state.movies.status;
 export const moviesErrorMessageSelector = (state: RootState) => state.movies.responseMessage;
+
+export default moviesSlice.reducer;

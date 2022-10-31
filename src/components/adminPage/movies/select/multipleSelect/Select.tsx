@@ -12,7 +12,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { v4 as uuidv4 } from 'uuid';
 import { StyledMenuItem } from './Select.styled';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import CreateModal from '../../../modal/Modal';
+import CreateModal from '../../../../modal/Modal';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

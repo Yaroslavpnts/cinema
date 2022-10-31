@@ -51,11 +51,9 @@ const GenreForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
       createNew(values)
         .then(() => {
           setStatus('success');
-          // setIsAlert(true);
         })
         .catch(() => {
           setStatus('error');
-          // setIsAlert(true);
         })
         .finally();
     },

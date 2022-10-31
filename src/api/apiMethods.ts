@@ -42,7 +42,7 @@ export interface ICreateMovieAsync {
 }
 
 export interface IApiResponseMovie extends IMovie {
-  id: string;
+  id: number;
 }
 
 export interface IMovie {
@@ -81,6 +81,10 @@ export const Api = {
     return instance.post<IApiResponseMovie>('movies', movie);
   },
 
+  deleteMovie(id: number) {
+    return instance.delete(`movies/${id}`);
+  },
+
   fetchCategories() {
     return instance.get<IApiResponseCategory[]>('movies/categories');
   },
@@ -88,24 +92,27 @@ export const Api = {
   createCategory(name: ICategory) {
     return instance.post<IApiResponseCategory>('movies/categories', name);
   },
-
-  createActor(actor: IPosition) {
-    return instance.post<IApiResponseActor>('/actors', actor);
+  fetchActors() {
+    return instance.get<IApiResponseActor[]>('actors');
   },
 
-  fetchActors() {
-    return instance.get<IApiResponseActor[]>('/actors');
+  createActor(actor: IPosition) {
+    return instance.post<IApiResponseActor>('actors', actor);
+  },
+
+  deleteActor(id: number) {
+    return instance.delete(`actors/${id}`);
   },
 
   fetchDirectors() {
-    return instance.get<IApiResponseDirector[]>('/directors');
+    return instance.get<IApiResponseDirector[]>('directors');
   },
 
   createDirector(director: IPosition) {
-    return instance.post<IApiResponseDirector>('/directors', director);
+    return instance.post<IApiResponseDirector>('directors', director);
   },
 
   deleteDirector(id: number) {
-    return instance.delete;
+    return instance.delete(`directors/${id}`);
   },
 };

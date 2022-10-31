@@ -1,5 +1,5 @@
-import { styled } from '@mui/material';
-import { Form } from 'formik';
+import { styled, TextField } from '@mui/material';
+import { Field, Form } from 'formik';
 
 export const FormStyled = styled(Form)`
   width: 350px;
@@ -21,14 +21,14 @@ export const InputBlock = styled('div')`
 
   textarea[name='description'] {
     width: 100%;
-    /* height: auto; */
-    min-height: 26px;
     resize: none;
+    /* min-height: 26px; */
+
     padding: 3px 7px;
-    vertical-align: middle;
-    font-size: 14px;
-    line-height: 14px;
-    transition: all 0.3s;
+    /* vertical-align: middle; */
+    /* font-size: 14px; */
+    /* line-height: 14px; */
+    /* transition: all 0.3s; */
 
     &::-webkit-scrollbar {
       width: 0;
@@ -48,6 +48,26 @@ export const InputBlock = styled('div')`
   > svg {
     font-size: 40px;
     cursor: pointer;
+  }
+`;
+
+export const RatingBlock = styled('div')`
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+    width: 45%;
+
+    div {
+      width: 100%;
+    }
+  }
+`;
+
+export const RatingField = styled(TextField)`
+  input {
+    text-align: center;
+    padding: 16.5px 14px;
   }
 `;
 

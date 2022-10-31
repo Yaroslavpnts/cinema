@@ -19,9 +19,10 @@ import Notification from '../../../../notification/Notification';
 interface IProps {
   createNew: (value: IPosition) => Promise<IApiResponseActor | IApiResponseDirector>;
   btnTitle: string;
+  sucessMessage: string;
 }
 
-const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
+const PositionForm: React.FC<IProps> = ({ createNew, btnTitle, sucessMessage }) => {
   const errorMessage = useAppSelector(actorsErrorMessageSelector);
 
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -80,11 +81,9 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
       createNew(values)
         .then(() => {
           setStatus('success');
-          // setIsAlert(true);
         })
         .catch(() => {
           setStatus('error');
-          // setIsAlert(true);
         })
         .finally();
     },
@@ -98,7 +97,7 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
           isOpen={status === 'success'}
           setIsOpen={() => setStatus('')}
         >
-          Жанр створено
+          {sucessMessage}
         </Notification>
       ),
       error: (
@@ -113,35 +112,12 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
   return (
     <ActorBlockStyled>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {/* <Formik
-          initialValues={{
-            name: '',
-            birthday: '',
-            city: '',
-            country: '',
-            photo_src: '',
-          }}
-          validate={validate}
-          onSubmit={(values: IPosition, { setStatus }) => {
-            console.log(values);
-            createNew(values)
-              .then(() => {
-                setStatus('done');
-                setIsAlertOpen(true);
-              })
-              .catch(() => {
-                setStatus('done');
-                setIsAlertOpen(true);
-              });
-          }}
-        >
-          {({ values, touched, setFieldValue, errors, status }) => ( */}
         <FormStyled onSubmit={handleSubmit}>
           <InputBlock>
             <label>Прізвище та ім'я</label>
-            {/* <Field name="name" /> */}
+
             <input name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
-            {/* <ErrorMessage name="name" render={msg => <Error>{msg}</Error>} /> */}
+
             {touched.name && errors.name ? <Error>{errors.name}</Error> : null}
           </InputBlock>
           <InputBlock>
@@ -188,14 +164,11 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
           </InputBlock>
           <InputBlock>
             <label>Місто</label>
-            {/* <Field name="city" /> */}
             <input name="city" value={values.city} onChange={handleChange} onBlur={handleBlur} />
-            {/* <ErrorMessage name="city" render={msg => <Error>{msg}</Error>} /> */}
             {touched.city && errors.city ? <Error>{errors.city}</Error> : null}
           </InputBlock>
           <InputBlock>
             <label>Країна</label>
-            {/* <Field name="country" /> */}
             <input
               name="country"
               value={values.country}
@@ -207,21 +180,17 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
           </InputBlock>
           <InputBlock>
             <label>Фото</label>
-            {/* <Field name="photo_src" /> */}
             <input
               name="photo_src"
               value={values.photo_src}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {/* <ErrorMessage name="photo_src" render={msg => <Error>{msg}</Error>} /> */}
             {touched.photo_src && errors.photo_src ? <Error>{errors.photo_src}</Error> : null}
           </InputBlock>
           <ButtonStyled type="submit">{btnTitle}</ButtonStyled>
           {status && notification[status as keyof typeof notification]}
         </FormStyled>
-        {/* )}
-        </Formik> */}
       </LocalizationProvider>
     </ActorBlockStyled>
   );
