@@ -5,11 +5,13 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     customColor?: PaletteColorOptions;
     black?: PaletteColorOptions;
+    white?: PaletteColorOptions;
   }
 
   interface Palette {
     customColor: PaletteColor;
     black: PaletteColor;
+    white: PaletteColor;
   }
 
   interface LinearProgressPropsColorOverrides {

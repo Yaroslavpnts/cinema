@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Api, userDataType } from '../../api/apiMethods';
 import { RootState } from '../store';
 import { fetchStatus } from '../types';
+import jwt_decode from 'jwt-decode';
 
 type SignUpPayloadType = {
   userData: userDataType;
@@ -14,9 +15,12 @@ export const logInAppAction = createAsyncThunk(
   async ({ userData, setStatus }: SignUpPayloadType, { rejectWithValue }) => {
     try {
       const { data } = await Api.auth(userData);
-      console.log(data);
       if (data.token) {
         document.cookie = `token=${data.token}; max-age=3600`;
+
+        const decoded = jwt_decode(data.token);
+
+        console.log(decoded);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

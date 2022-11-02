@@ -9,14 +9,17 @@ export const theme = createTheme({
     black: {
       main: '#121212',
     },
+    white: {
+      main: '#f8f5f5',
+    },
   },
   breakpoints: {
     values: {
       xs: 0,
       sm: 600,
-      md: 900,
-      lg: 1350,
-      xl: 1536,
+      md: 1000,
+      lg: 1400,
+      xl: 1600,
     },
   },
 });

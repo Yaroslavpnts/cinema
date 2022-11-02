@@ -7,5 +7,6 @@ export const AppWrapper = styled('div')`
 
   main {
     flex: 1;
+    margin-top: 66px;
   }
 `;
