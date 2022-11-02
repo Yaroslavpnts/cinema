@@ -19,7 +19,7 @@ import {
 import CartSvg from '../../assets/img/cart.svg';
 import OutSvg from '../../assets/img/out.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { isAuthSelector, logOut } from '../../redux/slices/authorizationSlice';
+import { isAuthSelector, signOut } from '../../redux/slices/authorizationSlice';
 import Search from '../search/Search';
 
 const Header: React.FC = () => {
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                 </AnonymousBlock>
               ) : (
                 <AuthorizedBlock>
-                  <Link to="/auth" style={{ display: 'flex' }} onClick={() => dispatch(logOut())}>
+                  <Link to="/auth" style={{ display: 'flex' }} onClick={() => dispatch(signOut())}>
                     <img src={OutSvg} alt="" />
                   </Link>
                 </AuthorizedBlock>

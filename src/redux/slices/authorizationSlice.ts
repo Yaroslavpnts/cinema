@@ -71,8 +71,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logOut: state => {
+    signOut: state => {
       state.isAuth = false;
+    },
+    signIn: state => {
+      state.isAuth = true;
     },
   },
   extraReducers: builder => {
@@ -100,7 +103,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logOut } = authSlice.actions;
+export const { signOut, signIn } = authSlice.actions;
 
 export const isAuthSelector = (state: RootState) => state.auth.isAuth;
 
