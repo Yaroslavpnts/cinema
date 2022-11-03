@@ -1,5 +1,6 @@
 {
   "name": "cinema",
+  "homepage": "https://Yaroslavpnts.github.io/cinema/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -36,7 +37,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@toolz/allow-react)/\" --env=jsdom"
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@toolz/allow-react)/\" --env=jsdom",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -99,6 +103,7 @@
   "devDependencies": {
     "@types/uuid": "^8.3.4",
     "ahooks": "^3.7.1",
+    "gh-pages": "^4.0.0",
     "ts-jest": "^29.0.3"
   }
 }
