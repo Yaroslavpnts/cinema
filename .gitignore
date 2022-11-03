@@ -7,8 +7,9 @@
 
 # testing
 /coverage
+/src/tests
 
-# production
+# productio
 /build
 
 # misc
