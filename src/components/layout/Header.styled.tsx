@@ -97,6 +97,7 @@ export const AnonymousBlock = styled('div')`
 
 export const AuthorizedBlock = styled('div')`
   margin-right: 57px;
+  display: flex;
 `;
 
 export const LinkAuth = styled(Link)`

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { getCookie } from '../app/helpers/helperFunctions';
 import { API_URL } from '../config';
 
