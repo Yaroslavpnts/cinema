@@ -92,7 +92,7 @@ const Footer: React.FC = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <Link to="/about">Як придбати квиток</Link>
+              <Link to="/about">м. Місто, вул. Вулиця, буд. Х</Link>
             </li>
             <li>
               <svg
