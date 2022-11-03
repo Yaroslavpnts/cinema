@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/cinema/static/css/main.89267544.css",
+    "main.js": "/cinema/static/js/main.c4854200.js",
+    "static/media/auth_gest.png": "/cinema/static/media/auth_gest.9bda6ca30eac85ddd942.png",
+    "static/media/anonymous-pro-v21-latin_cyrillic-regular.ttf": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.9d04903207f8bc5690b2.ttf",
+    "static/media/anonymous-pro-v21-latin_cyrillic-700.ttf": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.7ecf22ae01c3f9e0914c.ttf",
+    "static/media/anonymous-pro-v21-latin_cyrillic-regular.svg": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.5b345d61f572c7dbfaaf.svg",
+    "static/media/anonymous-pro-v21-latin_cyrillic-700.svg": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.d0f8e8b9fab7419a42ea.svg",
+    "static/media/mulish-v12-latin_cyrillic-regular.svg": "/cinema/static/media/mulish-v12-latin_cyrillic-regular.534e2563dd9a11218375.svg",
+    "static/media/mulish-v12-latin_cyrillic-regular.ttf": "/cinema/static/media/mulish-v12-latin_cyrillic-regular.b036171a816093e20848.ttf",
+    "static/media/anonymous-pro-v21-latin_cyrillic-regular.woff": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.e713ab43c90c030f95b9.woff",
+    "static/media/anonymous-pro-v21-latin_cyrillic-700.woff": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.29667ce86ca7083bca4b.woff",
+    "static/media/anonymous-pro-v21-latin_cyrillic-regular.eot": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.605e912ba8bad9b6d2c5.eot",
+    "static/media/anonymous-pro-v21-latin_cyrillic-700.eot": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.fe695561b7599010dc74.eot",
+    "static/media/anonymous-pro-v21-latin_cyrillic-regular.woff2": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.646b158d3b5b35c2d64e.woff2",
+    "static/media/anonymous-pro-v21-latin_cyrillic-700.woff2": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.6f600bddacd6d2008bea.woff2",
+    "static/media/mulish-v12-latin_cyrillic-regular.woff": "/cinema/static/media/mulish-v12-latin_cyrillic-regular.9cc5cd745fc34d3933ef.woff",
+    "static/media/mulish-v12-latin_cyrillic-regular.eot": "/cinema/static/media/mulish-v12-latin_cyrillic-regular.ed271775b66923e2caa2.eot",
+    "static/media/mulish-v12-latin_cyrillic-regular.woff2": "/cinema/static/media/mulish-v12-latin_cyrillic-regular.b593dd54d33a80e86540.woff2",
+    "static/media/cart.svg": "/cinema/static/media/cart.c7934ebbcfc225daded480323de62ba7.svg",
+    "static/media/out.svg": "/cinema/static/media/out.2b456a7f0f3e96cef61a9f48fc96f811.svg",
+    "index.html": "/cinema/index.html",
+    "main.89267544.css.map": "/cinema/static/css/main.89267544.css.map",
+    "main.c4854200.js.map": "/cinema/static/js/main.c4854200.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.89267544.css",
+    "static/js/main.c4854200.js"
+  ]
+}
