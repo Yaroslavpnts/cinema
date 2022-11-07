@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { userDataType } from '../../api/apiMethods';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -17,12 +17,22 @@ import {
   FormRegistration,
 } from './AuthForm.styled';
 
-const AuthForm: React.FC = props => {
+enum TypeAuth {
+  ENTER = 'enter',
+  REGISTRATION = 'registration',
+}
+
+const AuthForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthSelector);
   const navigate = useNavigate();
-  const [isShowEnter, setIsShowEnter] = useState(false);
-  const [isShowRegistration, setIsShowRegistration] = useState(false);
+
+  const { type } = useParams();
+
+  const [isShowEnter, setIsShowEnter] = useState<boolean>(type === TypeAuth.ENTER);
+  const [isShowRegistration, setIsShowRegistration] = useState<boolean>(
+    type === TypeAuth.REGISTRATION
+  );
 
   useEffect(() => {
     if (isAuth) {
@@ -80,10 +90,24 @@ const AuthForm: React.FC = props => {
     },
   });
 
+  const btnEnterHandler = () => {
+    setIsShowEnter(!isShowEnter);
+    setIsShowRegistration(false);
+  };
+  const btnRegistrationHandler = () => {
+    setIsShowRegistration(!isShowRegistration);
+    setIsShowEnter(false);
+  };
+
+  useEffect(() => {
+    setIsShowEnter(type === TypeAuth.ENTER);
+    setIsShowRegistration(type === TypeAuth.REGISTRATION);
+  }, [type]);
+
   return (
     <>
       <form onSubmit={formikEnter.handleSubmit} autoComplete="off">
-        <BtnShowForm variant="outlined" onClick={() => setIsShowEnter(!isShowEnter)}>
+        <BtnShowForm variant="outlined" onClick={btnEnterHandler}>
           Вхід
         </BtnShowForm>
         <FormEnter className={isShowEnter ? 'show-enter' : ''}>
@@ -132,7 +156,7 @@ const AuthForm: React.FC = props => {
       </form>
 
       <form onSubmit={formikRegistration.handleSubmit}>
-        <BtnShowForm variant="outlined" onClick={() => setIsShowRegistration(!isShowRegistration)}>
+        <BtnShowForm variant="outlined" onClick={btnRegistrationHandler}>
           Реєстрація
         </BtnShowForm>
         <FormRegistration className={isShowRegistration ? 'opened' : ''}>

@@ -7,6 +7,26 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const MovieRatings = ['G', 'PG', 'PG-13', 'R', 'NC-17'];
 
+type PlaceholderProps = {
+  children: React.ReactNode;
+};
+
+const Placeholder: React.FC<PlaceholderProps> = ({ children }) => {
+  return (
+    <div
+      style={{
+        color: '#969696',
+        fontWeight: '400',
+        fontSize: '18px',
+        lineHeight: '18px',
+        fontFamily: 'Anonymous Pro',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 interface ISengleSelectProps {
   name: string;
   setFieldValue: (field: string, value: string, shouldValidate?: boolean | undefined) => void;
@@ -14,22 +34,26 @@ interface ISengleSelectProps {
 }
 
 const SingleSelect: React.FC<ISengleSelectProps> = ({ name, setFieldValue, value }) => {
-  const [age, setAge] = React.useState('');
-
   const handleChange = (event: SelectChangeEvent) => {
     setFieldValue(name, event.target.value);
   };
 
   return (
-    // <div>
     <FormControl>
-      {/* <InputLabel id="demo-simple-select-helper-label">Age</InputLabel> */}
       <Select
-        // labelId="demo-simple-select-helper-label"
-        // id="demo-simple-select-helper"
         value={value}
-        // label="Age"
+        displayEmpty
         onChange={handleChange}
+        sx={{
+          '.MuiSelect-select': {
+            backgroundColor: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+          },
+        }}
+        renderValue={selected => {
+          return value ? value : <Placeholder>Рейтинг</Placeholder>;
+        }}
       >
         {MovieRatings.map(r => (
           <MenuItem key={r} value={r}>
@@ -39,7 +63,6 @@ const SingleSelect: React.FC<ISengleSelectProps> = ({ name, setFieldValue, value
       </Select>
       {/* <FormHelperText>With label + helper text</FormHelperText> */}
     </FormControl>
-    // </div>
   );
 };
 

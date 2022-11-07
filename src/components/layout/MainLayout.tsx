@@ -8,7 +8,7 @@ import { AppWrapper } from './MainLayout.styled';
 const MainLayout: React.FC = () => {
   return (
     <AppWrapper>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <Header />
       <Outlet />
       <Footer />

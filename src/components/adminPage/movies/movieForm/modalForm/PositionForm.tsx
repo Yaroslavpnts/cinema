@@ -1,55 +1,47 @@
 import React, { useMemo, useState } from 'react';
-import { Formik, Field, ErrorMessage, useFormik } from 'formik';
+import { ErrorMessage, useFormik } from 'formik';
 import { IApiResponseActor, IApiResponseDirector, IPosition } from '../../../../../api/apiMethods';
 import { actorsErrorMessageSelector } from '../../../../../redux/slices/actorsSlice';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  ActorBlockStyled,
-  ButtonStyled,
-  Error,
-  FormStyled,
-  InputBlock,
-} from './PositionForm.styled';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import Notification from '../../../../notification/Notification';
+import { GenreBlockStyled, FormStyled, InputBlock, ButtonStyled, Error } from './modalForm.style';
 
 interface IProps {
   createNew: (value: IPosition) => Promise<IApiResponseActor | IApiResponseDirector>;
-  btnTitle: string;
-  sucessMessage: string;
+  title: string;
+  successMessage: string;
 }
 
-const PositionForm: React.FC<IProps> = ({ createNew, btnTitle, sucessMessage }) => {
+const PositionForm: React.FC<IProps> = ({ createNew, title, successMessage }) => {
   const errorMessage = useAppSelector(actorsErrorMessageSelector);
-
-  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
 
   const validate = (values: IPosition) => {
     const errors = {} as IPosition;
     if (!values.name) {
-      errors.name = 'Required';
+      errors.name = "Треба вказати ім'я";
     }
     if (!values.birthday) {
-      errors.birthday = 'Required';
+      errors.birthday = 'Треба вказати дату народження';
     }
     if (!values.city) {
-      errors.city = 'Required';
+      errors.city = 'Треба вказати місто';
     }
     if (!values.country) {
-      errors.country = 'Required';
+      errors.country = 'Треба вказати країну';
     }
     if (!values.photo_src) {
-      errors.photo_src = 'Required';
+      errors.photo_src = 'Треба вставити посилання на фото';
     } else if (
       !values.photo_src.match(
         // /^(http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
         /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
       )
     ) {
-      errors.photo_src = "Url isn't valid";
+      errors.photo_src = 'Посилання не є валідним';
     }
     return errors;
   };
@@ -97,7 +89,7 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle, sucessMessage }) 
           isOpen={status === 'success'}
           setIsOpen={() => setStatus('')}
         >
-          {sucessMessage}
+          {successMessage}
         </Notification>
       ),
       error: (
@@ -110,7 +102,8 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle, sucessMessage }) 
   );
 
   return (
-    <ActorBlockStyled>
+    // <ActorBlockStyled>
+    <GenreBlockStyled>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <FormStyled onSubmit={handleSubmit}>
           <InputBlock>
@@ -188,11 +181,11 @@ const PositionForm: React.FC<IProps> = ({ createNew, btnTitle, sucessMessage }) 
             />
             {touched.photo_src && errors.photo_src ? <Error>{errors.photo_src}</Error> : null}
           </InputBlock>
-          <ButtonStyled type="submit">{btnTitle}</ButtonStyled>
+          <ButtonStyled type="submit">{title}</ButtonStyled>
           {status && notification[status as keyof typeof notification]}
         </FormStyled>
       </LocalizationProvider>
-    </ActorBlockStyled>
+    </GenreBlockStyled>
   );
 };
 

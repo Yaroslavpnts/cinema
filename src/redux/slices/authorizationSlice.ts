@@ -4,6 +4,7 @@ import { Api, userDataType } from '../../api/apiMethods';
 import { RootState } from '../store';
 import { fetchStatus } from '../types';
 import jwt_decode from 'jwt-decode';
+import { deleteCookie } from '../../app/helpers/helperFunctions';
 
 type SignUpPayloadType = {
   userData: userDataType;
@@ -16,7 +17,7 @@ export const logInAppAction = createAsyncThunk(
     try {
       const { data } = await Api.auth(userData);
       if (data.token) {
-        document.cookie = `token=${data.token}; max-age=3600`;
+        document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
 
         const decoded = jwt_decode(data.token);
 
@@ -42,7 +43,7 @@ export const signUpAction = createAsyncThunk(
       const { data } = await Api.signUp(userData);
 
       if (data.token) {
-        document.cookie = `token=${data.token}; max-age=3600`;
+        document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -72,6 +73,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     signOut: state => {
+      deleteCookie('token');
       state.isAuth = false;
     },
     signIn: state => {

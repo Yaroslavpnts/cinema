@@ -139,6 +139,7 @@ export const actorsSelector = (state: RootState) => state.actors.actors;
 
 export const actorsForTable = createSelector(actorsSelector, actors => {
   return actors.map(actor => ({
+    id: actor.actor_id,
     name: actor.name,
     birthday: actor.birthday,
     city: actor.city,

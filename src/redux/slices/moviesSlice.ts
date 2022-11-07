@@ -38,39 +38,74 @@ export const createMovieAction = createAsyncThunk<
     rejectValue: string;
   }
 >(`movies/createMovie`, async (movie, { rejectWithValue, getState }) => {
-  const genres = [] as number[];
-  const actors = [] as number[];
-  const directors = [] as number[];
+  // const genres = [] as number[];
+  // const actors = [] as number[];
+  // const directors = [] as number[];
 
-  getState().genres.genres.forEach(genre => {
-    if (movie.genres.includes(genre.name)) {
-      genres.push(genre.id);
-    }
-  });
+  // getState().genres.genres.forEach(genre => {
+  //   if (movie.genres.includes(genre.name)) {
+  //     genres.push(genre.id);
+  //   }
+  // });
 
-  getState().actors.actors.forEach(actor => {
-    if (movie.actors.includes(actor.name)) {
-      actors.push(actor.actor_id);
-    }
-  });
+  // getState().actors.actors.forEach(actor => {
+  //   if (movie.actors.includes(actor.name)) {
+  //     actors.push(actor.actor_id);
+  //   }
+  // });
 
-  getState().directors.directors.forEach(director => {
-    if (movie.directors.includes(director.name)) {
-      directors.push(director.id);
-    }
-  });
+  // getState().directors.directors.forEach(director => {
+  //   if (movie.directors.includes(director.name)) {
+  //     directors.push(director.id);
+  //   }
+  // });
 
   const newMovie = {
     ...movie,
-    genres,
-    actors,
-    directors,
+    genres: movie.genres.map(genre => genre.id),
+    actors: movie.actors.map(actor => actor.id),
+    directors: movie.directors.map(director => director.id),
     imdb_rating: movie.imdb_rating.toString(),
   };
 
   try {
     const { data } = await Api.createMovie(newMovie);
 
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    if (error instanceof Error) {
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Інша помилка');
+  }
+});
+
+export const updateMovieAction = createAsyncThunk<
+  IApiResponseMovie,
+  TCreateMovie,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>(`movies/updateMovie`, async (movie, { rejectWithValue, getState }) => {
+  const newMovie = {
+    ...movie,
+    genres: movie.genres.map(genre => genre.id),
+    actors: movie.actors.map(actor => actor.id),
+    directors: movie.directors.map(director => director.id),
+    imdb_rating: movie.imdb_rating.toString(),
+  };
+
+  try {
+    const { data } = await Api.updateMovie(newMovie);
+    console.log(data);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -151,10 +186,31 @@ export const moviesSelector = (state: RootState) => state.movies.movies;
 
 export const moviesForTable = createSelector(moviesSelector, movies => {
   return movies.map(movie => ({
+    id: movie.id,
     name: movie.name,
     imdb_rating: Number(movie.imdb_rating),
+    production_year: Number(movie.production_year),
   }));
 });
+
+export const movieById = (id: number | null) => (state: RootState) => {
+  if (!id) return null;
+
+  let returnedMovie = {} as TCreateMovie;
+
+  state.movies.movies.forEach(movie => {
+    if (movie.id === id) {
+      returnedMovie = {
+        ...movie,
+        genres: [...movie.genres.map(genre => ({ id: genre.id, name: genre.name }))],
+        actors: [...movie.actors.map(actor => ({ id: actor.actor_id, name: actor.name }))],
+        directors: [...movie.directors.map(director => ({ id: director.id, name: director.name }))],
+      };
+    }
+  });
+
+  return returnedMovie;
+};
 
 export const moviesStatusSelector = (state: RootState) => state.movies.status;
 export const moviesErrorMessageSelector = (state: RootState) => state.movies.responseMessage;

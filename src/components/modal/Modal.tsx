@@ -10,13 +10,13 @@ const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
-  padding: '10rem',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: 'none',
   boxShadow: 24,
-  p: 6,
+  padding: '31px 93px 0',
+  borderRadius: '10px',
+  background: '#c5e9f8',
 };
 
 interface ModalProps {
@@ -37,10 +37,16 @@ const CreateModal: React.FC<ModalProps> = ({ open, handleClose, modalTitle, chil
         BackdropProps={{
           timeout: 1000,
         }}
+        sx={{ overflow: 'scroll' }}
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h3">
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h3"
+              sx={{ textAlign: 'center', fontFamily: 'Mulish' }}
+            >
               {modalTitle}
             </Typography>
             {children}

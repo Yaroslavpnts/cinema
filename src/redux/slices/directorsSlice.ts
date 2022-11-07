@@ -137,6 +137,7 @@ export const directorsSelector = (state: RootState) => state.directors.directors
 
 export const directorsForTable = createSelector(directorsSelector, directors => {
   return directors.map(director => ({
+    id: director.id,
     name: director.name,
     birthday: director.birthday,
     city: director.city,

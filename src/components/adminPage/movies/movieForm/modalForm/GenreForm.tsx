@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Formik, Field, ErrorMessage, useFormik } from 'formik';
-import { ButtonStyled, Error, FormStyled, GenreBlockStyled, InputBlock } from './GenreForm.style';
+import React, { useMemo } from 'react';
+import { useFormik } from 'formik';
+import { ButtonStyled, Error, FormStyled, GenreBlockStyled, InputBlock } from './modalForm.style';
 import { IApiResponseCategory, ICategory } from '../../../../../api/apiMethods';
 import Notification from '../../../../notification/Notification';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -14,13 +14,11 @@ type TInititalValues = typeof initialValues;
 
 interface IProps {
   createNew: (value: ICategory) => Promise<IApiResponseCategory>;
-  btnTitle: string;
+  title: string;
 }
 
-const GenreForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
+const GenreForm: React.FC<IProps> = ({ createNew, title }) => {
   const errorMessage = useAppSelector(genresErrorMessageSelector);
-
-  // const [isAlert, setIsAlert] = useState<boolean>(false);
 
   const validate = (values: TInititalValues) => {
     const errors = {} as TInititalValues;
@@ -83,11 +81,16 @@ const GenreForm: React.FC<IProps> = ({ createNew, btnTitle }) => {
     <GenreBlockStyled>
       <FormStyled onSubmit={handleSubmit}>
         <InputBlock>
-          <input name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
-          <ErrorMessage name="name" render={msg => <Error>{msg}</Error>} />
-          {touched.name && errors.name ? <div>{errors.name}</div> : null}
+          <input
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Назва"
+          />
+          {touched.name && errors.name ? <Error>{errors.name}</Error> : null}
         </InputBlock>
-        <ButtonStyled type="submit">{btnTitle}</ButtonStyled>
+        <ButtonStyled type="submit">{title}</ButtonStyled>
         {status && notification[status as keyof typeof notification]}
       </FormStyled>
     </GenreBlockStyled>

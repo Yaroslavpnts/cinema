@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AdminLink,
@@ -19,14 +19,21 @@ import {
 import CartSvg from '../../assets/img/cart.svg';
 import OutSvg from '../../assets/img/out.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { isAuthSelector, signOut } from '../../redux/slices/authorizationSlice';
+import { isAuthSelector, signIn, signOut } from '../../redux/slices/authorizationSlice';
 import Search from '../search/Search';
+import { getCookie } from '../../app/helpers/helperFunctions';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthSelector);
 
   const [activeNav, setSsActiveNav] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (getCookie('token')) {
+      dispatch(signIn());
+    }
+  }, []);
 
   return (
     <HeaderApp>
@@ -70,14 +77,14 @@ const Header: React.FC = () => {
             <UserBlock>
               {!isAuth ? (
                 <AnonymousBlock>
-                  <LinkAuth to="/auth?type=enter">Вхід</LinkAuth>
-                  <LinkAuth to="/auth?type=register" className="register-link">
+                  <LinkAuth to="/auth/enter">Вхід</LinkAuth>
+                  <LinkAuth to="/auth/registration" className="register-link">
                     Реєстрація
                   </LinkAuth>
                 </AnonymousBlock>
               ) : (
                 <AuthorizedBlock>
-                  <Link to="/auth" style={{ display: 'flex' }} onClick={() => dispatch(signOut())}>
+                  <Link to="/" style={{ display: 'flex' }} onClick={() => dispatch(signOut())}>
                     <img src={OutSvg} alt="" />
                   </Link>
                   <AdminLink to="admin">

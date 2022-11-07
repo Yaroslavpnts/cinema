@@ -38,11 +38,8 @@ export interface ICreateMovieAsync {
   directors: number[];
   rating: string;
   imdb_rating: string;
+  production_year: string;
   poster_src: string;
-}
-
-export interface IApiResponseMovie extends IMovie {
-  id: number;
 }
 
 export interface IMovie {
@@ -51,9 +48,14 @@ export interface IMovie {
   rating: string;
   imdb_rating: string;
   poster_src: string;
-  actors: Array<IPosition>;
-  directors: Array<IPosition>;
+  actors: IApiResponseActor[];
+  directors: IApiResponseDirector[];
+  production_year: string;
   genres: Array<GenreType>;
+}
+
+export interface IApiResponseMovie extends IMovie {
+  id: number;
 }
 
 export interface ICategory {
@@ -79,6 +81,10 @@ export const Api = {
 
   createMovie(movie: ICreateMovieAsync) {
     return instance.post<IApiResponseMovie>('movies', movie);
+  },
+
+  updateMovie(movie: ICreateMovieAsync) {
+    return instance.patch<IApiResponseMovie>('movies', movie);
   },
 
   deleteMovie(id: number) {

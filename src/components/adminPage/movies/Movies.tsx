@@ -6,7 +6,6 @@ import {
   MoviesBlockStyled,
   StyledContainer,
 } from './Movies.styled';
-import DataTable from './table/DataTable';
 import DataTab from './tabs/DataTab';
 
 const Movies = () => {
@@ -14,11 +13,10 @@ const Movies = () => {
     <MoviesBlockStyled>
       <StyledContainer>
         <CreateMovieBlock>
-          <MovieForm />
+          <MovieForm id={null} />
         </CreateMovieBlock>
         <MovieDataBlock>
           <DataTab />
-          {/* <DataTable /> */}
         </MovieDataBlock>
       </StyledContainer>
     </MoviesBlockStyled>

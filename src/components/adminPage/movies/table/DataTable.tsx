@@ -24,6 +24,11 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { deleteActorAction } from '../../../../redux/slices/actorsSlice';
 import { deleteDirectorAction } from '../../../../redux/slices/directorsSlice';
 import { deleteMovieAction } from '../../../../redux/slices/moviesSlice';
+import { StyledEnhancedTableHead, StyledTableBody, StyledEditIcon } from './DataTable.styled';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
+import CreateModal from '../../../modal/Modal';
+import MovieForm from '../movieForm/MovieForm';
 
 export enum EnumTypeData {
   MOVIES = 'movies',
@@ -84,6 +89,13 @@ const headCells: readonly HeadCell[] = [
     type: ColumnType.MOVIES,
   },
   {
+    id: 'production_year',
+    numeric: true,
+    disablePadding: false,
+    label: 'Рік випуску',
+    type: ColumnType.MOVIES,
+  },
+  {
     id: 'name',
     numeric: false,
     disablePadding: true,
@@ -130,7 +142,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   };
 
   return (
-    <TableHead>
+    <StyledEnhancedTableHead>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
@@ -139,7 +151,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'select all movies',
             }}
           />
         </TableCell>
@@ -150,6 +162,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               align={headCell.numeric ? 'right' : 'left'}
               padding={headCell.disablePadding ? 'none' : 'normal'}
               sortDirection={orderBy === headCell.id ? order : false}
+              sx={{ color: 'white' }}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -166,8 +179,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableCell>
           ) : null;
         })}
+        <TableCell padding="checkbox" />
       </TableRow>
-    </TableHead>
+    </StyledEnhancedTableHead>
   );
 }
 
@@ -216,6 +230,7 @@ interface IDataTableProps {
   rows: {
     [index: string]: string | number;
     name: string;
+    id: number;
   }[];
   typeData: EnumTypeData;
 }
@@ -229,6 +244,40 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [modalContentKey, setModalContentKey] = React.useState<EnumTypeData | ''>('');
+
+  const [editMovieId, setEditMovieId] = React.useState<number>(0);
+
+  const modalContent = React.useMemo(
+    () => ({
+      movies: {
+        title: 'Редагування фільму',
+        // layout: <MovieForm id={} />,
+      },
+      actors: {
+        title: 'Редагування актора',
+        // layout: <MovieForm id={} />,
+      },
+      directors: {
+        title: 'Редагування режисера',
+        // layout: <MovieForm id={} />,
+      },
+    }),
+    []
+  );
+
+  const handleEdit = (id: number) => {
+    setModalContentKey(typeData);
+    setEditMovieId(id);
+  };
+
+  const handleClose = (
+    e: React.MouseEvent<HTMLElement>,
+    reason: 'escapeKeyDown' | 'backdropClick'
+  ) => {
+    setEditMovieId(0);
+  };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -328,7 +377,7 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
               rowCount={rows.length}
               type={typeData === EnumTypeData.MOVIES ? ColumnType.MOVIES : ColumnType.POSITION}
             />
-            <TableBody>
+            <StyledTableBody>
               {rows
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -339,28 +388,35 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
+                          onClick={event => handleClick(event, row.name)}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
                         />
                       </TableCell>
+
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                        {typeData === EnumTypeData.MOVIES ? (
+                          <Link to={`${row.id}`}>{row.name}</Link>
+                        ) : (
+                          <Link to={`/actors/${row.id}`}>{row.name}</Link>
+                        )}
                       </TableCell>
+
                       {typeData === EnumTypeData.MOVIES && (
                         <>
                           <TableCell align="right">{row.imdb_rating}</TableCell>
+                          <TableCell align="right">{row.production_year}</TableCell>
                         </>
                       )}
                       {(typeData === EnumTypeData.ACTORS ||
@@ -371,6 +427,9 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
                           <TableCell align="right">{row.birthday}</TableCell>
                         </>
                       )}
+                      <TableCell>
+                        <StyledEditIcon onClick={() => handleEdit(row.id)} />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -383,15 +442,38 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
-            </TableBody>
+            </StyledTableBody>
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
+          labelRowsPerPage="Рядків на сторінку"
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
+          sx={{
+            backgroundColor: '#E9E9E9',
+            '.MuiToolbar-root': {
+              fontFamily: 'Mulish',
+              fontSize: '24px',
+              lineHeight: '28.8px',
+            },
+            '.MuiTablePagination-selectLabel': {
+              fontFamily: 'inherit',
+              fontSize: '24px',
+              lineHeight: '28.8px',
+            },
+            '.MuiInputBase-root': {
+              fontFamily: 'inherit',
+              fontSize: '24px',
+            },
+            '.MuiTablePagination-displayedRows': {
+              fontFamily: 'inherit',
+              fontSize: '24px',
+              lineHeight: '28.8px',
+            },
+          }}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
@@ -400,6 +482,14 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <CreateModal
+        handleClose={handleClose}
+        open={!!editMovieId}
+        modalTitle={modalContentKey && modalContent[typeData].title}
+      >
+        {/* {editMovieId && modalContent[modalContentKey].layout} */}
+        {editMovieId && <MovieForm id={editMovieId} />}
+      </CreateModal>
     </Box>
   );
 };

@@ -8,6 +8,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import MainLayout from './components/layout/MainLayout';
 import Movies from './components/adminPage/movies/Movies';
 import Sessions from './components/adminPage/sessions/Sessions';
+import ActorPage from './pages/ActorPage/ActorPage';
 
 const App: React.FC = () => {
   return (
@@ -15,12 +16,12 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<MainPage />} />
-          <Route path="auth" element={<Authorization />} />
+          <Route path="auth/:type" element={<Authorization />} />
           <Route path="admin/" element={<AdminPage />}>
-            <Route path="actors" element={<div>Незабаром тут щось буде</div>} />
             <Route path="movies" element={<Movies />} />
             <Route path="sessions" element={<Sessions />} />
           </Route>
+          <Route path="actors/:id" element={<ActorPage />} />
         </Route>
       </Routes>
     </ThemeProvider>

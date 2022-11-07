@@ -2,28 +2,31 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { ICategory, IPosition } from '../../../../api/apiMethods';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import AddBoxIcon from '@mui/icons-material/AddBox';
 import {
   createMovieAction,
+  movieById,
   moviesErrorMessageSelector,
   moviesStatusSelector,
+  updateMovieAction,
 } from '../../../../redux/slices/moviesSlice';
 import { fetchStatus } from '../../../../redux/types';
 import Notification from '../../../notification/Notification';
 import {
+  AddBoxIconStyled,
   ButtonStyled,
   Error,
   FormStyled,
   InputBlock,
   RatingBlock,
   RatingField,
+  YearField,
 } from './MovieForm.style';
 import {
   createGenreAction,
   fetchGenresAction,
   genresSelector,
 } from '../../../../redux/slices/genresSlice';
-import PositionForm from './position/PositionForm';
+import PositionForm from './modalForm/PositionForm';
 import {
   actorsNamesSelector,
   createActorAction,
@@ -32,27 +35,27 @@ import {
 import {
   createDirectorAction,
   directorsNamesSelector,
-  directorsSelector,
   fetchDirectorsAction,
 } from '../../../../redux/slices/directorsSlice';
 import SelectFilmFields from '../select/multipleSelect/SelectFilmFields';
 import CreateModal from '../../../modal/Modal';
-import GenreForm from './genre/GenreForm';
+import GenreForm from './modalForm/GenreForm';
 import { TextareaAutosize, TextField } from '@mui/material';
 import SingleSelect from '../select/singleSelect/SingleSelect';
 
-const initialValues = {
+const defaultValues = {
   name: '',
   description: '',
-  genres: [] as string[],
-  actors: [] as string[],
-  directors: [] as string[],
+  genres: [] as { id: number; name: string }[],
+  actors: [] as { id: number; name: string }[],
+  directors: [] as { id: number; name: string }[],
   rating: '',
   imdb_rating: '',
+  production_year: '',
   poster_src: '',
 };
 
-export type TCreateMovie = typeof initialValues;
+export type TCreateMovie = typeof defaultValues;
 
 type Keys =
   | 'name'
@@ -62,6 +65,7 @@ type Keys =
   | 'directors'
   | 'rating'
   | 'imdb_rating'
+  | 'production_year'
   | 'poster_src';
 
 const validate = (values: TCreateMovie) => {
@@ -92,6 +96,11 @@ const validate = (values: TCreateMovie) => {
   if (!values.imdb_rating) {
     errors.imdb_rating = 'Потрібно вибрати рейтинг IMDB фільму';
   }
+
+  if (!values.production_year) {
+    errors.production_year = 'Потрібно вибрати рік виходу фільму';
+  }
+
   if (!values.poster_src) {
     errors.poster_src = 'Потрібно вибрати постер до фільму';
   }
@@ -99,12 +108,19 @@ const validate = (values: TCreateMovie) => {
   return errors;
 };
 
-const MovieForm: React.FC = () => {
+interface IMovieFormProps {
+  id: number | null;
+}
+
+const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
   const dispatch = useAppDispatch();
 
   const genres = useAppSelector(genresSelector);
   const actors = useAppSelector(actorsNamesSelector);
   const directors = useAppSelector(directorsNamesSelector);
+  const movie = useAppSelector(movieById(id));
+
+  const initialValues = movie ? movie : defaultValues;
 
   useEffect(() => {
     dispatch(fetchGenresAction());
@@ -138,26 +154,26 @@ const MovieForm: React.FC = () => {
   const modalContent = useMemo(
     () => ({
       genres: {
-        modalTitle: 'Створити жанр',
-        layout: <GenreForm createNew={createNewCategory} btnTitle="Створити жанр" />,
+        title: 'Створення нового жанру',
+        layout: <GenreForm createNew={createNewCategory} title="Створити жанр" />,
       },
       actors: {
-        modalTitle: 'Створити актора',
+        title: 'Створення нового актора',
         layout: (
           <PositionForm
             createNew={createNewActor}
-            btnTitle="Створити актора"
-            sucessMessage="Актор створений"
+            title="Створити актора"
+            successMessage="Актор створений"
           />
         ),
       },
       directors: {
-        modalTitle: 'Створити режисера',
+        title: 'Створення нового режисера',
         layout: (
           <PositionForm
             createNew={createNewDirector}
-            btnTitle="Створити режисера"
-            sucessMessage="Режисер створений"
+            title="Створити режисера"
+            successMessage="Режисер створений"
           />
         ),
       },
@@ -172,7 +188,12 @@ const MovieForm: React.FC = () => {
       onSubmit={async (values: TCreateMovie, { setStatus, resetForm }) => {
         console.log(values);
         try {
-          await dispatch(createMovieAction(values)).unwrap();
+          if (!movie) {
+            await dispatch(createMovieAction(values)).unwrap();
+          } else {
+            await dispatch(updateMovieAction(values)).unwrap();
+          }
+
           resetForm();
         } catch (error) {}
       }}
@@ -180,29 +201,25 @@ const MovieForm: React.FC = () => {
       {({ values, touched, setFieldValue, errors, handleChange, handleBlur }) => (
         <FormStyled>
           <InputBlock>
-            <label>Назва фільму</label>
             <div>
-              <Field name="name" />
+              <Field name="name" placeholder="Назва фільму" />
               <ErrorMessage name="name" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
-            <label>Опис фільму</label>
             <div>
-              {/* <Field name="city" as="textarea" ref={InputRef} /> */}
               <TextareaAutosize
                 minRows={3}
                 value={values.description}
                 onChange={handleChange}
                 name="description"
-                // ref={TextareaRef}
+                placeholder="Опис фільму"
                 onBlur={handleBlur}
-              ></TextareaAutosize>
+              />
               <ErrorMessage name="city" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
-            <label htmlFor="genres">Жанри</label>
             <div>
               <SelectFilmFields
                 id="genres"
@@ -211,15 +228,15 @@ const MovieForm: React.FC = () => {
                 options={genres}
                 setFieldValue={setFieldValue}
                 title="Жанри"
+                placeholderText="Жанри"
               />
+              <AddBoxIconStyled onClick={() => setModalContentKey('genres')} />
             </div>
-            <AddBoxIcon onClick={() => setModalContentKey('genres')} />
             <div>
               <ErrorMessage name="country" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
-            <label htmlFor="actors">Актори</label>
             <div>
               <SelectFilmFields
                 id="actors"
@@ -228,15 +245,15 @@ const MovieForm: React.FC = () => {
                 options={actors}
                 setFieldValue={setFieldValue}
                 title="Актори"
+                placeholderText="Актори"
               />
+              <AddBoxIconStyled onClick={() => setModalContentKey('actors')} />
             </div>
-            <AddBoxIcon onClick={() => setModalContentKey('actors')} />
             <div>
               <ErrorMessage name="country" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
-            <label htmlFor="directors">Режисери</label>
             <div>
               <SelectFilmFields
                 id="directors"
@@ -245,9 +262,10 @@ const MovieForm: React.FC = () => {
                 options={directors}
                 setFieldValue={setFieldValue}
                 title="Режисери"
+                placeholderText="Режисери"
               />
+              <AddBoxIconStyled onClick={() => setModalContentKey('directors')} />
             </div>
-            <AddBoxIcon onClick={() => setModalContentKey('directors')} />
             <div>
               <ErrorMessage name="country" render={msg => <Error>{msg}</Error>} />
             </div>
@@ -255,16 +273,15 @@ const MovieForm: React.FC = () => {
           <InputBlock>
             <RatingBlock>
               <div>
-                <label>Рейтинг</label>
                 <SingleSelect name="rating" setFieldValue={setFieldValue} value={values.rating} />
               </div>
               <div>
-                <label>Рейтинг IMDB</label>
                 <RatingField
                   type="number"
                   name="imdb_rating"
                   value={values.imdb_rating}
                   onChange={handleChange}
+                  placeholder="Рейтинг IMDB"
                   inputProps={{
                     inputMode: 'numeric',
                     pattern: '[0-9]*',
@@ -277,22 +294,42 @@ const MovieForm: React.FC = () => {
             </RatingBlock>
           </InputBlock>
           <InputBlock>
-            <label>Постер</label>
             <div>
-              <Field name="poster_src" />
+              <YearField
+                type="number"
+                name="production_year"
+                value={values.production_year}
+                onChange={handleChange}
+                placeholder="Рік випуску"
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  max: new Date().getFullYear() + 1,
+                  min: 1900,
+                  step: '1',
+                }}
+              />
+              <ErrorMessage name="production_year" render={msg => <Error>{msg}</Error>} />
+            </div>
+          </InputBlock>
+          <InputBlock>
+            <div>
+              <Field name="poster_src" placeholder="Постер до фільму" />
               <ErrorMessage name="poster_src" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <CreateModal
             handleClose={handleClose}
             open={!!modalContentKey}
-            modalTitle={modalContentKey && modalContent[modalContentKey].modalTitle}
+            modalTitle={modalContentKey && modalContent[modalContentKey].title}
           >
             {modalContentKey && modalContent[modalContentKey].layout}
           </CreateModal>
           <InputBlock>
             <div>
-              <ButtonStyled type="submit">Створити фільм</ButtonStyled>
+              <ButtonStyled type="submit">
+                {movie ? 'Відредагувати' : 'Створити фільм'}
+              </ButtonStyled>
             </div>
           </InputBlock>
         </FormStyled>
@@ -302,18 +339,3 @@ const MovieForm: React.FC = () => {
 };
 
 export default MovieForm;
-
-// <InputBlock>
-//   <label>Жанри</label>
-//   {/* <SelectValues
-//     name="genres"
-//     value={values.genres}
-//     options={genres}
-//     setFieldValue={setFieldValue}
-//     title="Жанри"
-//     newItemTitle="Створити новий жанр"
-//   >
-//     <div>Створити жанр</div>
-//   </SelectValues> */}
-//   <ErrorMessage name="country" render={msg => <Error>{msg}</Error>} />
-// </InputBlock>;
