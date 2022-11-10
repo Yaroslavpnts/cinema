@@ -61,11 +61,13 @@ export const signUpAction = createAsyncThunk(
 type initialStateType = {
   isAuth: boolean;
   status: fetchStatus;
+  roles: string[];
 };
 
 const initialState: initialStateType = {
   isAuth: false,
   status: fetchStatus.Idle,
+  roles: [],
 };
 
 const authSlice = createSlice({
@@ -95,7 +97,7 @@ const authSlice = createSlice({
       .addCase(signUpAction.pending, state => {
         state.status = fetchStatus.Pending;
       })
-      .addCase(signUpAction.fulfilled, state => {
+      .addCase(signUpAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
         state.isAuth = true;
       })

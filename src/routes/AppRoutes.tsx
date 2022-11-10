@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Movies from '../components/adminPage/movies/Movies';
-import Sessions from '../components/adminPage/sessions/Sessions';
+import Movies from '../components/admin/movies/Movies';
+import Sessions from '../components/admin/sessions/Sessions';
 import MainLayout from '../components/layout/MainLayout';
 import ActorPage from '../pages/ActorPage/ActorPage';
 import AdminPage from '../pages/AdminPage/AdminPage';

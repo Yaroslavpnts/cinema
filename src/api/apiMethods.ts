@@ -21,6 +21,19 @@ export interface IApiResponseActor extends IPosition {
   actor_id: number;
 }
 
+export interface IApiResponseFullActor extends IApiResponseActor {
+  movies: {
+    description: string;
+    id: number;
+    imdb_rating: string;
+    name: string;
+    poster_src: string;
+    production_year: string;
+    rating: string;
+    wide_poster_src: string;
+  }[];
+}
+
 export interface IApiResponseDirector extends IPosition {
   id: number;
 }
@@ -102,6 +115,10 @@ export const Api = {
   },
   fetchActors() {
     return instance.get<IApiResponseActor[]>('actors');
+  },
+
+  fetchActor(id: number) {
+    return instance.get<IApiResponseFullActor>(`actors/${id}`);
   },
 
   createActor(actor: IPosition) {

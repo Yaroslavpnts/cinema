@@ -2,7 +2,7 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { Api, IPosition, IApiResponseActor } from '../../api/apiMethods';
-import { TCreatePosition } from '../../components/adminPage/movies/movieForm/modalForm/PositionForm';
+import { TCreatePosition } from '../../components/admin/movies/movieForm/modalForm/PositionForm';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
