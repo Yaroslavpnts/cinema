@@ -14,7 +14,7 @@ const style = {
   bgcolor: 'background.paper',
   border: 'none',
   boxShadow: 24,
-  padding: '31px 93px 0',
+  // paddingTop: '31px',
   borderRadius: '10px',
   background: '#c5e9f8',
 };
@@ -23,10 +23,10 @@ interface ModalProps {
   open: boolean;
   handleClose: (e: React.MouseEvent<HTMLElement>, type: 'escapeKeyDown' | 'backdropClick') => void;
   children: React.ReactNode;
-  modalTitle: string;
+  // modalTitle?: string;
 }
 
-const CreateModal: React.FC<ModalProps> = ({ open, handleClose, modalTitle, children }) => {
+const CreateModal: React.FC<ModalProps> = ({ open, handleClose, children }) => {
   return (
     <div>
       <Modal
@@ -41,14 +41,14 @@ const CreateModal: React.FC<ModalProps> = ({ open, handleClose, modalTitle, chil
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography
+            {/* <Typography
               id="transition-modal-title"
               variant="h6"
               component="h3"
               sx={{ textAlign: 'center', fontFamily: 'Mulish' }}
             >
               {modalTitle}
-            </Typography>
+            </Typography> */}
             {children}
           </Box>
         </Fade>

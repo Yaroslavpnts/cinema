@@ -39,6 +39,7 @@ export interface ICreateMovieAsync {
   rating: string;
   imdb_rating: string;
   production_year: string;
+  wide_poster_src: string;
   poster_src: string;
 }
 
@@ -48,6 +49,7 @@ export interface IMovie {
   rating: string;
   imdb_rating: string;
   poster_src: string;
+  wide_poster_src: string;
   actors: IApiResponseActor[];
   directors: IApiResponseDirector[];
   production_year: string;
@@ -104,6 +106,10 @@ export const Api = {
 
   createActor(actor: IPosition) {
     return instance.post<IApiResponseActor>('actors', actor);
+  },
+
+  updateActor(actor: IPosition) {
+    return instance.patch<IApiResponseActor>('actors', actor);
   },
 
   deleteActor(id: number) {

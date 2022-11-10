@@ -2,10 +2,8 @@ import * as React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
@@ -21,14 +19,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useAppDispatch } from '../../../../app/hooks';
-import { deleteActorAction } from '../../../../redux/slices/actorsSlice';
+import { deleteActorAction, updateActorAction } from '../../../../redux/slices/actorsSlice';
 import { deleteDirectorAction } from '../../../../redux/slices/directorsSlice';
 import { deleteMovieAction } from '../../../../redux/slices/moviesSlice';
-import { StyledEnhancedTableHead, StyledTableBody, StyledEditIcon } from './DataTable.styled';
-import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
+import {
+  StyledEnhancedTableHead,
+  StyledTableBody,
+  StyledEditIcon,
+  StyledLink,
+} from './DataTable.styled';
 import CreateModal from '../../../modal/Modal';
 import MovieForm from '../movieForm/MovieForm';
+import PositionForm from '../movieForm/modalForm/PositionForm';
+import { IPosition } from '../../../../api/apiMethods';
 
 export enum EnumTypeData {
   MOVIES = 'movies',
@@ -245,38 +248,56 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const [modalContentKey, setModalContentKey] = React.useState<EnumTypeData | ''>('');
+  const [modalContentKey, setModalContentKey] = React.useState<
+    'movies' | 'actors' | 'directors' | ''
+  >('');
 
-  const [editMovieId, setEditMovieId] = React.useState<number>(0);
+  const [editFormId, setEditFormId] = React.useState<number>(0);
 
   const modalContent = React.useMemo(
     () => ({
       movies: {
         title: 'Редагування фільму',
-        // layout: <MovieForm id={} />,
+        layout: <MovieForm id={editFormId} title="Редагування фільму" />,
       },
       actors: {
         title: 'Редагування актора',
-        // layout: <MovieForm id={} />,
+        layout: (
+          <PositionForm
+            id={editFormId}
+            formTitle="Редагування актора"
+            btnTitle="Редагувати актора"
+            successMessage="Актора відредаговано"
+            dispatchMethod={(actor: IPosition) => dispatch(updateActorAction(actor)).unwrap()}
+          />
+        ),
       },
       directors: {
         title: 'Редагування режисера',
-        // layout: <MovieForm id={} />,
+        layout: (
+          <PositionForm
+            id={editFormId}
+            formTitle="Редагування режисера"
+            btnTitle="Редагувати режисера"
+            successMessage="Режисера відредаговано"
+            dispatchMethod={(actor: IPosition) => dispatch(updateActorAction(actor)).unwrap()} //нужно сделать для режисера
+          />
+        ),
       },
     }),
-    []
+    [editFormId]
   );
 
   const handleEdit = (id: number) => {
     setModalContentKey(typeData);
-    setEditMovieId(id);
+    setEditFormId(id);
   };
 
   const handleClose = (
     e: React.MouseEvent<HTMLElement>,
     reason: 'escapeKeyDown' | 'backdropClick'
   ) => {
-    setEditMovieId(0);
+    setEditFormId(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
@@ -406,10 +427,14 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
                       </TableCell>
 
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {typeData === EnumTypeData.MOVIES ? (
-                          <Link to={`${row.id}`}>{row.name}</Link>
-                        ) : (
-                          <Link to={`/actors/${row.id}`}>{row.name}</Link>
+                        {typeData === EnumTypeData.MOVIES && (
+                          <StyledLink to={`/movies/${row.id}`}>{row.name}</StyledLink>
+                        )}
+                        {typeData === EnumTypeData.ACTORS && (
+                          <StyledLink to={`/actors/${row.id}`}>{row.name}</StyledLink>
+                        )}
+                        {typeData === EnumTypeData.DIRECTORS && (
+                          <StyledLink to={`/directors/${row.id}`}>{row.name}</StyledLink>
                         )}
                       </TableCell>
 
@@ -484,11 +509,11 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
       />
       <CreateModal
         handleClose={handleClose}
-        open={!!editMovieId}
-        modalTitle={modalContentKey && modalContent[typeData].title}
+        open={!!editFormId}
+        // modalTitle={modalContentKey && modalContent[typeData].title}
       >
-        {/* {editMovieId && modalContent[modalContentKey].layout} */}
-        {editMovieId && <MovieForm id={editMovieId} />}
+        {modalContentKey && modalContent[modalContentKey].layout}
+        {/* {editMovieId && <MovieForm id={editMovieId} title="Редагування фільму" />} */}
       </CreateModal>
     </Box>
   );

@@ -4,12 +4,12 @@ import { FlexBoxCenter } from '../../../../../theme/template';
 
 export const GenreBlockStyled = styled('div')`
   ${FlexBoxCenter}
-  padding-bottom: 40px;
-  width: 390px;
+  flex-direction: column;
+  padding: 31px 93px 31px;
+  width: 550px;
 `;
 
 export const FormStyled = styled('form')`
-  margin-top: 38px;
   width: 100%;
   text-align: center;
 `;

@@ -17,8 +17,9 @@ import {
   Error,
   FormStyled,
   InputBlock,
-  RatingBlock,
+  MultipleBlock,
   RatingField,
+  StyledTypography,
   YearField,
 } from './MovieForm.style';
 import {
@@ -40,7 +41,7 @@ import {
 import SelectFilmFields from '../select/multipleSelect/SelectFilmFields';
 import CreateModal from '../../../modal/Modal';
 import GenreForm from './modalForm/GenreForm';
-import { TextareaAutosize, TextField } from '@mui/material';
+import { TextareaAutosize } from '@mui/material';
 import SingleSelect from '../select/singleSelect/SingleSelect';
 
 const defaultValues = {
@@ -52,6 +53,7 @@ const defaultValues = {
   rating: '',
   imdb_rating: '',
   production_year: '',
+  wide_poster_src: '',
   poster_src: '',
 };
 
@@ -109,10 +111,11 @@ const validate = (values: TCreateMovie) => {
 };
 
 interface IMovieFormProps {
-  id: number | null;
+  id?: number;
+  title: string;
 }
 
-const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
+const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
   const dispatch = useAppDispatch();
 
   const genres = useAppSelector(genresSelector);
@@ -154,25 +157,33 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
   const modalContent = useMemo(
     () => ({
       genres: {
-        title: 'Створення нового жанру',
-        layout: <GenreForm createNew={createNewCategory} title="Створити жанр" />,
+        // title: 'Створення нового жанру',
+        layout: (
+          <GenreForm
+            createNew={createNewCategory}
+            formTitle="Створення нового жанру"
+            btnTitle="Створити жанр"
+          />
+        ),
       },
       actors: {
-        title: 'Створення нового актора',
+        // title: 'Створення нового актора',
         layout: (
           <PositionForm
-            createNew={createNewActor}
-            title="Створити актора"
+            dispatchMethod={createNewActor}
+            formTitle="Створення нового актора"
+            btnTitle="Створити актора"
             successMessage="Актор створений"
           />
         ),
       },
       directors: {
-        title: 'Створення нового режисера',
+        // title: 'Створення нового режисера',
         layout: (
           <PositionForm
-            createNew={createNewDirector}
-            title="Створити режисера"
+            dispatchMethod={createNewDirector}
+            formTitle="Створення нового режисера"
+            btnTitle="Створити режисера"
             successMessage="Режисер створений"
           />
         ),
@@ -200,6 +211,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
     >
       {({ values, touched, setFieldValue, errors, handleChange, handleBlur }) => (
         <FormStyled>
+          <StyledTypography variant="h3">{title}</StyledTypography>
           <InputBlock>
             <div>
               <Field name="name" placeholder="Назва фільму" />
@@ -271,7 +283,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
             </div>
           </InputBlock>
           <InputBlock>
-            <RatingBlock>
+            <MultipleBlock>
               <div>
                 <SingleSelect name="rating" setFieldValue={setFieldValue} value={values.rating} />
               </div>
@@ -291,9 +303,26 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
                   }}
                 />
               </div>
-            </RatingBlock>
+              <div>
+                <YearField
+                  type="number"
+                  name="production_year"
+                  value={values.production_year}
+                  onChange={handleChange}
+                  placeholder="Рік випуску"
+                  inputProps={{
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                    max: new Date().getFullYear() + 1,
+                    min: 1900,
+                    step: '1',
+                  }}
+                />
+                <ErrorMessage name="production_year" render={msg => <Error>{msg}</Error>} />
+              </div>
+            </MultipleBlock>
           </InputBlock>
-          <InputBlock>
+          {/* <InputBlock>
             <div>
               <YearField
                 type="number"
@@ -311,6 +340,12 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
               />
               <ErrorMessage name="production_year" render={msg => <Error>{msg}</Error>} />
             </div>
+          </InputBlock> */}
+          <InputBlock>
+            <div>
+              <Field name="wide_poster_src" placeholder="Афіша до фільму" />
+              <ErrorMessage name="wide_poster_src" render={msg => <Error>{msg}</Error>} />
+            </div>
           </InputBlock>
           <InputBlock>
             <div>
@@ -321,7 +356,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id }) => {
           <CreateModal
             handleClose={handleClose}
             open={!!modalContentKey}
-            modalTitle={modalContentKey && modalContent[modalContentKey].title}
+            // modalTitle={modalContentKey && modalContent[modalContentKey].title}
           >
             {modalContentKey && modalContent[modalContentKey].layout}
           </CreateModal>

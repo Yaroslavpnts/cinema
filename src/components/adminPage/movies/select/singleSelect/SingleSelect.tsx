@@ -17,8 +17,8 @@ const Placeholder: React.FC<PlaceholderProps> = ({ children }) => {
       style={{
         color: '#969696',
         fontWeight: '400',
-        fontSize: '18px',
-        lineHeight: '18px',
+        fontSize: '16px',
+        lineHeight: '16px',
         fontFamily: 'Anonymous Pro',
       }}
     >
@@ -49,6 +49,7 @@ const SingleSelect: React.FC<ISengleSelectProps> = ({ name, setFieldValue, value
             backgroundColor: '#fff',
             display: 'flex',
             alignItems: 'center',
+            padding: '5px 15px',
           },
         }}
         renderValue={selected => {

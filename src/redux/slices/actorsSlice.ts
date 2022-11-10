@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { Api, IPosition, IApiResponseActor } from '../../api/apiMethods';
+import { TCreatePosition } from '../../components/adminPage/movies/movieForm/modalForm/PositionForm';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
@@ -40,6 +42,34 @@ export const createActorAction = createAsyncThunk<
   try {
     const { data } = await Api.createActor(actor);
 
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Інша помилка');
+  }
+});
+
+export const updateActorAction = createAsyncThunk<
+  // Return type of the payload creator
+  IApiResponseActor,
+  // First argument to the payload creator
+  IPosition,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>('actors/updateActor', async (actor, { rejectWithValue }) => {
+  try {
+    const { data } = await Api.updateActor(actor);
+    console.log(data);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -146,6 +176,23 @@ export const actorsForTable = createSelector(actorsSelector, actors => {
     country: actor.country,
   }));
 });
+
+export const actorById = (id: number | undefined) => (state: RootState) => {
+  if (!id) return null;
+
+  let returnedActor = {} as TCreatePosition;
+
+  state.actors.actors.forEach(actor => {
+    if (actor.actor_id === id) {
+      returnedActor = {
+        ...actor,
+        birthday: dayjs(actor.birthday).format('YYYY-MM-DD'),
+      };
+    }
+  });
+
+  return returnedActor;
+};
 
 export const actorsNamesSelector = createSelector(actorsSelector, actors => {
   return actors.map(actor => ({ id: actor.actor_id, name: actor.name }));

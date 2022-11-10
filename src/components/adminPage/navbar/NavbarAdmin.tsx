@@ -18,10 +18,10 @@ const NavbarAdmin = () => {
               <StyledListLink to="actors">Актори</StyledListLink>
             </StyledListItem>
             <StyledListItem>
-              <StyledListLink to="movies">Фільми</StyledListLink>
+              <StyledListLink to="create-movies">Фільми</StyledListLink>
             </StyledListItem>
             <StyledListItem>
-              <StyledListLink to="sessions">Сеанси</StyledListLink>
+              <StyledListLink to="create-sessions">Сеанси</StyledListLink>
             </StyledListItem>
             <StyledListItem>
               <StyledListLink to="cinemas">Кінотеатри</StyledListLink>

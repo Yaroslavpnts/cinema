@@ -7,15 +7,24 @@ export const StyledMenuItem = styled(MenuItem)`
 
 export const StyledTextField = styled(TextField)`
   .MuiInputBase-input {
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 16px;
+    line-height: 16px;
+
     &::placeholder {
       font-family: 'Anonymous Pro';
       color: #969696;
       opacity: 1;
-      font-size: 18px;
-      line-height: '18px';
+      font-size: 16px;
+      line-height: '16px';
       font-weight: 400;
     }
+  }
+  .MuiOutlinedInput-root .MuiAutocomplete-input {
+    padding: 0px;
+  }
+  .MuiOutlinedInput-root {
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 `;

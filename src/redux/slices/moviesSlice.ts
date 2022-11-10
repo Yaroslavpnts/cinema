@@ -38,28 +38,6 @@ export const createMovieAction = createAsyncThunk<
     rejectValue: string;
   }
 >(`movies/createMovie`, async (movie, { rejectWithValue, getState }) => {
-  // const genres = [] as number[];
-  // const actors = [] as number[];
-  // const directors = [] as number[];
-
-  // getState().genres.genres.forEach(genre => {
-  //   if (movie.genres.includes(genre.name)) {
-  //     genres.push(genre.id);
-  //   }
-  // });
-
-  // getState().actors.actors.forEach(actor => {
-  //   if (movie.actors.includes(actor.name)) {
-  //     actors.push(actor.actor_id);
-  //   }
-  // });
-
-  // getState().directors.directors.forEach(director => {
-  //   if (movie.directors.includes(director.name)) {
-  //     directors.push(director.id);
-  //   }
-  // });
-
   const newMovie = {
     ...movie,
     genres: movie.genres.map(genre => genre.id),
@@ -154,7 +132,6 @@ const moviesSlice = createSlice({
       .addCase(fetchMoviesAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
         state.movies = action.payload;
-        state.responseMessage = 'Фільм створений';
       })
       .addCase(fetchMoviesAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
@@ -165,6 +142,7 @@ const moviesSlice = createSlice({
       .addCase(createMovieAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
         state.movies.push(action.payload);
+        state.responseMessage = 'Фільм створений';
       })
       .addCase(createMovieAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
@@ -193,7 +171,7 @@ export const moviesForTable = createSelector(moviesSelector, movies => {
   }));
 });
 
-export const movieById = (id: number | null) => (state: RootState) => {
+export const movieById = (id: number | undefined) => (state: RootState) => {
   if (!id) return null;
 
   let returnedMovie = {} as TCreateMovie;

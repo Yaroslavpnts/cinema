@@ -2,6 +2,7 @@ import { styled } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
 
 export const StyledEnhancedTableHead = styled(TableHead)`
   background-color: #252525;
@@ -42,4 +43,11 @@ export const StyledTableBody = styled(TableBody)`
 
 export const StyledEditIcon = styled(EditIcon)`
   cursor: pointer;
+`;
+
+export const StyledLink = styled(Link)`
+  color: #3cb4e7;
+  &:visited {
+    color: #3cb4e7;
+  }
 `;

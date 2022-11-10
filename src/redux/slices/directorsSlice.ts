@@ -65,7 +65,7 @@ export const deleteDirectorAction = createAsyncThunk<
 
   const directorForDelete = directors.find(director => director.name === name);
   try {
-    await Api.deleteActor(directorForDelete!.id);
+    await Api.deleteDirector(directorForDelete!.id);
 
     return directorForDelete!.id;
   } catch (error) {
