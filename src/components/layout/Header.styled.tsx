@@ -16,9 +16,10 @@ export const HeaderApp = styled('header')`
 `;
 
 export const Logo = styled(Link)`
-  position: relative;
+  position: absolute;
   /* left: 29px; */
   top: 18px;
+  left: 20px;
   display: inline-block;
   z-index: 2;
 `;
@@ -42,7 +43,7 @@ export const HeaderMain = styled('div')`
 `;
 
 export const Menu = styled('ul')`
-  padding-left: 30px;
+  /* padding-left: 30px; */
   color: #fff;
   display: flex;
   font-size: 15px;

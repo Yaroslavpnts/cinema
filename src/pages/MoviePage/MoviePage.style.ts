@@ -1,5 +1,5 @@
 import { styled } from '@mui/material';
 
-export const StyledActorPage = styled('main')`
+export const StyledMoviePage = styled('main')`
   margin-top: 66px;
 `;

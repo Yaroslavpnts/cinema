@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyledActorPage } from './MoviePage.style';
+import { StyledMoviePage } from './MoviePage.style';
 
 const ActorPage = () => {
-  return <StyledActorPage>MoviePage</StyledActorPage>;
+  return <StyledMoviePage>MoviePage</StyledMoviePage>;
 };
 
 export default ActorPage;

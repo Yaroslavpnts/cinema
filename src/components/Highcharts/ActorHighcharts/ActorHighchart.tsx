@@ -5,26 +5,11 @@ import { Api, IApiResponseFullActor } from '../../../api/apiMethods';
 import { useParams } from 'react-router-dom';
 import { red } from '@mui/material/colors';
 
-// interface IActorHighchart extends HighchartsReact.Props {
-//   id: number;
-// }
+interface IActorHighchart extends HighchartsReact.Props {
+  actor: IApiResponseFullActor | undefined;
+}
 
-const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
-  const [actor, setActor] = useState<IApiResponseFullActor>();
-
-  const { id } = useParams();
-
-  useEffect(() => {
-    const getActor = async (id: number) => {
-      try {
-        const { data } = await Api.fetchActor(id);
-        setActor(data);
-      } catch (error) {}
-    };
-
-    if (id) getActor(+id);
-  }, [id]);
-
+const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
   // "Для разработки", удалить потом
   let arr = [] as {
     description: string;
@@ -167,9 +152,7 @@ const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
 
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-  return (
-    <HighchartsReact highcharts={Highcharts} options={options} ref={chartComponentRef} {...props} />
-  );
+  return <HighchartsReact highcharts={Highcharts} options={options} ref={chartComponentRef} />;
 };
 
 export default ActorHighchart;
