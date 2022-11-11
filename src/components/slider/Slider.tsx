@@ -16,29 +16,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { IApiResponseMovie } from '../../api/apiMethods';
 
-// const movies = [
-//   {
-//     src: 'https://m.media-amazon.com/images/M/MV5BOTg4ZTNkZmUtMzNlZi00YmFjLTk1MmUtNWQwNTM0YjcyNTNkXkEyXkFqcGdeQXVyNjg2NjQwMDQ@._V1_FMjpg_UX1000_.jpg',
-//     name: 'Одного разу в Голівуді',
-//     rating: 'R',
-//   },
-//   {
-//     src: 'https://i.pravatar.cc/500',
-//     name: 'Одного разу в Голівуді',
-//     rating: 'R',
-//   },
-//   {
-//     src: 'https://i.pravatar.cc/500',
-//     name: 'Одного разу в Голівуді',
-//     rating: 'R',
-//   },
-//   {
-//     src: 'https://i.pravatar.cc/500',
-//     name: 'Одного разу в Голівуді',
-//     rating: 'R',
-//   },
-// ];
-
 interface SliderProps {
   movies: Array<IApiResponseMovie>;
 }

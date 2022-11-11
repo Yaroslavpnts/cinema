@@ -3,6 +3,7 @@ import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Api, IApiResponseFullActor } from '../../../api/apiMethods';
 import { useParams } from 'react-router-dom';
+import { red } from '@mui/material/colors';
 
 // interface IActorHighchart extends HighchartsReact.Props {
 //   id: number;
@@ -24,35 +25,76 @@ const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
     if (id) getActor(+id);
   }, [id]);
 
-  let moviesYears;
-  let moviesRatings;
-  if (actor) {
-    moviesYears = actor.movies.map(movie => movie.production_year);
-    moviesRatings = actor.movies.map(movie => Number(movie.imdb_rating));
+  // "Для разработки", удалить потом
+  let arr = [] as {
+    description: string;
+    id: number;
+    imdb_rating: string;
+    name: string;
+    poster_src: string;
+    production_year: string;
+    rating: string;
+    wide_poster_src: string;
+  }[];
 
-    //Для разработки, удалить потом
-    moviesYears?.push('2001');
-    moviesRatings?.push(5);
+  if (actor) {
+    arr = actor.movies;
+  }
+  arr.push({
+    description: 'Тестоий опис',
+    id: 151,
+    imdb_rating: '3',
+    name: 'Тестова назва',
+    poster_src: 'постер',
+    production_year: '2020',
+    rating: 'PG-13',
+    wide_poster_src: 'широкий постер',
+  });
+  arr.push({
+    description: 'Тестоий111 опис',
+    id: 151,
+    imdb_rating: '5',
+    name: 'Тестова назва1111',
+    poster_src: 'постер',
+    production_year: '2010',
+    rating: 'PG-13',
+    wide_poster_src: 'широкий постер',
+  });
+  // конец "для разработки"
+
+  // const filteredMoviesList = actor?.movies.sort(
+  //   (a, b) => Number(b.production_year) - Number(a.production_year)
+  // );
+  const filteredMoviesList = arr.sort(
+    (a, b) => Number(b.production_year) - Number(a.production_year)
+  );
+  console.log(filteredMoviesList);
+  let moviesYears = [] as string[] | undefined;
+  let moviesRatings = [] as { name: string; y: number }[] | undefined;
+  let moviesNames = [] as string[] | undefined;
+
+  if (actor) {
+    moviesYears = filteredMoviesList?.map(movie => movie.production_year);
+    moviesRatings = filteredMoviesList?.map(movie => ({
+      name: movie.production_year,
+      y: Number(movie.imdb_rating),
+    }));
+    moviesNames = filteredMoviesList?.map(movies => movies.name);
+    console.log(moviesNames);
   }
 
   const options: Highcharts.Options = {
     chart: {
-      type: 'column',
+      type: 'bar',
     },
     title: {
-      text: 'Рейтинг фільмографії',
+      text: 'Рейтинг фільмографії актора',
     },
-    //   subtitle: {
-    //     text:
-    //       'Source: ' +
-    //       '<a href="https://www.ssb.no/en/statbank/table/08940/" ' +
-    //       'target="_blank">SSB</a>',
-    //   },
     xAxis: {
-      categories: moviesYears,
+      categories: moviesNames,
       crosshair: true,
       title: {
-        text: 'Рік виходу фільму',
+        text: null,
       },
     },
     yAxis: {
@@ -61,11 +103,14 @@ const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
         text: 'Рейтинг фільму',
       },
       labels: {
-        formatter: function () {
-          return this.value + ' %';
-        },
-        useHTML: true,
+        overflow: 'justify',
       },
+      // labels: {
+      //   formatter: function () {
+      //     return this.value + ' %';
+      //   },
+      //   useHTML: true,
+      // },
     },
     //   tooltip: {
     //     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -79,13 +124,21 @@ const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
     tooltip: {
       backgroundColor: 'blue',
       borderColor: 'black',
-      borderRadius: 10,
-      borderWidth: 3,
+      borderRadius: 0,
+      borderWidth: 0,
+      formatter() {
+        console.log(this);
+        return `<div><div>Рейтинг фільму: ${this.y}</div></br><div>Рік випуску фільму: ${this.key}</div></div>`;
+      },
+    },
+    credits: {
+      enabled: false,
     },
     plotOptions: {
       column: {
         pointPadding: 0.1,
-        borderWidth: 0,
+        borderWidth: 2,
+        borderColor: 'red',
         //Значення над серією
         dataLabels: {
           enabled: true,
@@ -95,12 +148,21 @@ const ActorHighchart: React.FC<HighchartsReact.Props> = props => {
     series: [
       {
         type: 'column',
-        name: 'Фільмів за рік',
+        name: 'Рейтинг',
         data: moviesRatings,
         color: 'black',
         borderRadius: 8,
       },
     ],
+    // series: [
+    //   {
+    //     type: 'column',
+    //     name: 'Рейтинг фільму',
+    //     data: moviesRatings,
+    //     color: 'black',
+    //     borderRadius: 8,
+    //   },
+    // ],
   };
 
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);

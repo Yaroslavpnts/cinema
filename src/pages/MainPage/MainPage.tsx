@@ -5,12 +5,16 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import MoviesList from '../../components/movies/MoviesList';
 import Slider from '../../components/slider/Slider';
 // import { signIn } from '../../redux/slices/authorizationSlice';
-import { fetchMoviesAction, moviesSelector } from '../../redux/slices/moviesSlice';
+import {
+  fetchMoviesAction,
+  moviesSelector,
+  moviesStateSelector,
+} from '../../redux/slices/moviesSlice';
 import { MainPageWrapper } from './MainPage.styled';
 
 const MainPage = () => {
   const dispatch = useAppDispatch();
-  const movies = useAppSelector(moviesSelector);
+  const movies = useAppSelector(moviesStateSelector);
 
   useEffect(() => {
     dispatch(fetchMoviesAction());
@@ -18,9 +22,9 @@ const MainPage = () => {
 
   return (
     <MainPageWrapper>
-      <Slider movies={movies} />
+      <Slider movies={movies.movies} />
       <Container>
-        <MoviesList movies={movies} />
+        <MoviesList movies={movies.movies} status={movies.status} />
       </Container>
     </MainPageWrapper>
   );

@@ -5,13 +5,13 @@ import { TCreateMovie } from '../../components/admin/movies/movieForm/MovieForm'
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
-type initialStateType = {
+export type initialStateMoviesType = {
   status: fetchStatus;
   responseMessage: string;
   movies: Array<IApiResponseMovie>;
 };
 
-const initialState: initialStateType = {
+const initialState: initialStateMoviesType = {
   status: fetchStatus.Idle,
   responseMessage: '',
   movies: [],
@@ -159,6 +159,8 @@ const moviesSlice = createSlice({
       });
   },
 });
+
+export const moviesStateSelector = (state: RootState) => state.movies;
 
 export const moviesSelector = (state: RootState) => state.movies.movies;
 

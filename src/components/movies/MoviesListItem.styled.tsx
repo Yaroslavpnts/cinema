@@ -1,11 +1,15 @@
 import { css, styled, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { FlexBoxCenter } from '../../theme/template';
 
 export const Card = styled('div')`
-  display: flex;
+  ${FlexBoxCenter}
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+`;
+
+export const SkeletonCard = styled('div')`
+  ${FlexBoxCenter}
+  flex-direction: column;
 `;
 
 export const RotatingPart = styled('div')`
@@ -14,6 +18,7 @@ export const RotatingPart = styled('div')`
   position: relative;
   perspective: 600px;
   cursor: pointer;
+  margin-bottom: 10px;
 
   &:hover > div:first-of-type {
     transform: rotateY(180deg);
