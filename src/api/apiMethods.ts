@@ -21,17 +21,19 @@ export interface IApiResponseActor extends IPosition {
   actor_id: number;
 }
 
+export interface IActorMovie {
+  description: string;
+  id: number;
+  imdb_rating: string;
+  name: string;
+  poster_src: string;
+  production_year: string;
+  rating: string;
+  wide_poster_src: string;
+}
+
 export interface IApiResponseFullActor extends IApiResponseActor {
-  movies: {
-    description: string;
-    id: number;
-    imdb_rating: string;
-    name: string;
-    poster_src: string;
-    production_year: string;
-    rating: string;
-    wide_poster_src: string;
-  }[];
+  movies: IActorMovie[];
 }
 
 export interface IApiResponseDirector extends IPosition {
@@ -92,6 +94,10 @@ export const Api = {
 
   fetchMovies() {
     return instance.get<IApiResponseMovie[]>('movies');
+  },
+
+  fetchMovie(id: number) {
+    return instance.get<IApiResponseMovie>(`movies/${id}`);
   },
 
   createMovie(movie: ICreateMovieAsync) {

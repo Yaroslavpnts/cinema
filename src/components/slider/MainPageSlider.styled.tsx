@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 export const ImgWrapper = styled('div')`
   width: 100%;
   height: 570px;
-  margin-bottom: 2 0px;
+  margin-bottom: 20px;
 `;
 
 export const Img = styled('img')`
@@ -29,24 +29,34 @@ export const StyledSwiper = styled(Swiper)`
     height: 40px;
     background-color: ${props => props.theme.palette.customColor.light};
     border-radius: 50%;
+
+    &:hover {
+      background-color: ${props => props.theme.palette.customColor.main};
+    }
+
+    &::after {
+      position: absolute;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0;
+    }
   }
 
-  & .swiper-button-next:hover,
+  /* & .swiper-button-next:hover,
   .swiper-button-prev:hover {
-    background-color: ${props => props.theme.palette.customColor.main};
-  }
-  & .swiper-button-next::after,
+  } */
+  /* & .swiper-button-next::after,
   .swiper-button-prev::after {
-    position: absolute;
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  } */
 `;
 
 export const StyledSwiperSlide = styled(SwiperSlide)`

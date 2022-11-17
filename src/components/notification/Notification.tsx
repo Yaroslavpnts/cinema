@@ -52,7 +52,7 @@ const Notification: React.FC<Props> = ({ isOpen, severity, children, setIsOpen }
   return (
     <SnackBarStyled
       open={isOpen}
-      autoHideDuration={2000}
+      autoHideDuration={700000}
       onClose={handleClose}
       sx={{
         '.MuiSnackbar-root': {

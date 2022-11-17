@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useFormik } from 'formik';
-import { ButtonStyled, Error, FormStyled, GenreBlockStyled, InputBlock } from './modalForm.style';
+import { ButtonStyled, CreateBlockStyled, Error, FormStyled, InputBlock } from './modalForm.style';
 import { IApiResponseCategory, ICategory } from '../../../../../api/apiMethods';
 import Notification from '../../../../notification/Notification';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -80,7 +80,7 @@ const GenreForm: React.FC<IProps> = ({ createNew, formTitle, btnTitle }) => {
   );
 
   return (
-    <GenreBlockStyled>
+    <CreateBlockStyled>
       <Typography
         id="transition-modal-title"
         variant="h6"
@@ -103,7 +103,7 @@ const GenreForm: React.FC<IProps> = ({ createNew, formTitle, btnTitle }) => {
         <ButtonStyled type="submit">{btnTitle}</ButtonStyled>
         {status && notification[status as keyof typeof notification]}
       </FormStyled>
-    </GenreBlockStyled>
+    </CreateBlockStyled>
   );
 };
 

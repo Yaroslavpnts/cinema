@@ -2,10 +2,10 @@ import { styled } from '@mui/material';
 import { Form } from 'formik';
 import { FlexBoxCenter } from '../../../../../theme/template';
 
-export const GenreBlockStyled = styled('div')`
+export const CreateBlockStyled = styled('div')`
   ${FlexBoxCenter}
   flex-direction: column;
-  padding: 31px 93px 31px;
+  padding: 31px 93px 61px;
   width: 550px;
 `;
 

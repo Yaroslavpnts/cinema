@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Api, userDataType } from '../../api/apiMethods';
-import { RootState } from '../store';
+import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 import jwt_decode from 'jwt-decode';
 import { deleteCookie } from '../../app/helpers/helperFunctions';
@@ -11,30 +11,35 @@ type SignUpPayloadType = {
   setStatus: (status: string) => void;
 };
 
-export const logInAppAction = createAsyncThunk(
-  'auth/login',
-  async ({ userData, setStatus }: SignUpPayloadType, { rejectWithValue }) => {
-    try {
-      const { data } = await Api.auth(userData);
-      if (data.token) {
-        document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
-
-        const decoded = jwt_decode(data.token);
-
-        console.log(decoded);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setStatus(error.response?.data.message);
-        return rejectWithValue(error.response?.data.message);
-      }
-
-      const typedError = error as Error;
-
-      return rejectWithValue(typedError);
-    }
+export const logInAppAction = createAsyncThunk<
+  TUserRole[] | undefined,
+  SignUpPayloadType,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
   }
-);
+>('auth/login', async ({ userData, setStatus }, { rejectWithValue }) => {
+  try {
+    const { data } = await Api.auth(userData);
+    if (data.token) {
+      document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
+
+      const decoded = jwt_decode<{ roles: TUserRole[] }>(data.token);
+
+      return decoded.roles;
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      setStatus(error.response?.data.message);
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    const typedError = error as Error;
+
+    return rejectWithValue(typedError.message);
+  }
+});
 
 export const signUpAction = createAsyncThunk(
   'auth/signUp',
@@ -58,10 +63,22 @@ export const signUpAction = createAsyncThunk(
   }
 );
 
+enum UserRoles {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
+}
+
+type TUserRole = {
+  id: number;
+  value: UserRoles;
+  description: string;
+};
+
 type initialStateType = {
   isAuth: boolean;
   status: fetchStatus;
-  roles: string[];
+  roles: TUserRole[];
 };
 
 const initialState: initialStateType = {
@@ -77,6 +94,7 @@ const authSlice = createSlice({
     signOut: state => {
       deleteCookie('token');
       state.isAuth = false;
+      state.roles = [];
     },
     signIn: state => {
       state.isAuth = true;
@@ -87,9 +105,12 @@ const authSlice = createSlice({
       .addCase(logInAppAction.pending, state => {
         state.status = fetchStatus.Pending;
       })
-      .addCase(logInAppAction.fulfilled, state => {
+      .addCase(logInAppAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
         state.isAuth = true;
+        if (action.payload) {
+          state.roles = action.payload;
+        }
       })
       .addCase(logInAppAction.rejected, state => {
         state.status = fetchStatus.Error;
@@ -106,6 +127,9 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const adminRoleSelector = (state: RootState) =>
+  state.auth.roles.some(role => role.value === UserRoles.ADMIN);
 
 export const { signOut, signIn } = authSlice.actions;
 

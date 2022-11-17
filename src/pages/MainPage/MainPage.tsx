@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 // import { getCookie } from '../../app/helpers/helperFunctions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import MoviesList from '../../components/movies/MoviesList';
-import Slider from '../../components/slider/Slider';
+import MainPageSlider from '../../components/slider/MainPageSlider';
 // import { signIn } from '../../redux/slices/authorizationSlice';
 import {
   fetchMoviesAction,
@@ -22,7 +22,7 @@ const MainPage = () => {
 
   return (
     <MainPageWrapper>
-      <Slider movies={movies.movies} />
+      <MainPageSlider movies={movies.movies} />
       <Container>
         <MoviesList movies={movies.movies} status={movies.status} />
       </Container>

@@ -26,21 +26,23 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
     arr = actor.movies;
   }
   arr.push({
-    description: 'Тестоий опис',
+    description: '',
     id: 151,
     imdb_rating: '3',
-    name: 'Тестова назва',
-    poster_src: 'постер',
+    name: 'Тестова назва123',
+    poster_src:
+      'https://static.kinoafisha.info/k/movie_posters/canvas/800x1200/upload/movie_posters/6/7/5/4366576/b76f8b3158a661a90432a60056468b3d.jpg',
     production_year: '2020',
     rating: 'PG-13',
     wide_poster_src: 'широкий постер',
   });
   arr.push({
-    description: 'Тестоий111 опис',
+    description: '',
     id: 151,
     imdb_rating: '5',
-    name: 'Тестова назва1111',
-    poster_src: 'постер',
+    name: 'Тестова назва123456',
+    poster_src:
+      'https://static.kinoafisha.info/k/movie_posters/canvas/800x1200/upload/movie_posters/6/7/5/4366576/b76f8b3158a661a90432a60056468b3d.jpg',
     production_year: '2010',
     rating: 'PG-13',
     wide_poster_src: 'широкий постер',
@@ -53,7 +55,6 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
   const filteredMoviesList = arr.sort(
     (a, b) => Number(b.production_year) - Number(a.production_year)
   );
-  console.log(filteredMoviesList);
   let moviesYears = [] as string[] | undefined;
   let moviesRatings = [] as { name: string; y: number }[] | undefined;
   let moviesNames = [] as string[] | undefined;
@@ -65,15 +66,22 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
       y: Number(movie.imdb_rating),
     }));
     moviesNames = filteredMoviesList?.map(movies => movies.name);
-    console.log(moviesNames);
   }
 
   const options: Highcharts.Options = {
     chart: {
       type: 'bar',
+      height:
+        filteredMoviesList.length < 8 ? '400px' : `${400 + (filteredMoviesList.length - 8) * 50}px`,
     },
     title: {
       text: 'Рейтинг фільмографії актора',
+      style: {
+        fontFamily: 'Mulish',
+        fontWeight: '700',
+        fontSize: '24px',
+        color: 'rgb(34, 34, 34)',
+      },
     },
     xAxis: {
       categories: moviesNames,
@@ -81,15 +89,28 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
       title: {
         text: null,
       },
+      labels: {
+        style: {
+          fontSize: '20px',
+          fontFamily: 'Anonymous Pro',
+          color: 'rgb(16, 16, 16)',
+        },
+      },
     },
     yAxis: {
       title: {
-        //   useHTML: true,
-        text: 'Рейтинг фільму',
+        text: '',
       },
       labels: {
         overflow: 'justify',
+        style: {
+          fontSize: '18px',
+          fontFamily: 'Anonymous Pro',
+          color: 'rgba(176, 170, 170, 1)',
+        },
       },
+      lineWidth: 1,
+      gridLineColor: 'rgb(220, 215, 215)',
       // labels: {
       //   formatter: function () {
       //     return this.value + ' %';
@@ -107,13 +128,19 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
     //     useHTML: true,
     //   },
     tooltip: {
-      backgroundColor: 'blue',
+      backgroundColor: '#E1F6FF',
       borderColor: 'black',
       borderRadius: 0,
       borderWidth: 0,
-      formatter() {
-        console.log(this);
-        return `<div><div>Рейтинг фільму: ${this.y}</div></br><div>Рік випуску фільму: ${this.key}</div></div>`;
+      style: {
+        fontFamily: 'Anonymous Pro',
+        backgroundColor: '',
+        fontSize: '16px',
+        color: '#101010',
+      },
+      formatter(tooltip) {
+        console.log(tooltip);
+        return `<div><p>Рейтинг: ${this.y}</p></br><p>Рік випуску: ${this.key}</p></div>`;
       },
     },
     credits: {
@@ -122,12 +149,12 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
     plotOptions: {
       column: {
         pointPadding: 0.1,
-        borderWidth: 2,
-        borderColor: 'red',
+        borderWidth: 1,
+        borderColor: 'rgba(89, 193, 237, 0.61)',
         //Значення над серією
-        dataLabels: {
-          enabled: true,
-        },
+        // dataLabels: {
+        //   enabled: true,
+        // },
       },
     },
     series: [
@@ -135,8 +162,7 @@ const ActorHighchart: React.FC<IActorHighchart> = ({ actor }) => {
         type: 'column',
         name: 'Рейтинг',
         data: moviesRatings,
-        color: 'black',
-        borderRadius: 8,
+        color: 'rgba(60, 180, 231, 0.3)',
       },
     ],
     // series: [

@@ -343,14 +343,14 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
           </InputBlock> */}
           <InputBlock>
             <div>
-              <Field name="wide_poster_src" placeholder="Афіша до фільму" />
-              <ErrorMessage name="wide_poster_src" render={msg => <Error>{msg}</Error>} />
+              <Field name="poster_src" placeholder="Афіша до фільму" />
+              <ErrorMessage name="poster_src" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
             <div>
-              <Field name="poster_src" placeholder="Постер до фільму" />
-              <ErrorMessage name="poster_src" render={msg => <Error>{msg}</Error>} />
+              <Field name="wide_poster_src" placeholder="Постер до фільму" />
+              <ErrorMessage name="wide_poster_src" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <CreateModal

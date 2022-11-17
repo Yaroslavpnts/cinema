@@ -5,12 +5,13 @@ import ActorHighchart from '../../Highcharts/ActorHighcharts/ActorHighchart';
 import {
   StyledActor,
   StyledActorInfo,
+  StyledActorSliderBlock,
   StyledBiographyActor,
-  StyledDivider,
   StyledPersonalInfo,
   StyledPhotoBlock,
 } from './Actor.style';
 import Typography from '@mui/material/Typography';
+import ActorSlider from './ActorSlider/ActorSlider';
 
 const Actor: React.FC = () => {
   const [actor, setActor] = useState<IApiResponseFullActor>();
@@ -27,6 +28,8 @@ const Actor: React.FC = () => {
 
     if (id) getActor(+id);
   }, [id]);
+
+  console.log(actor);
 
   return (
     <StyledActor>
@@ -50,13 +53,15 @@ const Actor: React.FC = () => {
                 <p>{actor?.country}</p>
               </div>
             </StyledPersonalInfo>
-            {/* <p></p>
-            <p></p>
-            <p></p> */}
           </div>
         </StyledBiographyActor>
       </StyledActorInfo>
-      <StyledDivider />
+
+      <StyledActorSliderBlock>
+        <Typography component="h3">Фільмографія</Typography>
+        <ActorSlider movies={actor?.movies ? actor?.movies : []} />
+      </StyledActorSliderBlock>
+
       <ActorHighchart actor={actor} />
     </StyledActor>
   );

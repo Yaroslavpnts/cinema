@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
 // import 'swiper/css/scrollbar';
 
-import { Navigation } from 'swiper';
+import { Navigation, EffectFade } from 'swiper';
 import {
   CarouselCaptionBlock,
   Img,
@@ -12,18 +13,24 @@ import {
   MovieTitle,
   StyledSwiper,
   StyledSwiperSlide,
-} from './Slider.styled';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+} from './MainPageSlider.styled';
 import { IApiResponseMovie } from '../../api/apiMethods';
 
 interface SliderProps {
   movies: Array<IApiResponseMovie>;
 }
 
-const Slider: React.FC<SliderProps> = ({ movies }) => {
+const MainPageSlider: React.FC<SliderProps> = ({ movies }) => {
   return (
     <ImgWrapper>
-      <StyledSwiper loop={true} navigation={true} slidesPerView={1} modules={[Navigation]}>
+      <StyledSwiper
+        loop={true}
+        navigation={true}
+        slidesPerView={1}
+        // effect="fade"
+        speed={800}
+        modules={[Navigation, EffectFade]}
+      >
         {movies.map((movie, index) => (
           <StyledSwiperSlide key={index}>
             <Img src={movie.poster_src} alt="movie" />
@@ -39,4 +46,4 @@ const Slider: React.FC<SliderProps> = ({ movies }) => {
   );
 };
 
-export default Slider;
+export default MainPageSlider;

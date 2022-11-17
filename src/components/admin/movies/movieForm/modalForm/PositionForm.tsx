@@ -8,7 +8,7 @@ import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import Notification from '../../../../notification/Notification';
-import { GenreBlockStyled, FormStyled, InputBlock, ButtonStyled, Error } from './modalForm.style';
+import { CreateBlockStyled, FormStyled, InputBlock, ButtonStyled, Error } from './modalForm.style';
 import Typography from '@mui/material/Typography';
 
 const defaultValues = {
@@ -118,7 +118,7 @@ const PositionForm: React.FC<IProps> = ({
 
   return (
     // <ActorBlockStyled>
-    <GenreBlockStyled>
+    <CreateBlockStyled>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Typography
           id="transition-modal-title"
@@ -204,7 +204,7 @@ const PositionForm: React.FC<IProps> = ({
           {status && notification[status as keyof typeof notification]}
         </FormStyled>
       </LocalizationProvider>
-    </GenreBlockStyled>
+    </CreateBlockStyled>
   );
 };
 

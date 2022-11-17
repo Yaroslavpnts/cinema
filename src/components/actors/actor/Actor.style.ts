@@ -6,7 +6,7 @@ export const StyledActor = styled('div')`
 
 export const StyledActorInfo = styled('div')`
   display: flex;
-  padding-bottom: 20px;
+  padding-bottom: 70px;
 `;
 
 export const StyledPhotoBlock = styled('div')`
@@ -43,23 +43,6 @@ export const StyledBiographyActor = styled('div')`
       text-transform: uppercase;
       margin-bottom: 20px;
     }
-    /* p {
-      font-family: 'Anonymous Pro';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 20px;
-
-      letter-spacing: 0.03em;
-      color: #222222;
-
-      display: flex;
-      gap: 103px;
-
-      &:not(:last-child) {
-        margin-bottom: 25px;
-      }
-    }*/
   }
 `;
 
@@ -85,7 +68,20 @@ export const StyledPersonalInfo = styled('div')`
   }
 `;
 
-export const StyledDivider = styled('div')`
-  height: 2px;
-  background-color: #f5f5f5;
+export const StyledActorSliderBlock = styled('div')`
+  border-top: 2px solid #f5f5f5;
+  border-bottom: 2px solid #f5f5f5;
+  padding: 20px 0 70px;
+  margin-bottom: 50px;
+  h3 {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    text-transform: uppercase;
+    color: #222222;
+    margin-bottom: 20px;
+    text-align: center;
+  }
 `;
