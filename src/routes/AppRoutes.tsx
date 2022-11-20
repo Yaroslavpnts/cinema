@@ -9,6 +9,7 @@ import MoviePage from '../pages/MoviePage/MoviePage';
 import DirectorPage from '../pages/DirectorPage/DirectorPage';
 import Authorization from '../pages/AuthorizationPage/Authorization';
 import MainPage from '../pages/MainPage/MainPage';
+import MapPage from '../pages/MapPage/MapPage';
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes = () => {
         <Route path="movies/:id" element={<MoviePage />} />
         <Route path="actors/:id" element={<ActorPage />} />
         <Route path="directors/:id" element={<DirectorPage />} />
+        <Route path="map" element={<MapPage />} />
       </Route>
     </Routes>
   );
