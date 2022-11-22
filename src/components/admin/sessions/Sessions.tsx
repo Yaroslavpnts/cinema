@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Sessions = () => {
+const Sessions: React.FC = () => {
   return <div>Sessions</div>;
 };
 

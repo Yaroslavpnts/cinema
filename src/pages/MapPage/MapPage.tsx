@@ -1,11 +1,9 @@
-import { Container } from '@mui/material';
 import { useJsApiLoader } from '@react-google-maps/api';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ControlsPanel from '../../components/GoogleMap/ControlsPanel/ControlsPanel';
 import { Map } from '../../components/GoogleMap/Map';
-import { getBrowserLocation } from '../../components/utils/geo';
 
-import { StyledMapPage } from './MapPage.style';
+import { StyledContainer, StyledMapPage } from './MapPage.style';
 
 enum Libraries {
   DRAWING = 'drawing',
@@ -43,7 +41,7 @@ export type TCinemasLocation = typeof cinemas;
 
 const libraries = [Libraries.PLACES] as Libraries[];
 
-const MapPage = () => {
+const MapPage: React.FC = () => {
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({
     lat: 48.383022,
     lng: 31.1828699,
@@ -63,7 +61,7 @@ const MapPage = () => {
 
   return (
     <StyledMapPage>
-      <Container>
+      <StyledContainer>
         {isLoaded && (
           <ControlsPanel
             setDirectionResponse={setDirectionResponse}
@@ -80,7 +78,7 @@ const MapPage = () => {
             zoom={zoom}
           />
         )}
-      </Container>
+      </StyledContainer>
     </StyledMapPage>
   );
 };

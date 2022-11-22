@@ -4,6 +4,7 @@ import { TCinemasLocation } from '../../pages/MapPage/MapPage';
 import { StyledMap } from './ControlsPanel/Map.styled';
 
 import { defaultTheme } from './theme';
+import markerlogo from '../../assets/img/logo-for-map.svg';
 
 const containerStyle = {
   width: '100%',
@@ -59,6 +60,7 @@ export const Map: React.FC<IMapProps> = ({ center, directionResponse, cinemas, z
             key={cinema.id}
             position={cinema.location}
             onClick={(e: google.maps.MapMouseEvent) => console.log(e)}
+            icon={markerlogo}
           />
         ))}
       </GoogleMap>

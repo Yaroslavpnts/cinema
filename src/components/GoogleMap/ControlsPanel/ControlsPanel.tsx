@@ -1,6 +1,16 @@
 import { Autocomplete } from '@react-google-maps/api';
 import React, { useRef, useState } from 'react';
 import { TCinemasLocation } from '../../../pages/MapPage/MapPage';
+import {
+  StyledAutocomplete,
+  StyledButton,
+  StyledCalculatedData,
+  StyledCityList,
+  StyledInput,
+  StyledLocationBlock,
+} from './ControlsPanel.styled';
+import PlaceIcon from '@mui/icons-material/Place';
+import { GeoIcon } from './GeoIcon';
 
 interface IControlPanelProps {
   setDirectionResponse: (direction: google.maps.DirectionsResult | null) => void;
@@ -37,7 +47,6 @@ const ControlsPanel: React.FC<IControlPanelProps> = ({
 
     setDirectionResponse(results);
 
-    console.log(results);
     setDistance(results.routes[0]?.legs[0].distance?.text);
     setDuration(results.routes[0].legs[0].duration?.text);
   };
@@ -69,29 +78,44 @@ const ControlsPanel: React.FC<IControlPanelProps> = ({
     }
   };
 
-  const onClickCity = (cinema: typeof cinemas[number]) => () => {
+  const onClickCity = (cinema: typeof cinemas[number]) => {
     setCenter(cinema.location);
     setDestinationCinema(cinema);
     setZoom(12);
   };
 
   return (
-    <div>
-      <div>
-        <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
-          <input placeholder="Ваше місце знаходження" ref={originRef} />
-        </Autocomplete>
+    <StyledLocationBlock>
+      <h2>Оберіть ваше місто</h2>
+      <StyledCityList>
         {cinemas.map(cinema => (
-          <button onClick={onClickCity(cinema)}>{cinema.city}</button>
+          <li key={cinema.id}>
+            <button onClick={() => onClickCity(cinema)}>{cinema.city}</button>
+          </li>
         ))}
-        <button onClick={calculateRoute}>Calculate route</button>
-        <button onClick={clearRoute}>Clear route</button>
-        <div>
-          <span>Дистанція маршруту: {distance};</span>
-          <span>Тривалість маршруту: {duration};</span>
-        </div>
-      </div>
-    </div>
+      </StyledCityList>
+
+      <h3>Вкажіть ваше місце знаходження</h3>
+
+      <StyledAutocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+        <>
+          <StyledInput
+            placeholder="Наприклад, м. Полтава, вул. Лесі Українки, буд. Х"
+            ref={originRef}
+          />
+          <GeoIcon />
+        </>
+      </StyledAutocomplete>
+      <StyledButton variant="contained" onClick={calculateRoute} disableRipple>
+        Прокласти маршрут
+      </StyledButton>
+      {distance && (
+        <StyledCalculatedData>
+          <span>Дистанція маршруту: {distance}</span>
+          <span>Тривалість маршруту: {duration}</span>
+        </StyledCalculatedData>
+      )}
+    </StyledLocationBlock>
   );
 };
 

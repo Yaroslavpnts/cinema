@@ -12,7 +12,7 @@ import {
 } from '../../redux/slices/moviesSlice';
 import { MainPageWrapper } from './MainPage.styled';
 
-const MainPage = () => {
+const MainPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const movies = useAppSelector(moviesStateSelector);
 

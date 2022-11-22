@@ -1,10 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Api, userDataType } from '../../api/apiMethods';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 import jwt_decode from 'jwt-decode';
-import { deleteCookie } from '../../app/helpers/helperFunctions';
 
 type SignUpPayloadType = {
   userData: userDataType;
@@ -63,28 +62,31 @@ export const signUpAction = createAsyncThunk(
   }
 );
 
-enum UserRoles {
+export enum UserRoles {
   USER = 'USER',
   ADMIN = 'ADMIN',
   MODERATOR = 'MODERATOR',
 }
 
-type TUserRole = {
+export type TUserRole = {
   id: number;
   value: UserRoles;
   description: string;
 };
 
-type initialStateType = {
-  isAuth: boolean;
-  status: fetchStatus;
+export type TUser = {
+  isAuth: boolean | null;
   roles: TUserRole[];
 };
 
+type initialStateType = {
+  status: fetchStatus;
+  user: TUser;
+};
+
 const initialState: initialStateType = {
-  isAuth: false,
   status: fetchStatus.Idle,
-  roles: [],
+  user: { isAuth: null, roles: [] },
 };
 
 const authSlice = createSlice({
@@ -92,12 +94,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     signOut: state => {
-      deleteCookie('token');
-      state.isAuth = false;
-      state.roles = [];
+      state.user.isAuth = false;
+      state.user.roles = [];
     },
-    signIn: state => {
-      state.isAuth = true;
+    signIn: (state, action: PayloadAction<TUserRole[] | null>) => {
+      if (action.payload) {
+        state.user.roles = action.payload;
+        state.user.isAuth = true;
+      } else {
+        state.user.isAuth = false;
+      }
     },
   },
   extraReducers: builder => {
@@ -107,9 +113,9 @@ const authSlice = createSlice({
       })
       .addCase(logInAppAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        state.isAuth = true;
+        state.user.isAuth = true;
         if (action.payload) {
-          state.roles = action.payload;
+          state.user.roles = action.payload;
         }
       })
       .addCase(logInAppAction.rejected, state => {
@@ -120,7 +126,7 @@ const authSlice = createSlice({
       })
       .addCase(signUpAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        state.isAuth = true;
+        state.user.isAuth = true;
       })
       .addCase(signUpAction.rejected, (state, { error }) => {
         state.status = fetchStatus.Error;
@@ -129,10 +135,11 @@ const authSlice = createSlice({
 });
 
 export const adminRoleSelector = (state: RootState) =>
-  state.auth.roles.some(role => role.value === UserRoles.ADMIN);
+  state.auth.user.roles.some(role => role.value === UserRoles.ADMIN);
 
 export const { signOut, signIn } = authSlice.actions;
 
-export const isAuthSelector = (state: RootState) => state.auth.isAuth;
+export const isAuthSelector = (state: RootState) => state.auth.user.isAuth;
+export const userSelector = (state: RootState) => state.auth.user;
 
 export default authSlice.reducer;

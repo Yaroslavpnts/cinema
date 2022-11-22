@@ -11,7 +11,7 @@ import {
 } from './Movies.styled';
 import DataTab from './tabs/DataTab';
 
-const Movies = () => {
+const Movies: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {

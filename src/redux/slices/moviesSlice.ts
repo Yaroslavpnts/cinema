@@ -24,6 +24,7 @@ export const fetchMoviesAction = createAsyncThunk(
       const { data } = await Api.fetchMovies();
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error);
     }
   }

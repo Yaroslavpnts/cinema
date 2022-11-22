@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AdminLink,
@@ -16,17 +16,11 @@ import {
   StyledContainer,
   UserBlock,
 } from './Header.styled';
-import CartSvg from '../../assets/img/cart.svg';
 import OutSvg from '../../assets/img/out.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  adminRoleSelector,
-  isAuthSelector,
-  signIn,
-  signOut,
-} from '../../redux/slices/authorizationSlice';
+import { adminRoleSelector, isAuthSelector, signOut } from '../../redux/slices/authorizationSlice';
 import Search from '../search/Search';
-import { getCookie } from '../../app/helpers/helperFunctions';
+import { deleteCookie } from '../../app/helpers/helperFunctions';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,11 +29,10 @@ const Header: React.FC = () => {
 
   const [activeNav, setSsActiveNav] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (getCookie('token')) {
-      dispatch(signIn());
-    }
-  }, []);
+  const handlersignOut = () => {
+    deleteCookie('token');
+    dispatch(signOut());
+  };
 
   return (
     <HeaderApp>
@@ -75,7 +68,7 @@ const Header: React.FC = () => {
               <Link to="">Фільми</Link>
             </li>
             <li>
-              <Link to="">Кінотеатри</Link>
+              <Link to="/map">Кінотеатри</Link>
             </li>
           </Menu>
           <HeaderRightBlock>
@@ -90,7 +83,7 @@ const Header: React.FC = () => {
                 </AnonymousBlock>
               ) : (
                 <AuthorizedBlock>
-                  <Link to="/" style={{ display: 'flex' }} onClick={() => dispatch(signOut())}>
+                  <Link to="/" style={{ display: 'flex' }} onClick={handlersignOut}>
                     <img src={OutSvg} alt="" />
                   </Link>
                   {isAdmin && (

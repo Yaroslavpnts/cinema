@@ -3,7 +3,7 @@ import React from 'react';
 import Actor from '../../components/actors/actor/Actor';
 import { StyledActorPage } from './ActorPage.style';
 
-const ActorPage = () => {
+const ActorPage: React.FC = () => {
   return (
     <StyledActorPage>
       <Container>

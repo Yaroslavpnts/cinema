@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
-import { useFormik } from 'formik';
+import { replace, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { userDataType } from '../../api/apiMethods';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -24,8 +24,10 @@ enum TypeAuth {
 
 const AuthForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isAuth = useAppSelector(isAuthSelector);
+  // const isAuth = useAppSelector(isAuthSelector);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
   const { type } = useParams();
 
@@ -34,11 +36,11 @@ const AuthForm: React.FC = () => {
     type === TypeAuth.REGISTRATION
   );
 
-  useEffect(() => {
-    if (isAuth) {
-      navigate('/');
-    }
-  }, [isAuth]);
+  // useEffect(() => {
+  //   if (isAuth) {
+  //     navigate('/');
+  //   }
+  // }, [isAuth]);
 
   const initialValues: userDataType = { email: '', password: '' };
 
@@ -67,12 +69,16 @@ const AuthForm: React.FC = () => {
   const formikEnter = useFormik({
     initialValues,
     validate,
-    onSubmit: (values: userDataType, { setStatus, setSubmitting }) => {
+    onSubmit: async (values: userDataType, { setStatus, setSubmitting }) => {
       const payload = {
         userData: values,
         setStatus,
       };
-      dispatch(logInAppAction(payload));
+      try {
+        await dispatch(logInAppAction(payload)).unwrap();
+        navigate(from, { replace: true });
+      } catch (error) {}
+
       setSubmitting(false);
     },
   });
