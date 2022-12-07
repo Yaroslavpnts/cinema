@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ImdbImg from '../../assets/img/imdb.png';
 import { IApiResponseMovie } from '../../api/apiMethods';
 import {

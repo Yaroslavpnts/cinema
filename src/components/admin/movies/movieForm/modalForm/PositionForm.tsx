@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { ErrorMessage, useFormik } from 'formik';
+import React, { useMemo } from 'react';
+import { useFormik } from 'formik';
 import { IApiResponseActor, IApiResponseDirector, IPosition } from '../../../../../api/apiMethods';
 import { actorById, actorsErrorMessageSelector } from '../../../../../redux/slices/actorsSlice';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -79,7 +79,6 @@ const PositionForm: React.FC<IProps> = ({
     status,
     setFieldValue,
     touched,
-    resetForm,
   } = useFormik({
     initialValues,
     validate,

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Api, IApiResponseMovie, IMovie } from '../../api/apiMethods';
+import { Api, IApiResponseMovie } from '../../api/apiMethods';
 import { TCreateMovie } from '../../components/admin/movies/movieForm/MovieForm';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';

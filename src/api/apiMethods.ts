@@ -58,6 +58,51 @@ export interface ICreateMovieAsync {
   poster_src: string;
 }
 
+export interface ISession {
+  date: string;
+  session_start: string;
+  session_end: string;
+  available_seats?: number;
+  cinema_hall_id: number;
+  movie_id: number;
+}
+
+export interface IApiResponseSession extends ISession {
+  session_id: number;
+}
+
+export interface ICinemaHall {
+  name: string;
+  number_of_seats: number;
+  isWorking?: boolean;
+  cinema_id: number;
+  sessions?: IApiResponseSession[];
+}
+
+export interface IApiResponseCinemaHall extends ICinemaHall {
+  cinemas_hall_id: number;
+}
+
+export interface ICinema {
+  city_id: number;
+  total_number_of_seats: number;
+  adress: string;
+  cinema_halls?: IApiResponseCinemaHall[];
+}
+
+export interface IApiResponseCinema extends ICinema {
+  cinemas_id: number;
+}
+
+export interface ICity {
+  name: string;
+  cinemas?: IApiResponseCinema[];
+}
+
+export interface IApiResponseCity extends ICity {
+  city_id: number;
+}
+
 export interface IMovie {
   name: string;
   description: string;
@@ -69,6 +114,9 @@ export interface IMovie {
   directors: IApiResponseDirector[];
   production_year: string;
   genres: Array<GenreType>;
+  start_date_session?: string;
+  end_date_session?: string;
+  sessions?: IApiResponseSession[];
 }
 
 export interface IApiResponseMovie extends IMovie {
@@ -94,6 +142,10 @@ export const Api = {
 
   fetchMovies() {
     return instance.get<IApiResponseMovie[]>('movies');
+  },
+
+  fetchMoviesWithSessionsByDateAndByCinemaHalls(date: string, cinemaHalls: string) {
+    return instance.get<IApiResponseMovie[]>(`movies?date=${date}&cinemaHalls=${cinemaHalls}`);
   },
 
   fetchMovie(id: number) {
@@ -149,5 +201,33 @@ export const Api = {
 
   deleteDirector(id: number) {
     return instance.delete(`directors/${id}`);
+  },
+
+  fetchCities() {
+    return instance.get<IApiResponseCity[]>('cities');
+  },
+
+  createCity(city: ICity) {
+    return instance.post<IApiResponseCity>('cities', city);
+  },
+
+  fetchCinemas() {
+    return instance.get<IApiResponseCinema[]>('cinemas');
+  },
+
+  createCinema(cinema: ICinema) {
+    return instance.post<IApiResponseCinema>('cinemas', cinema);
+  },
+
+  fetchCinemaHallsWithSessionsByCinema(cinema_id: number) {
+    return instance.get<IApiResponseCinemaHall[]>(`cinema_halls/${cinema_id}`);
+  },
+
+  createCinemaHall(body: ICinemaHall) {
+    return instance.post<IApiResponseCinemaHall>('cinema_halls', body);
+  },
+
+  createSession(body: ISession) {
+    return instance.post<IApiResponseSession>('sessions', body);
   },
 };

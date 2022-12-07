@@ -1,4 +1,4 @@
-import React, { FocusEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SearchStyled, StyledSearchIcon, StyledInput } from './Search.styled';
 
 const Search: React.FC = () => {

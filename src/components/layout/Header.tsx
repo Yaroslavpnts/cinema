@@ -62,7 +62,7 @@ const Header: React.FC = () => {
         <HeaderMain>
           <Menu className={activeNav ? 'active' : ''}>
             <li>
-              <Link to="">Розклад</Link>
+              <Link to={'/sessions'}>Розклад</Link>
             </li>
             <li>
               <Link to="">Фільми</Link>

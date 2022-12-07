@@ -5,11 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import MoviesList from '../../components/movies/MoviesList';
 import MainPageSlider from '../../components/slider/MainPageSlider';
 // import { signIn } from '../../redux/slices/authorizationSlice';
-import {
-  fetchMoviesAction,
-  moviesSelector,
-  moviesStateSelector,
-} from '../../redux/slices/moviesSlice';
+import { fetchMoviesAction, moviesStateSelector } from '../../redux/slices/moviesSlice';
 import { MainPageWrapper } from './MainPage.styled';
 
 const MainPage: React.FC = () => {
@@ -18,6 +14,7 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchMoviesAction());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

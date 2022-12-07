@@ -4,6 +4,7 @@ import authReducer from './slices/authorizationSlice';
 import moviesReducer from './slices/moviesSlice';
 import genresReducer from './slices/genresSlice';
 import directorsReducer from './slices/directorsSlice';
+import citiesSlice from './slices/citiesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     actors: actorsReducer,
     genres: genresReducer,
     directors: directorsReducer,
+    cities: citiesSlice,
   },
 });
 

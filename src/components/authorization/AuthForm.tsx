@@ -1,14 +1,10 @@
 import { TextField } from '@mui/material';
-import { replace, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { userDataType } from '../../api/apiMethods';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  isAuthSelector,
-  logInAppAction,
-  signUpAction,
-} from '../../redux/slices/authorizationSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { logInAppAction, signUpAction } from '../../redux/slices/authorizationSlice';
 import {
   BtnSendValues,
   BtnShowForm,

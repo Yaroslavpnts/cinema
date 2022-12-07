@@ -1,10 +1,5 @@
 import React from 'react';
 import MuiAlert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Snackbar from '@mui/material/Snackbar';
-import { minWidth } from '@mui/system';
 import { SnackBarStyled } from './Notification.styled';
 
 interface IProps {

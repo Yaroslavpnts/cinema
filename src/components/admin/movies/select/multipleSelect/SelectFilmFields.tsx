@@ -1,5 +1,4 @@
 import React from 'react';
-import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { StyledTextField } from './SelectFilmFields.styled';
 
@@ -20,7 +19,7 @@ interface ISelectProps {
 const SelectFilmFields: React.FC<ISelectProps> = ({
   name,
   value,
-  options,
+  options = [],
   setFieldValue,
   title,
   id,

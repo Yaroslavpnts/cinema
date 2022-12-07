@@ -32,32 +32,22 @@ const GenreForm: React.FC<IProps> = ({ createNew, formTitle, btnTitle }) => {
     return errors;
   };
 
-  const {
-    values,
-    setStatus,
-    handleSubmit,
-    handleBlur,
-    handleChange,
-    errors,
-    status,
-    setFieldValue,
-    touched,
-    resetForm,
-  } = useFormik({
-    initialValues,
-    validate,
-    enableReinitialize: true,
-    onSubmit: (values, { setStatus }) => {
-      createNew(values)
-        .then(() => {
-          setStatus('success');
-        })
-        .catch(() => {
-          setStatus('error');
-        })
-        .finally();
-    },
-  });
+  const { values, setStatus, handleSubmit, handleBlur, handleChange, errors, status, touched } =
+    useFormik({
+      initialValues,
+      validate,
+      enableReinitialize: true,
+      onSubmit: (values, { setStatus }) => {
+        createNew(values)
+          .then(() => {
+            setStatus('success');
+          })
+          .catch(() => {
+            setStatus('error');
+          })
+          .finally();
+      },
+    });
 
   const notification = useMemo(
     () => ({

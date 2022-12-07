@@ -285,6 +285,7 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
         ),
       },
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [editFormId]
   );
 

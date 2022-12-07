@@ -1,10 +1,6 @@
 import { Input, styled } from '@mui/material';
 import { Button } from '@mui/material';
 
-interface BtnSendValueProps {
-  sz?: string;
-}
-
 export const FormEnter = styled('div')({
   height: '0px',
   transition: '0.7s',

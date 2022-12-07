@@ -163,8 +163,6 @@ const actorsSlice = createSlice({
   },
 });
 
-export default actorsSlice.reducer;
-
 export const actorsSelector = (state: RootState) => state.actors.actors;
 
 export const actorsForTable = createSelector(actorsSelector, actors => {
@@ -200,3 +198,5 @@ export const actorsNamesSelector = createSelector(actorsSelector, actors => {
 
 export const actorsStatusSelector = (state: RootState) => state.actors.status;
 export const actorsErrorMessageSelector = (state: RootState) => state.actors.responseMessage;
+
+export default actorsSlice.reducer;

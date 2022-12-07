@@ -122,6 +122,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
   const actors = useAppSelector(actorsNamesSelector);
   const directors = useAppSelector(directorsNamesSelector);
   const movie = useAppSelector(movieById(id));
+  console.log(genres);
 
   const initialValues = movie ? movie : defaultValues;
 
