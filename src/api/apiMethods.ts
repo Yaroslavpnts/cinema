@@ -144,8 +144,14 @@ export const Api = {
     return instance.get<IApiResponseMovie[]>('movies');
   },
 
-  fetchMoviesWithSessionsByDateAndByCinemaHalls(date: string, cinemaHalls: string) {
-    return instance.get<IApiResponseMovie[]>(`movies?date=${date}&cinemaHalls=${cinemaHalls}`);
+  fetchMoviesWithSessionsByDateAndByCinemaHalls(
+    dateStart: string,
+    dateEnd: string,
+    cinemaHalls: string
+  ) {
+    return instance.get<IApiResponseMovie[]>(
+      `movies/filter?dateStart=${dateStart}&dateEnd=${dateEnd}&cinemaHalls=${cinemaHalls}`
+    );
   },
 
   fetchMovie(id: number) {
@@ -217,6 +223,10 @@ export const Api = {
 
   createCinema(cinema: ICinema) {
     return instance.post<IApiResponseCinema>('cinemas', cinema);
+  },
+
+  fetchCinemaHalls() {
+    return instance.get<IApiResponseCinemaHall[]>('cinema_halls');
   },
 
   fetchCinemaHallsWithSessionsByCinema(cinema_id: number) {

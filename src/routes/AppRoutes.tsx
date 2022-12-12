@@ -23,7 +23,6 @@ import SessionPage from '../pages/SessionsPage/SessionsPage';
 const AppRoutes = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
-  console.log(user);
 
   useEffect(() => {
     const token = getCookie('token');

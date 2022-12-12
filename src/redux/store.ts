@@ -5,6 +5,7 @@ import moviesReducer from './slices/moviesSlice';
 import genresReducer from './slices/genresSlice';
 import directorsReducer from './slices/directorsSlice';
 import citiesSlice from './slices/citiesSlice';
+import cinemaHallsSlice from './slices/cinemaHallsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     genres: genresReducer,
     directors: directorsReducer,
     cities: citiesSlice,
+    cinemaHalls: cinemaHallsSlice,
   },
 });
 

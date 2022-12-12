@@ -1,4 +1,3 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { citiesSelector, fetchCitiesAction } from '../../redux/slices/citiesSlice';

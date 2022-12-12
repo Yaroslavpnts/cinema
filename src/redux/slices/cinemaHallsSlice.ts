@@ -1,14 +1,20 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Api, IApiResponseCity, ICity } from '../../api/apiMethods';
+import {
+  Api,
+  IApiResponseCinemaHall,
+  IApiResponseCity,
+  ICinemaHall,
+  ICity,
+} from '../../api/apiMethods';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
-export const fetchCitiesAction = createAsyncThunk(
-  'cities/fetchCities',
+export const fetchCinemaHallsAction = createAsyncThunk(
+  'cinemaHalls/fetchCinemaHalls',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await Api.fetchCities();
+      const { data } = await Api.fetchCinemaHalls();
       return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -24,19 +30,19 @@ export const fetchCitiesAction = createAsyncThunk(
   }
 );
 
-export const createCityAction = createAsyncThunk<
+export const createCinemaHallAction = createAsyncThunk<
   // Return type of the payload creator
-  IApiResponseCity,
+  IApiResponseCinemaHall,
   // First argument to the payload creator
-  ICity,
+  ICinemaHall,
   {
     dispatch: AppDispatch;
     state: RootState;
     rejectValue: string;
   }
->('cities/createCity', async (city, { rejectWithValue }) => {
+>('cinemaHalls/createCinemaHall', async (cinemaHall, { rejectWithValue }) => {
   try {
-    const { data } = await Api.createCity(city);
+    const { data } = await Api.createCinemaHall(cinemaHall);
 
     return data;
   } catch (error) {
@@ -55,31 +61,31 @@ export const createCityAction = createAsyncThunk<
 type initialStateType = {
   status: fetchStatus;
   responseMessage: string;
-  cities: IApiResponseCity[];
+  cinemaHalls: IApiResponseCinemaHall[];
 };
 
 const initialState: initialStateType = {
   status: fetchStatus.Idle,
   responseMessage: '',
-  cities: [],
+  cinemaHalls: [],
 };
 
-const citiesSlice = createSlice({
-  name: 'cities',
+const cinemaHallsSlice = createSlice({
+  name: 'cinemaHalls',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(createCityAction.pending, state => {
+      .addCase(createCinemaHallAction.pending, state => {
         state.status = fetchStatus.Pending;
         state.responseMessage = '';
       })
-      .addCase(createCityAction.fulfilled, (state, action) => {
+      .addCase(createCinemaHallAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        state.cities.push(action.payload);
-        state.responseMessage = 'Місто створене';
+        state.cinemaHalls.push(action.payload);
+        state.responseMessage = 'Кінозал створений';
       })
-      .addCase(createCityAction.rejected, (state, action) => {
+      .addCase(createCinemaHallAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
         if (action.payload) {
           state.responseMessage = action.payload;
@@ -87,24 +93,32 @@ const citiesSlice = createSlice({
           state.responseMessage = action.error.message;
         }
       })
-      .addCase(fetchCitiesAction.pending, state => {
+      .addCase(fetchCinemaHallsAction.pending, state => {
         state.status = fetchStatus.Pending;
       })
-      .addCase(fetchCitiesAction.fulfilled, (state, action) => {
+      .addCase(fetchCinemaHallsAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        state.cities = action.payload;
+        state.cinemaHalls = action.payload;
       })
-      .addCase(fetchCitiesAction.rejected, state => {
+      .addCase(fetchCinemaHallsAction.rejected, state => {
         state.status = fetchStatus.Error;
       });
   },
 });
 
-export default citiesSlice.reducer;
+export default cinemaHallsSlice.reducer;
 
-export const citiesSelector = (state: RootState) => state.cities.cities;
+export const cinemaHallsSelector = (state: RootState) => state.cinemaHalls.cinemaHalls;
 
-export const cinemasByCityNameSelector = (cityName: string) => (state: RootState) => {
-  const city = state.cities.cities.find(city => city.name === cityName);
-  return city?.cinemas?.[0];
-};
+export interface ICinemaHallsChecked extends IApiResponseCinemaHall {
+  checked: boolean;
+}
+
+export const cinemaHallsCheckedSelector = createSelector(cinemaHallsSelector, cinemaHalls => {
+  const halls = [...cinemaHalls] as ICinemaHallsChecked[];
+
+  return halls.map(h => ({
+    ...h,
+    checked: true,
+  }));
+});
