@@ -158,6 +158,10 @@ export const Api = {
     return instance.get<IApiResponseMovie>(`movies/${id}`);
   },
 
+  fetchMoviesBySearch(search: string) {
+    return instance.get<IApiResponseMovie[]>(`movies/search?search=${search}`);
+  },
+
   createMovie(movie: ICreateMovieAsync) {
     return instance.post<IApiResponseMovie>('movies', movie);
   },

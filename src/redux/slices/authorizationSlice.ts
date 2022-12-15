@@ -98,6 +98,7 @@ const authSlice = createSlice({
       state.user.roles = [];
     },
     signIn: (state, action: PayloadAction<TUserRole[] | null>) => {
+      console.log(action.payload);
       if (action.payload) {
         state.user.roles = action.payload;
         state.user.isAuth = true;

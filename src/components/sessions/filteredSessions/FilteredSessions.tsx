@@ -62,12 +62,7 @@ export const FilteredSessions: React.FC<IFilteredSessionsProps> = ({ cityName })
         technologiesChecked={technologiesChecked}
         setTechnologiesChecked={setTechnologiesChecked}
       />
-      <MoviesWithSessionsList
-        movies={movies}
-        // cinemaHalls={cinema?.cinema_halls}
-        cinemaHalls={technologiesChecked}
-        dateStart={dateStart}
-      />
+      <MoviesWithSessionsList movies={movies} cinemaHalls={technologiesChecked} />
     </StyledFilteredSessions>
   );
 };

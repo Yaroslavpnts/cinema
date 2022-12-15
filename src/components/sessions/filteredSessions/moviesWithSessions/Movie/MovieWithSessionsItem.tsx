@@ -11,7 +11,6 @@ import {
 interface IMovieProps {
   movie: IApiResponseMovie;
   cinemaHalls: ICinemaHallsChecked[];
-  dateStart: string;
 }
 
 const parseJSX = (date: string) => {
@@ -23,7 +22,7 @@ const parseJSX = (date: string) => {
   }).format(new Date(date))}`;
 };
 
-const MovieWithSessionsItem: React.FC<IMovieProps> = ({ movie, cinemaHalls, dateStart }) => {
+const MovieWithSessionsItem: React.FC<IMovieProps> = ({ movie, cinemaHalls }) => {
   const groupedSessions = movie?.sessions?.reduce((acc, cur) => {
     acc[cur.date as keyof typeof cur] = acc[cur.date as string] || [];
 

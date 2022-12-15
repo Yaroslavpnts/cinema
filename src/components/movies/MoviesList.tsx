@@ -1,7 +1,6 @@
-import { Typography } from '@mui/material';
 import React from 'react';
 import { IApiResponseMovie } from '../../api/apiMethods';
-import { MoviesContainer } from './MoviesList.styled';
+import { MoviesContainer, StyledHeading } from './MoviesList.styled';
 import MoviesListItem from './MoviesListItem';
 import Skeleton from '@mui/material/Skeleton';
 import { fetchStatus } from '../../redux/types';
@@ -24,9 +23,9 @@ const MoviesList: React.FC<SliderProps> = ({ movies, status }) => {
 
   return (
     <div>
-      <Typography variant="h2" sx={{ mb: 3 }}>
-        Планета Кіно в Києві: сьогодні у кіно
-      </Typography>
+      <StyledHeading variant="h2" sx={{ mb: 3 }}>
+        Cьогодні у кіно
+      </StyledHeading>
       <MoviesContainer>{status === fetchStatus.Pending ? skeletons : moviesList}</MoviesContainer>
     </div>
   );

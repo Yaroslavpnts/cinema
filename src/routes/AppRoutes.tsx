@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { signIn, TUserRole, UserRoles, userSelector } from '../redux/slices/authorizationSlice';
 import PrivateRoutes from './PrivateRoutes';
 import jwt_decode from 'jwt-decode';
+import { ReactComponent as Loader } from '../assets/img/loader.svg';
 
 import {
   Movies,
@@ -37,7 +38,7 @@ const AppRoutes = () => {
   }, []);
 
   if (user.isAuth === null) {
-    return <div>Initializing app...</div>;
+    return <Loader />;
   }
 
   return (

@@ -15,9 +15,16 @@ export const StyledCitySelectorBlock = styled('div')`
   .MuiSelect-select {
     border: 1px solid ${props => props.theme.palette.customColor.main};
     border-radius: 33px;
-    /* padding-right: 54px; */
+    padding-right: 70px;
+    &:focus {
+      border-radius: 33px;
+    }
   }
   .MuiOutlinedInput-notchedOutline {
     border-style: none;
+  }
+
+  .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+    padding-right: 70px;
   }
 `;

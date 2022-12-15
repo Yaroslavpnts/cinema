@@ -9,8 +9,24 @@ export const FooterWrapper = styled('div')`
 
 export const ContainerStyled = styled(Container)`
   padding: 30px 0 40px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+  gap: 25px;
+
+  @media (max-width: 600px) {
+    padding: 15px 20px 15px;
+  }
+
+  @media (max-width: 535px) {
+    grid-template-columns: repeat(1, 1fr);
+    padding: 15px 20px 15px;
+  }
+
+  /* @media (max-width: 535px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  } */
 `;
 
 const templateBlock = ({ theme }: { theme: Theme }) => css`
@@ -38,19 +54,49 @@ const templateBlock = ({ theme }: { theme: Theme }) => css`
     li:not(:last-child) {
       margin-bottom: 11px;
     }
+
+    @media (max-width: 535px) {
+      display: flex;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 535px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const templateList = css`
+  @media (max-width: 488px) {
+    ul {
+      flex-wrap: wrap;
+    }
+
+    li {
+      width: 100%;
+      text-align: center;
+    }
   }
 `;
 
 export const FooterCompany = styled('div')`
   ${templateBlock};
+  ${templateList};
 `;
 
 export const FooterQA = styled('div')`
   ${templateBlock};
+  ${templateList};
 `;
 
 export const FooterContacts = styled('div')`
   ${templateBlock};
+  ul {
+    flex-direction: column;
+  }
+
   li {
     display: flex;
     align-items: center;

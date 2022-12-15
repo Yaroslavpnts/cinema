@@ -35,11 +35,44 @@ export const StyledInput = styled(Input)`
   line-height: 16px;
   width: 0;
   opacity: 0;
+
   input {
     padding: 0;
   }
+`;
 
-  /* &:focus {
-    border-color: #00bff0;
-  } */
+export const StyledSearchResults = styled('div')`
+  position: absolute;
+  top: 40px;
+
+  ul {
+    background: #fff;
+
+    li {
+      border-top: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+    }
+
+    p {
+      color: #959595;
+      padding: 10px;
+      text-align: center;
+    }
+  }
+`;
+
+export const StyledSmallPosterBlock = styled('div')`
+  height: 35px;
+  width: 25px;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 `;

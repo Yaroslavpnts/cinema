@@ -26,6 +26,7 @@
     "highcharts": "^10.3.1",
     "highcharts-react-official": "^3.1.0",
     "jwt-decode": "^3.1.2",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.4",
@@ -104,6 +105,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "@types/uuid": "^8.3.4",
     "ahooks": "^3.7.1",
     "gh-pages": "^4.0.0",

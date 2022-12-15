@@ -18,13 +18,7 @@ const CitySelectorBlock: React.FC<CitySelectorBlockProps> = ({ cities, setCityNa
     <StyledCitySelectorBlock>
       <h2>Розклад фільмів у</h2>
       <FormControl sx={{ m: 1, minWidth: 80 }}>
-        <Select
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
-          value={cityName}
-          onChange={handleChange}
-          autoWidth
-        >
+        <Select value={cityName} onChange={handleChange} autoWidth>
           {cities.map(city => (
             <MenuItem key={city.city_id} value={city.name}>
               {city.name}
