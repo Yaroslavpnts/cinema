@@ -8,3 +8,4 @@ export { default as DirectorPage } from '../pages/DirectorPage/DirectorPage';
 export { default as Authorization } from '../pages/AuthorizationPage/Authorization';
 export { default as MainPage } from '../pages/MainPage/MainPage';
 export { default as MapPage } from '../pages/MapPage/MapPage';
+export { default as NotFoundPage } from '../pages/NotFoundPage/NotFoundPage';

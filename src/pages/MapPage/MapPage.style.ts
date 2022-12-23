@@ -1,8 +1,9 @@
 import { styled } from '@mui/material';
 import { Container } from '@mui/material';
+import { MarginTopHeader } from '../../theme/template';
 
 export const StyledMapPage = styled('main')`
-  margin-top: 66px;
+  ${MarginTopHeader};
 `;
 
 export const StyledContainer = styled(Container)`

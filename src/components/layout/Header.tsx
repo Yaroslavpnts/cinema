@@ -65,7 +65,7 @@ const Header: React.FC = () => {
               <Link to={'/sessions'}>Розклад</Link>
             </li>
             <li>
-              <Link to="">Фільми</Link>
+              <Link to="/movies">Фільми</Link>
             </li>
             <li>
               <Link to="/map">Кінотеатри</Link>

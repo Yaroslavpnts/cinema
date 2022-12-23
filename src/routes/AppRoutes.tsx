@@ -18,12 +18,15 @@ import {
   Authorization,
   MainPage,
   MapPage,
+  NotFoundPage,
 } from './routes';
 import SessionPage from '../pages/SessionsPage/SessionsPage';
 
 const AppRoutes = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
+
+  console.log(process.env.NODE_ENV);
 
   useEffect(() => {
     const token = getCookie('token');
@@ -65,6 +68,8 @@ const AppRoutes = () => {
             <Route path="create-sessions" element={<Sessions />} />
           </Route>
         </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

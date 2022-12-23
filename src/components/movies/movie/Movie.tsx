@@ -18,6 +18,7 @@ const Movie: React.FC = () => {
     const getActor = async (id: number) => {
       try {
         const { data } = await Api.fetchMovie(id);
+        console.log(data);
         setMovie(data);
       } catch (error) {}
     };

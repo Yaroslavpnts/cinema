@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
+import { MarginTopHeader } from '../../theme/template';
 
 export const StyledMoviePage = styled('main')`
-  margin-top: 66px;
+  ${MarginTopHeader};
 `;

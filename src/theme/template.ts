@@ -5,3 +5,7 @@ export const FlexBoxCenter = css`
   align-items: center;
   justify-content: center;
 `;
+
+export const MarginTopHeader = css`
+  margin-top: 66px;
+`;
