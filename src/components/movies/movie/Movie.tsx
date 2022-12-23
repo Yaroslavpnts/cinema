@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Api, IApiResponseMovie } from '../../../api/apiMethods';
+import { redirect } from 'react-router-dom';
 import {
   MovieAboutBlock,
   MovieStatsBlock,
@@ -12,15 +13,19 @@ import {
 const Movie: React.FC = () => {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   const [movie, setMovie] = useState<IApiResponseMovie>();
 
   useEffect(() => {
     const getActor = async (id: number) => {
       try {
         const { data } = await Api.fetchMovie(id);
-        console.log(data);
         setMovie(data);
-      } catch (error) {}
+      } catch (error) {
+        console.log('i am here');
+        navigate('/404');
+      }
     };
 
     if (id) getActor(+id);

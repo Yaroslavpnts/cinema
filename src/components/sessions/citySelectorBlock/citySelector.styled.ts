@@ -25,6 +25,7 @@ export const StyledCitySelectorBlock = styled('div')`
   }
 
   .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
-    padding-right: 70px;
+    padding: 10px 33px 10px 14px;
+    border-radius: 15px;
   }
 `;

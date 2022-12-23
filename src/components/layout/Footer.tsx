@@ -21,13 +21,13 @@ const Footer: React.FC = () => {
               <Link to="/about">Про компанію</Link>
             </li>
             <li>
-              <Link to="/cinema">Кінозали</Link>
+              <Link to="/cinemaHalls">Кінозали</Link>
             </li>
             <li>
-              <Link to="/about">Наш бар</Link>
+              <Link to="/bar">Наш бар</Link>
             </li>
             <li>
-              <Link to="/about">Події та акції</Link>
+              <Link to="/actions">Події та акції</Link>
             </li>
           </ul>
         </FooterCompany>
@@ -35,13 +35,13 @@ const Footer: React.FC = () => {
           <h3>Є запитання?</h3>
           <ul>
             <li>
-              <Link to="/about">ЧаПи</Link>
+              <Link to="/qa">ЧаПи</Link>
             </li>
             <li>
-              <Link to="/about">Як придбати квиток</Link>
+              <Link to="/qa/tickets">Як придбати квиток</Link>
             </li>
             <li>
-              <Link to="/about">Повернення квитків</Link>
+              <Link to="/qa/tickets">Повернення квитків</Link>
             </li>
           </ul>
         </FooterQA>

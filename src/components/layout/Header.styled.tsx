@@ -35,6 +35,7 @@ export const HeaderMain = styled('div')`
   align-items: center;
   justify-content: space-between;
   flex: 1;
+  padding-left: 80px;
 
   @media (max-width: 1250px) {
     justify-content: flex-end;
