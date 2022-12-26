@@ -16,6 +16,7 @@ import {
   RotatingPart,
 } from './MoviesListItem.styled';
 import { theme } from '../../theme/theme';
+import { Link } from 'react-router-dom';
 
 type MoviesListItemProps = {
   movie: IApiResponseMovie;
@@ -23,42 +24,42 @@ type MoviesListItemProps = {
 
 const MoviesListItem: React.FC<MoviesListItemProps> = ({ movie }) => {
   return (
-    <Card>
-      <RotatingPart>
-        <FrontSide>
-          <MovieImgWrapper url={movie.poster_src}>
-            <CardImg src={movie.poster_src} alt={movie.name} />
-          </MovieImgWrapper>
-        </FrontSide>
-        <BackSide>
-          <MovieTitle>{movie.name}</MovieTitle>
-          <MovieImdb>
-            <img src={ImdbImg} alt="" />
-            <div>
-              <span>{movie.imdb_rating}</span>
-              <span>/10</span>
-            </div>
-            <IconStyled sx={{ color: theme.palette.customColor.main }} />
-          </MovieImdb>
-          <MovieGenres>
-            <div>Жанр</div>
-            {movie.genres.map((genre, i) => {
-              if (!(i === movie.genres.length - 1)) {
-                return genre.name + ', ';
-              }
-              return genre.name;
-            })}
-          </MovieGenres>
-          <MovieDirectors>
-            <div>Режисер</div>
-            {movie.directors.map(director => director.name)}
-          </MovieDirectors>
-        </BackSide>
-      </RotatingPart>
-      <Typography variant="h4" sx={{ fontSize: '18px', textTransform: 'uppercase' }}>
-        Кінозал
-      </Typography>
-    </Card>
+    <Link to={`movies/${movie.id}`}>
+      <Card>
+        <RotatingPart>
+          <FrontSide>
+            <MovieImgWrapper url={movie.poster_src}>
+              <CardImg src={movie.poster_src} alt={movie.name} />
+            </MovieImgWrapper>
+          </FrontSide>
+          <BackSide>
+            <MovieTitle>{movie.name}</MovieTitle>
+            <MovieImdb>
+              <img src={ImdbImg} alt="" />
+              <div>
+                <span>{movie.imdb_rating}</span>
+                <span>/10</span>
+              </div>
+              <IconStyled sx={{ color: theme.palette.customColor.main }} />
+            </MovieImdb>
+            <MovieGenres>
+              <div>Жанр</div>
+              {movie.genres.map((genre, i) => {
+                if (!(i === movie.genres.length - 1)) {
+                  return genre.name + ', ';
+                }
+                return genre.name;
+              })}
+            </MovieGenres>
+            <MovieDirectors>
+              <div>Режисер</div>
+              {movie.directors.map(director => director.name)}
+            </MovieDirectors>
+          </BackSide>
+        </RotatingPart>
+        <Typography variant="h4" sx={{ fontSize: '18px', textTransform: 'uppercase' }}></Typography>
+      </Card>
+    </Link>
   );
 };
 

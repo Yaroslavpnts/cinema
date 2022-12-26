@@ -1,12 +1,12 @@
 // Import Swiper styles
-import { Swiper, SwiperSlide, useSwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-import { Navigation, Scrollbar, A11y } from 'swiper';
+import { Navigation } from 'swiper';
 import { IActorMovie } from '../../../../api/apiMethods';
 import { Img, StyledSwiper, StyledSwiperSlide } from './ActorSlider.style';
+import { Link } from 'react-router-dom';
 
 interface IActorSliderProps {
   movies: IActorMovie[];
@@ -70,14 +70,11 @@ const ActorSlider: React.FC<IActorSliderProps> = ({ movies }) => {
       // onReachEnd={swiper => console.log('onReachEnd', swiper)}
       onBeforeSlideChangeStart={swiper => console.log('onBeforeSlideChangeStart', swiper)}
     >
-      {/* {movies.map(movie => (
+      {movies.map(movie => (
         <StyledSwiperSlide key={movie.id}>
-          <Img src={movie.poster_src} />
-        </StyledSwiperSlide>
-      ))} */}
-      {test.map(movie => (
-        <StyledSwiperSlide key={movie.id}>
-          <Img src={movie.poster_src} />
+          <Link to={`../movies/${movie.id}`}>
+            <Img src={movie.poster_src} />
+          </Link>
         </StyledSwiperSlide>
       ))}
     </StyledSwiper>

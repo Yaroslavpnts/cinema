@@ -21,6 +21,8 @@ const MoviesList: React.FC<SliderProps> = ({ movies, status }) => {
 
   const moviesList = movies.map(movie => <MoviesListItem key={movie.id} movie={movie} />);
 
+  console.log(movies);
+
   return (
     <div>
       <StyledHeading variant="h2" sx={{ mb: 3 }}>

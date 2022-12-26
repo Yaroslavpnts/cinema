@@ -23,7 +23,6 @@ const Movie: React.FC = () => {
         const { data } = await Api.fetchMovie(id);
         setMovie(data);
       } catch (error) {
-        console.log('i am here');
         navigate('/404');
       }
     };

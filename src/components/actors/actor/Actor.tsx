@@ -29,8 +29,6 @@ const Actor: React.FC = () => {
     if (id) getActor(+id);
   }, [id]);
 
-  console.log(actor);
-
   return (
     <StyledActor>
       <StyledActorInfo>

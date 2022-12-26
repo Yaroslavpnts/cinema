@@ -70,7 +70,6 @@ const ControlsPanel: React.FC<IControlPanelProps> = ({
   };
 
   const onPlaceChanged = () => {
-    console.log(autocompleteRef.current);
     if (autocompleteRef.current !== null) {
       console.log(autocompleteRef.current.getPlace());
     } else {

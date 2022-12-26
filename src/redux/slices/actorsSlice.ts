@@ -69,7 +69,7 @@ export const updateActorAction = createAsyncThunk<
 >('actors/updateActor', async (actor, { rejectWithValue }) => {
   try {
     const { data } = await Api.updateActor(actor);
-    console.log(data);
+
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

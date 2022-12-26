@@ -122,7 +122,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
   const actors = useAppSelector(actorsNamesSelector);
   const directors = useAppSelector(directorsNamesSelector);
   const movie = useAppSelector(movieById(id));
-  console.log(genres);
 
   const initialValues = movie ? movie : defaultValues;
 
@@ -158,7 +157,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
   const modalContent = useMemo(
     () => ({
       genres: {
-        // title: 'Створення нового жанру',
         layout: (
           <GenreForm
             createNew={createNewCategory}
@@ -168,7 +166,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
         ),
       },
       actors: {
-        // title: 'Створення нового актора',
         layout: (
           <PositionForm
             dispatchMethod={createNewActor}
@@ -179,7 +176,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
         ),
       },
       directors: {
-        // title: 'Створення нового режисера',
         layout: (
           <PositionForm
             dispatchMethod={createNewDirector}
@@ -198,7 +194,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
       initialValues={initialValues}
       validate={validate}
       onSubmit={async (values: TCreateMovie, { setStatus, resetForm }) => {
-        console.log(values);
         try {
           if (!movie) {
             await dispatch(createMovieAction(values)).unwrap();
