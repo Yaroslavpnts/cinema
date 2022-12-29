@@ -16,7 +16,7 @@ const CitySelectorBlock: React.FC<CitySelectorBlockProps> = ({ cities, setCityNa
 
   return (
     <StyledCitySelectorBlock>
-      <h2>Розклад фільмів у</h2>
+      <h2>Оберіть місто</h2>
       <FormControl sx={{ m: 1, minWidth: 80 }}>
         <Select value={cityName} onChange={handleChange} autoWidth>
           {cities.map(city => (

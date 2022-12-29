@@ -26,8 +26,6 @@ const AppRoutes = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
 
-  console.log(process.env.NODE_ENV);
-
   useEffect(() => {
     const token = getCookie('token');
 

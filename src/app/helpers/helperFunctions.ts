@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const getCookie = (name: string) => {
   var matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
@@ -42,3 +44,10 @@ export function deleteCookie(name: string) {
     'max-age': -1,
   });
 }
+
+export const parseTimeString = (time: dayjs.Dayjs) => {
+  return `Час закінчення сеансу: ${time.get('hours').toString().padStart(2, '0')}:${time
+    .get('minutes')
+    .toString()
+    .padStart(2, '0')}`;
+};

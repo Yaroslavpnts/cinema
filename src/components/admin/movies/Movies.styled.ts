@@ -1,8 +1,8 @@
 import { Container, styled } from '@mui/material';
-import { FlexBoxCenter } from '../../../theme/template';
+import { AdminPageComponentBlock, FlexBoxCenter } from '../../../theme/template';
 
 export const MoviesBlockStyled = styled('div')`
-  padding: 52px 0;
+  ${AdminPageComponentBlock};
 `;
 
 export const StyledContainer = styled(Container)`

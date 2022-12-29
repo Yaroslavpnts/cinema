@@ -71,6 +71,11 @@ export interface IApiResponseSession extends ISession {
   session_id: number;
 }
 
+export interface IApiResponseSessionWithMovieAndCinemaHall extends IApiResponseSession {
+  movie: IApiResponseMovie;
+  cinema_hall: IApiResponseCinemaHall;
+}
+
 export interface ICinemaHall {
   name: string;
   number_of_seats: number;
@@ -117,6 +122,7 @@ export interface IMovie {
   start_date_session?: string;
   end_date_session?: string;
   sessions?: IApiResponseSession[];
+  duration: number;
 }
 
 export interface IApiResponseMovie extends IMovie {
@@ -242,6 +248,10 @@ export const Api = {
   },
 
   createSession(body: ISession) {
-    return instance.post<IApiResponseSession>('sessions', body);
+    return instance.post<IApiResponseSessionWithMovieAndCinemaHall>('sessions', body);
+  },
+
+  fetchAllSessions() {
+    return instance.get<IApiResponseSessionWithMovieAndCinemaHall[]>('sessions');
   },
 };

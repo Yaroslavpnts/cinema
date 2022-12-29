@@ -7,7 +7,7 @@ export const StyledCitySelectorBlock = styled('div')`
     font-family: 'Mulish';
     font-style: normal;
     font-weight: 600;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 30px;
     color: #171717;
   }

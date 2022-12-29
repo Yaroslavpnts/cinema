@@ -55,6 +55,7 @@ const defaultValues = {
   production_year: '',
   wide_poster_src: '',
   poster_src: '',
+  duration: 0,
 };
 
 export type TCreateMovie = typeof defaultValues;
@@ -68,7 +69,9 @@ type Keys =
   | 'rating'
   | 'imdb_rating'
   | 'production_year'
-  | 'poster_src';
+  | 'poster_src'
+  | 'wide_poster_src'
+  | 'duration';
 
 const validate = (values: TCreateMovie) => {
   const errors = {} as { [key in Keys]: string };
@@ -105,6 +108,10 @@ const validate = (values: TCreateMovie) => {
 
   if (!values.poster_src) {
     errors.poster_src = 'Потрібно вибрати постер до фільму';
+  }
+
+  if (!values.duration) {
+    errors.duration = 'Потрібно вказана тривалість фільму';
   }
 
   return errors;
@@ -318,25 +325,12 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
               </div>
             </MultipleBlock>
           </InputBlock>
-          {/* <InputBlock>
+          <InputBlock>
             <div>
-              <YearField
-                type="number"
-                name="production_year"
-                value={values.production_year}
-                onChange={handleChange}
-                placeholder="Рік випуску"
-                inputProps={{
-                  inputMode: 'numeric',
-                  pattern: '[0-9]*',
-                  max: new Date().getFullYear() + 1,
-                  min: 1900,
-                  step: '1',
-                }}
-              />
-              <ErrorMessage name="production_year" render={msg => <Error>{msg}</Error>} />
+              <Field name="duration" placeholder="Тривалість фільму" type="number" min={0} />
+              <ErrorMessage name="duration" render={msg => <Error>{msg}</Error>} />
             </div>
-          </InputBlock> */}
+          </InputBlock>
           <InputBlock>
             <div>
               <Field name="poster_src" placeholder="Афіша до фільму" />

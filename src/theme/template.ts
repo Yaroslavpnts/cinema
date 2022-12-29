@@ -9,3 +9,7 @@ export const FlexBoxCenter = css`
 export const MarginTopHeader = css`
   margin-top: 66px;
 `;
+
+export const AdminPageComponentBlock = css`
+  padding: 52px 0;
+`;

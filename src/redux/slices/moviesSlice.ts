@@ -141,6 +141,7 @@ const moviesSlice = createSlice({
         state.status = fetchStatus.Pending;
       })
       .addCase(createMovieAction.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.status = fetchStatus.Success;
         state.movies.push(action.payload);
         state.responseMessage = 'Фільм створений';

@@ -168,6 +168,7 @@ export const ButtonStyled = styled('button')`
   height: 30px;
   color: #f8f5f5;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 export const Error = styled('div')`
