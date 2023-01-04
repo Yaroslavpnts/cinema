@@ -247,8 +247,8 @@ export const Api = {
     return instance.post<IApiResponseCinemaHall>('cinema_halls', body);
   },
 
-  createSession(body: ISession) {
-    return instance.post<IApiResponseSessionWithMovieAndCinemaHall>('sessions', body);
+  createSessions(body: ISession[]) {
+    return instance.post<IApiResponseSessionWithMovieAndCinemaHall[]>('sessions', body);
   },
 
   fetchAllSessions() {

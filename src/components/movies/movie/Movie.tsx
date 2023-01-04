@@ -33,7 +33,7 @@ const Movie: React.FC = () => {
   return (
     <StyledMovie>
       <StyledPosterBlock>
-        <img src={movie?.wide_poster_src} alt="movie-poster" />
+        <img src={movie?.poster_src} alt="movie-poster" />
       </StyledPosterBlock>
       <MovieStatsBlock>
         <li>

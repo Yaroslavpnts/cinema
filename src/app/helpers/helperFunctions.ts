@@ -1,4 +1,11 @@
 import dayjs from 'dayjs';
+import {
+  IApiResponseCinema,
+  IApiResponseCinemaHall,
+  IApiResponseMovie,
+} from '../../api/apiMethods';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import _ from 'lodash';
 
 export const getCookie = (name: string) => {
   var matches = document.cookie.match(
@@ -45,9 +52,36 @@ export function deleteCookie(name: string) {
   });
 }
 
-export const parseTimeString = (time: dayjs.Dayjs) => {
-  return `Час закінчення сеансу: ${time.get('hours').toString().padStart(2, '0')}:${time
+export const parsePeriodString = (
+  dateStart: dayjs.Dayjs,
+  dateEnd: dayjs.Dayjs,
+  period: boolean
+) => {
+  return ` ${dateStart.isValid() ? dateStart.format('YYYY-MM-DD') : 'Невірно вказана дата'} ${
+    period ? `- ${dateEnd.isValid() ? dateEnd.format('YYYY-MM-DD') : 'Невірно вказана дата'}` : ''
+  }`;
+};
+
+export const parseTimeString = (time: dayjs.Dayjs, movie: IApiResponseMovie | null) => {
+  if (!movie) return 'Необхідно вибрати фільм';
+  if (!time.isValid()) return 'Необхідно вибрати коректний час початку сеансу';
+
+  return `Кінець сеансу: ${time.get('hours').toString().padStart(2, '0')}:${time
     .get('minutes')
     .toString()
     .padStart(2, '0')}`;
+};
+
+export const parseCheckedCinemaHall = (
+  cinema: IApiResponseCinema | undefined,
+  id: number | null
+) => {
+  const cinemaHall = cinema?.cinema_halls?.find(c => c.cinemas_hall_id === id);
+
+  if (id && cinemaHall) {
+    return cinemaHall.name;
+  } else {
+    // return cinema?.cinema_halls?.[0] ? cinema?.cinema_halls?.[0].name : '';
+    return '';
+  }
 };

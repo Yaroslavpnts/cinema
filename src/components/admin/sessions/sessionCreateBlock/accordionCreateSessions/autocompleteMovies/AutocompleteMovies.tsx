@@ -1,29 +1,44 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import { useDebounce } from '../../../../../../app/hooks';
 import { Api, IApiResponseMovie } from '../../../../../../api/apiMethods';
+import { AutocompleteMoviesStyled } from './AutocompleteMovies.styled';
 
 interface AutocompleteMoviesProps {
   movie: IApiResponseMovie | null;
-  setMovie: (movie: IApiResponseMovie) => void;
+  setMovie: (movie: IApiResponseMovie | null) => void;
   setMovieId: (field: string, value: number, shouldValidate?: boolean | undefined) => void;
+  handleReadyValue: (isExpanded: boolean) => void;
 }
 
 export const AutocompleteMovies: React.FC<AutocompleteMoviesProps> = ({
   movie,
   setMovie,
   setMovieId,
+  handleReadyValue,
 }) => {
   const [movies, setMovies] = useState<IApiResponseMovie[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [searchValue, setSearchValue] = useState('');
 
-  const onChange = (event: any, newMovie: IApiResponseMovie | string | null) => {
+  // const onChange = (event: any, newMovie: IApiResponseMovie | string | null) => {
+  const onChange = (event: any, newMovie: unknown) => {
     if (newMovie && typeof newMovie === 'object') {
-      setMovie(newMovie);
-      setMovieId('movie_id', newMovie.id);
+      const typedMovie = newMovie as IApiResponseMovie;
+
+      setMovie(typedMovie);
+      setMovieId('movie_id', typedMovie.id);
+      handleReadyValue(false);
+    } else {
+      setMovieId('movie_id', 0);
+      setMovie(null);
     }
+  };
+
+  const handleGetOptionsLabel = (options: unknown) => {
+    const typedOptions = options as IApiResponseMovie | string;
+
+    return typeof typedOptions === 'object' ? typedOptions.name : typedOptions;
   };
 
   const onInputChange = (event: any, value: string) => {
@@ -54,15 +69,16 @@ export const AutocompleteMovies: React.FC<AutocompleteMoviesProps> = ({
   }, [searchValue]);
 
   return (
-    <Autocomplete
+    <AutocompleteMoviesStyled
       freeSolo
       value={movie}
       onChange={onChange}
       inputValue={inputValue}
       onInputChange={onInputChange}
+      // sx={{ width: '350px' }}
       options={movies}
-      getOptionLabel={options => (typeof options === 'object' ? options.name : options)}
-      renderInput={params => <TextField {...params} label="Movie" />}
+      getOptionLabel={handleGetOptionsLabel}
+      renderInput={params => <TextField {...params} label="Введіть назву фільму" size="small" />}
     />
   );
 };

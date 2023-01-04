@@ -4,6 +4,7 @@ import { Api, userDataType } from '../../api/apiMethods';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 import jwt_decode from 'jwt-decode';
+import { setCookie } from '../../app/helpers/helperFunctions';
 
 type SignUpPayloadType = {
   userData: userDataType;
@@ -22,7 +23,7 @@ export const logInAppAction = createAsyncThunk<
   try {
     const { data } = await Api.auth(userData);
     if (data.token) {
-      document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
+      setCookie('token', data.token, { secure: true, 'Max-Age': 3600 });
 
       const decoded = jwt_decode<{ roles: TUserRole[] }>(data.token);
 
@@ -47,7 +48,7 @@ export const signUpAction = createAsyncThunk(
       const { data } = await Api.signUp(userData);
 
       if (data.token) {
-        document.cookie = `token=${data.token}; max-age=24 * 3600; path=/`;
+        setCookie('token', data.token, { secure: true, 'Max-Age': 3600 });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

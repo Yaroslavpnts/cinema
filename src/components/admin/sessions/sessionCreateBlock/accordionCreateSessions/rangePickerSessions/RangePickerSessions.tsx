@@ -1,27 +1,43 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
-import { Stack, Switch, TextField, Typography } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { IconButton, Stack, TextField, Typography } from '@mui/material';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
+  AddCircleOutlineIconStyled,
+  AddSessionBlockStyled,
   DateBlockStyled,
   DatePickerSessionStyled,
+  IconButtonStyled,
+  SessionBlock,
   SessionStyled,
+  SwithStyled,
   TimeSessionsPickerStyled,
 } from './RangePickerSessions.styled';
 import { IApiResponseMovie } from '../../../../../../api/apiMethods';
 import { parseTimeString } from '../../../../../../app/helpers/helperFunctions';
+import { useTheme } from '@mui/material/styles';
 
 interface IRangePickerSessionsProps {
   setValue: (
     field: string,
-    value: string | { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs }[],
+    value:
+      | string
+      | Date
+      | dayjs.Dayjs
+      | {
+          [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
+        },
     shouldValidate?: boolean | undefined
   ) => void;
-  dayStart: string;
-  dayEnd: string;
+  sessions: {
+    [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
+  };
+  dayStart: dayjs.Dayjs | null;
+  dayEnd: dayjs.Dayjs | null;
   checkedPeriod: boolean;
   setChekedPeriod: (checked: boolean) => void;
   movie: IApiResponseMovie | null;
@@ -31,36 +47,67 @@ export const RangePickerSessions: React.FC<IRangePickerSessionsProps> = ({
   setValue,
   dayStart,
   dayEnd,
+  sessions,
   checkedPeriod,
   setChekedPeriod,
   movie,
-  // touched,
-  // errors,
 }) => {
+  const theme = useTheme();
+
   const handleChecked = () => {
     setChekedPeriod(!checkedPeriod);
   };
 
-  const counter = useRef(0);
+  const handleSetStartPeriod = (value: Date | null) => {
+    if (value) {
+      setValue('dayStart', value, true);
 
-  const [sessionsValue, setSessionsValue] = useState<{
-    [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
-  }>({});
-
-  const handleAddSessionBtnClick = () => {
-    setSessionsValue({ ...sessionsValue, [counter.current]: { sessionStart: '', sessionEnd: '' } });
-    counter.current = counter.current += 1;
+      if (!checkedPeriod) {
+        setValue('dayEnd', value, true);
+      }
+    } else {
+      setValue('dayStart', dayjs(null));
+      setValue('dayEnd', dayjs(null));
+    }
   };
 
-  const handleSetSession = (i: number) => (newTime: string | null) => {
-    const sessionStart = newTime as unknown as dayjs.Dayjs;
+  const handleSetEndPeriod = (value: Date | null) => {
+    if (value) {
+      setValue('dayEnd', value, true);
+    } else {
+      setValue('dayEnd', dayjs(null));
+    }
+  };
 
-    const movieDuration = movie?.duration ? movie?.duration : 0;
-    const sessionEnd = sessionStart.add(Number(movieDuration) + 15, 'minute');
+  const handleAddSessionBtnClick = () => {
+    const id = uuidv4();
 
-    console.log('sessionEnd', sessionEnd);
+    setValue('sessions', {
+      ...sessions,
+      [id]: { sessionStart: dayjs(null), sessionEnd: dayjs(null) },
+    });
+  };
 
-    setSessionsValue({ ...sessionsValue, [i.toString()]: { sessionStart, sessionEnd } });
+  const handleSetSession = (key: string) => (newTime: string | null) => {
+    console.log('i am here', newTime);
+    if (newTime) {
+      const sessionStart = newTime as unknown as dayjs.Dayjs;
+      const movieDuration = movie?.duration ? movie?.duration : 0;
+      const sessionEnd = sessionStart.add(Number(movieDuration) + 15, 'minute');
+
+      setValue('sessions', { ...sessions, [key]: { sessionStart, sessionEnd } });
+    } else {
+      setValue('sessions', {
+        ...sessions,
+        [key]: { sessionStart: dayjs(null), sessionEnd: dayjs(null) },
+      });
+    }
+  };
+
+  const handleRemoveSession = (key: string) => {
+    const sessionsCopy = sessions;
+    delete sessionsCopy[key];
+    setValue('sessions', { ...sessionsCopy });
   };
 
   return (
@@ -68,60 +115,64 @@ export const RangePickerSessions: React.FC<IRangePickerSessionsProps> = ({
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateBlockStyled>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography>Один день</Typography>
-            <Switch
+            <Typography variant="subtitle2">Один день</Typography>
+            <SwithStyled
               checked={checkedPeriod}
               onChange={handleChecked}
               inputProps={{ 'aria-label': 'ant design' }}
+              sx={{ color: theme.palette.customColor.main }}
             />
-            <Typography>Період</Typography>
+            <Typography variant="subtitle2">Період</Typography>
           </Stack>
           <DesktopDatePicker
-            onChange={value => {
-              const date = dayjs(value).format('YYYY-MM-DD');
-              setValue('dayStart', date, true);
-            }}
+            onChange={handleSetStartPeriod}
             value={dayStart}
             inputFormat="DD-MM-YYYY"
-            minDate={new Date('1900-01-01')}
+            minDate={new Date()}
             label="Дата початку сеансів"
             renderInput={params => <TextField {...params} name="dayStart" variant="standard" />}
           />
           {checkedPeriod && (
             <DesktopDatePicker
-              onChange={value => {
-                const date = dayjs(value).format('YYYY-MM-DD');
-                setValue('dayEnd', date, true);
-              }}
+              onChange={handleSetEndPeriod}
               value={dayEnd}
               inputFormat="DD-MM-YYYY"
-              minDate={new Date('1900-01-01')}
+              minDate={dayStart ? new Date(dayStart.valueOf()) : new Date()}
               label="Дата кінця сеансів"
               renderInput={params => <TextField {...params} name="dayEnd" variant="standard" />}
             />
           )}
         </DateBlockStyled>
-
+        <AddSessionBlockStyled>
+          <span>Додати сеанс</span>
+          <AddCircleOutlineIconStyled onClick={handleAddSessionBtnClick} fontSize="large" />
+        </AddSessionBlockStyled>
         <TimeSessionsPickerStyled>
-          {Object.keys(sessionsValue).map((key, i) => {
-            console.log(sessionsValue[key].sessionStart);
-            console.log(sessionsValue[key].sessionEnd);
-            console.log('duration', movie?.duration);
+          {Object.keys(sessions).map(key => {
             return (
-              <SessionStyled>
-                <TimePicker
-                  key={key}
-                  value={dayjs(sessionsValue[key].sessionStart)}
-                  onChange={handleSetSession(i)}
-                  renderInput={params => <TextField {...params} />}
-                />
+              <SessionStyled key={key}>
+                <SessionBlock>
+                  <TimePicker
+                    value={dayjs(sessions[key].sessionStart)}
+                    onChange={handleSetSession(key)}
+                    renderInput={params => {
+                      return <TextField {...params} />;
+                    }}
+                  />
+                  <IconButtonStyled>
+                    <RemoveCircleOutlineIcon
+                      onClick={() => handleRemoveSession(key)}
+                      fontSize="large"
+                    />
+                  </IconButtonStyled>
+                </SessionBlock>
+
                 <span>
-                  {sessionsValue[key].sessionEnd && parseTimeString(sessionsValue[key].sessionEnd)}
+                  {sessions[key].sessionEnd && parseTimeString(sessions[key].sessionEnd, movie)}
                 </span>
               </SessionStyled>
             );
           })}
-          <AddCircleOutlineIcon sx={{ color: 'blue' }} onClick={handleAddSessionBtnClick} />
         </TimeSessionsPickerStyled>
       </LocalizationProvider>
     </DatePickerSessionStyled>

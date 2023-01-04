@@ -29,7 +29,7 @@ const MoviesListItem: React.FC<MoviesListItemProps> = ({ movie }) => {
         <RotatingPart>
           <FrontSide>
             <MovieImgWrapper url={movie.poster_src}>
-              <CardImg src={movie.poster_src} alt={movie.name} />
+              <CardImg src={movie.wide_poster_src} alt={movie.name} />
             </MovieImgWrapper>
           </FrontSide>
           <BackSide>

@@ -4,41 +4,78 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useFormik } from 'formik';
 import { AutocompleteMovies } from './autocompleteMovies/AutocompleteMovies';
 import { IApiResponseMovie } from '../../../../../api/apiMethods';
 import { RangePickerSessions } from './rangePickerSessions/RangePickerSessions';
+import { useTheme } from '@mui/material/styles';
 import dayjs from 'dayjs';
+import dayOfYear from 'dayjs/plugin/dayOfYear';
+import {
+  parseCheckedCinemaHall,
+  parsePeriodString,
+} from '../../../../../app/helpers/helperFunctions';
+import SelectCinemaHall from './selectCinemaHall/SelectCinemaHall';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { cinemasByCityNameSelector } from '../../../../../redux/slices/citiesSlice';
+import { createSessionsAction } from '../../../../../redux/slices/sessionsSlice';
+import {
+  AccordionSummaryStyled,
+  ButtonStyled,
+  FormFieldsBlock,
+} from './AccordionCreteSessions.styled';
+import { Alert, Snackbar } from '@mui/material';
 
-interface initialState {
-  dayStart: '';
-  dayEnd: '';
-  sessions: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs }[];
-  // sessions: { [sessionStart: string]: string };
-  // sessions: { [index: string]: { sessionStart: string; sessionEnd: string }[] };
-  cinema_hall_id: number | null;
-  movie_id: number | null;
+dayjs.extend(dayOfYear);
+
+export interface initialStateCreateSessionsForm {
+  dayStart: dayjs.Dayjs;
+  dayEnd: dayjs.Dayjs;
+  // sessions: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs }[];
+  sessions: {
+    [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
+  };
+  cinema_hall_id: number;
+  movie_id: number;
 }
 
 type Keys = 'dateStart' | 'dateEnd' | 'sessions' | 'cinema_hall_id' | 'movie_id';
 
-const parsePeriodString = (dateStart: string, dateEnd: string, period: boolean) => {
-  return ` ${dateStart === 'Invalid Date' ? 'Неправильно вказана дата' : dateStart} ${
-    period ? `- ${dateEnd === 'Invalid Date' ? 'Неправильно вказана дата' : dateEnd}` : ''
-  }`;
-};
+interface IAccordionCreteSessionsProps {
+  cityName: string;
+}
 
-export const AccordionCreteSessions: React.FC = () => {
+export const AccordionCreteSessions: React.FC<IAccordionCreteSessionsProps> = ({ cityName }) => {
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
+
+  const cinema = useAppSelector(cinemasByCityNameSelector(cityName));
+
   const [expanded, setExpanded] = useState<string | false>(false);
   const [checkedPeriod, setChekedPeriod] = useState(false);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [responseMessage, setResponseMessage] = useState('');
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const handleReadyValue = (isExpanded: boolean) => {
+    setExpanded(false);
+  };
+
+  const handleCloseSnackBar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackBarOpen(false);
+  };
+
   const [movie, setMovie] = useState<IApiResponseMovie | null>(null);
 
-  const validate = (values: initialState) => {
+  const validate = (values: initialStateCreateSessionsForm) => {
     const errors = {} as { [key in Keys]: string };
 
     if (!values.dayStart) {
@@ -49,16 +86,29 @@ export const AccordionCreteSessions: React.FC = () => {
       errors.dateEnd = 'Потрібно вказати кінець періоду';
     }
 
-    if (Object.keys(values.sessions).length === 0) {
+    const sessionsKeys = Object.keys(values.sessions);
+
+    if (
+      sessionsKeys.length === 0 ||
+      sessionsKeys.some(key => {
+        if (!values.sessions[key].sessionStart.isValid()) {
+          return true;
+        }
+
+        if (!values.sessions[key].sessionEnd.isValid()) {
+          return true;
+        }
+      })
+    ) {
       errors.sessions = 'Потрібно вказати хоча б один сеанс';
     }
 
-    if (!values.cinema_hall_id) {
-      errors.dateStart = 'Потрібно вказати кінозал';
+    if (values.cinema_hall_id === 0) {
+      errors.cinema_hall_id = 'Потрібно вказати кінозал';
     }
 
-    if (!values.movie_id) {
-      errors.dateStart = 'Потрібно вказати фільм';
+    if (values.movie_id === 0) {
+      errors.movie_id = 'Потрібно вказати фільм';
     }
 
     return errors;
@@ -66,79 +116,105 @@ export const AccordionCreteSessions: React.FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      dayStart: '',
-      dayEnd: '',
+      dayStart: dayjs().startOf('day'),
+      dayEnd: dayjs(),
       sessions: {},
-      cinema_hall_id: null,
-      movie_id: null,
-    } as initialState,
+      cinema_hall_id: 0,
+      movie_id: 0,
+    } as initialStateCreateSessionsForm,
     validate,
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await dispatch(createSessionsAction(values)).unwrap();
+        resetForm();
+        setMovie(null);
+        setResponseMessage('Сеанс(и) створено');
+        setSnackBarOpen(true);
+      } catch (error) {
+        setResponseMessage('Не вдалося створити сеанс(и)');
+      }
     },
   });
+
+  // console.log('values', formik.values);
+  // console.log('errors', formik.errors);
+  // console.log('touched', formik.touched);
 
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>Оберіть фільм</Typography>
-            <Typography>{movie?.name}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <AutocompleteMovies
-              movie={movie}
-              setMovie={setMovie}
-              setMovieId={formik.setFieldValue}
-            />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Оберіть дату та час сеансу (-ів)
-            </Typography>
-            <Typography>
-              {parsePeriodString(formik.values.dayStart, formik.values.dayEnd, checkedPeriod)}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <RangePickerSessions
-              setValue={formik.setFieldValue}
-              dayStart={formik.values.dayStart}
-              dayEnd={formik.values.dayEnd}
-              checkedPeriod={checkedPeriod}
-              setChekedPeriod={setChekedPeriod}
-              movie={movie}
-              // touched={formik.touched}
-              // errors={formik.errors}
-            />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>Advanced settings</Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-              Filtering has been entirely disabled for whole web server
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas
-              eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>Personal data</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography></Typography>
-          </AccordionDetails>
-        </Accordion>
+        <FormFieldsBlock>
+          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+            <AccordionSummaryStyled
+              expandIcon={<ExpandMoreIcon />}
+              sx={{ justifyContent: 'space-between' }}
+            >
+              <Typography sx={{ width: '33%', flexShrink: 0 }}>Оберіть фільм</Typography>
+              <Typography>{movie?.name}</Typography>
+              {formik.values.movie_id && !formik.errors.movie_id ? (
+                <CheckCircleIcon sx={{ color: theme.palette.customColor.main }} />
+              ) : null}
+            </AccordionSummaryStyled>
+            <AccordionDetails>
+              <AutocompleteMovies
+                movie={movie}
+                setMovie={setMovie}
+                setMovieId={formik.setFieldValue}
+                handleReadyValue={handleReadyValue}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+            <AccordionSummaryStyled expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                Оберіть дату та час сеансу (-ів)
+              </Typography>
+              <Typography>
+                {parsePeriodString(formik.values.dayStart, formik.values.dayEnd, checkedPeriod)}
+              </Typography>
+              {Object.keys(formik.values.sessions).length > 0 && !formik.errors.sessions ? (
+                <CheckCircleIcon sx={{ color: theme.palette.customColor.main }} />
+              ) : null}
+            </AccordionSummaryStyled>
+            <AccordionDetails>
+              <RangePickerSessions
+                setValue={formik.setFieldValue}
+                dayStart={formik.values.dayStart}
+                dayEnd={formik.values.dayEnd}
+                checkedPeriod={checkedPeriod}
+                setChekedPeriod={setChekedPeriod}
+                movie={movie}
+                sessions={formik.values.sessions}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+            <AccordionSummaryStyled expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ width: '33%', flexShrink: 0 }}>Оберіть кінозал</Typography>
+              <Typography>
+                {parseCheckedCinemaHall(cinema, formik.values.cinema_hall_id)}
+              </Typography>
+              {formik.values.cinema_hall_id !== 0 && !formik.errors.cinema_hall_id ? (
+                <CheckCircleIcon sx={{ color: theme.palette.customColor.main }} />
+              ) : null}
+            </AccordionSummaryStyled>
+            <AccordionDetails>
+              <Typography component="div">
+                <SelectCinemaHall
+                  cinemaHalls={cinema?.cinema_halls}
+                  setValue={formik.setFieldValue}
+                />
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </FormFieldsBlock>
+        <ButtonStyled type="submit">Створити сеанси</ButtonStyled>
       </form>
+      <Snackbar open={snackBarOpen} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+        <Alert onClose={handleCloseSnackBar} severity="success" sx={{ width: '100%' }}>
+          {responseMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

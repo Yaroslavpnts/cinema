@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import {
-  Api,
-  IPosition,
-  IApiResponseActor,
-  IApiResponseSession,
-  IApiResponseSessionWithMovieAndCinemaHall,
-} from '../../api/apiMethods';
+import { Api, IApiResponseSessionWithMovieAndCinemaHall, ISession } from '../../api/apiMethods';
 import { TCreatePosition } from '../../components/admin/movies/movieForm/modalForm/PositionForm';
+import { initialStateCreateSessionsForm } from '../../components/admin/sessions/sessionCreateBlock/accordionCreateSessions/AccordionCreteSessions';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
+
+interface createSessionPayloadCreator {
+  dayStart: dayjs.Dayjs;
+  dayEnd: dayjs.Dayjs;
+  sessions: {
+    [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
+  };
+  cinema_hall_id: number;
+  movie_id: number;
+}
 
 export const fetchSessionsAction = createAsyncThunk(
   'sessions/fetchSessions',
@@ -34,19 +39,38 @@ export const fetchSessionsAction = createAsyncThunk(
   }
 );
 
-export const createSessionAction = createAsyncThunk<
+export const createSessionsAction = createAsyncThunk<
   // Return type of the payload creator
-  IApiResponseSessionWithMovieAndCinemaHall,
+  IApiResponseSessionWithMovieAndCinemaHall[],
   // First argument to the payload creator
-  IApiResponseSession,
+  createSessionPayloadCreator,
   {
     dispatch: AppDispatch;
     state: RootState;
     rejectValue: string;
   }
->('sessions/createSession', async (session, { rejectWithValue }) => {
+>('sessions/createSession', async (data, { rejectWithValue }) => {
+  const days = data.dayEnd.diff(data.dayStart, 'd');
+  const sessions = [] as ISession[];
+
+  for (let i = 0; i <= days; i += 1) {
+    const newDate = data.dayStart.add(i, 'day');
+
+    Object.keys(data.sessions).map(key => {
+      const session = {} as ISession;
+
+      session.date = newDate.format('YYYY-MM-DD');
+      session.movie_id = data.movie_id;
+      session.cinema_hall_id = data.cinema_hall_id;
+      session.session_start = data.sessions[key].sessionStart.format('HH:mm');
+      session.session_end = data.sessions[key].sessionEnd.format('HH:mm');
+
+      sessions.push(session);
+    });
+  }
+
   try {
-    const { data } = await Api.createSession(session);
+    const { data } = await Api.createSessions(sessions);
 
     return data;
   } catch (error) {
@@ -80,16 +104,18 @@ const actorsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(createSessionAction.pending, (state, action) => {
+      .addCase(createSessionsAction.pending, (state, action) => {
         state.status = fetchStatus.Pending;
         state.responseMessage = '';
       })
-      .addCase(createSessionAction.fulfilled, (state, action) => {
+      .addCase(createSessionsAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        state.sessions.push(action.payload);
+        const a = action.payload;
+        action.payload.map(session => state.sessions.push(session));
+        // state.sessions.push(action.payload);
         state.responseMessage = 'Актор створений';
       })
-      .addCase(createSessionAction.rejected, (state, action) => {
+      .addCase(createSessionsAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
         if (action.payload) {
           state.responseMessage = action.payload;
