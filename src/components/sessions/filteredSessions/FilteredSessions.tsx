@@ -23,11 +23,8 @@ export const FilteredSessions: React.FC<IFilteredSessionsProps> = ({ cityName })
 
   useEffect(() => {
     const fetchMovies = async (cinemaHalls: string) => {
-      const { data: movies } = await Api.fetchMoviesWithSessionsByDateAndByCinemaHalls(
-        dateStart,
-        dateEnd,
-        cinemaHalls
-      );
+      const halls = `&cinemaHalls=${cinemaHalls}`;
+      const { data: movies } = await Api.fetchMoviesByFilters(dateStart, dateEnd, halls);
 
       setMovies(movies);
     };

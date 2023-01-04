@@ -122,7 +122,7 @@ export interface IMovie {
   start_date_session?: string;
   end_date_session?: string;
   sessions?: IApiResponseSession[];
-  duration: number;
+  duration: string;
 }
 
 export interface IApiResponseMovie extends IMovie {
@@ -146,17 +146,13 @@ export const Api = {
     return instance.post<ApiResponseToken>('auth/registration', data);
   },
 
-  fetchMovies() {
-    return instance.get<IApiResponseMovie[]>('movies');
+  fetchMovies(page: number, size: number) {
+    return instance.get<IApiResponseMovie[]>(`movies?page=${page}&size=${size}`);
   },
 
-  fetchMoviesWithSessionsByDateAndByCinemaHalls(
-    dateStart: string,
-    dateEnd: string,
-    cinemaHalls: string
-  ) {
+  fetchMoviesByFilters(dateStart: string, dateEnd: string, cinemaHalls: string) {
     return instance.get<IApiResponseMovie[]>(
-      `movies/filter?dateStart=${dateStart}&dateEnd=${dateEnd}&cinemaHalls=${cinemaHalls}`
+      `movies/filter?dateStart=${dateStart}&dateEnd=${dateEnd}${cinemaHalls}`
     );
   },
 

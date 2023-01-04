@@ -15,7 +15,7 @@ const Movies: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchMoviesAction());
+    dispatch(fetchMoviesAction({ page: 0, size: 10 }));
   }, []);
 
   return (

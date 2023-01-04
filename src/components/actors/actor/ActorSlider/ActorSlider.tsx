@@ -13,49 +13,6 @@ interface IActorSliderProps {
 }
 
 const ActorSlider: React.FC<IActorSliderProps> = ({ movies }) => {
-  const test = [
-    {
-      id: 1,
-      poster_src:
-        'https://st2.depositphotos.com/4431055/7495/i/600/depositphotos_74950191-stock-photo-men-latin-american-and-hispanic.jpg',
-    },
-    {
-      id: 2,
-      poster_src:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfaS70ALn_-Gf8xgogDTCwTQA0RoZJCUZEWA&usqp=CAU',
-    },
-    {
-      id: 3,
-      poster_src:
-        'https://st2.depositphotos.com/4431055/7495/i/600/depositphotos_74950191-stock-photo-men-latin-american-and-hispanic.jpg',
-    },
-    {
-      id: 4,
-      poster_src:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfaS70ALn_-Gf8xgogDTCwTQA0RoZJCUZEWA&usqp=CAU',
-    },
-    {
-      id: 5,
-      poster_src:
-        'https://st2.depositphotos.com/4431055/7495/i/600/depositphotos_74950191-stock-photo-men-latin-american-and-hispanic.jpg',
-    },
-    {
-      id: 6,
-      poster_src:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfaS70ALn_-Gf8xgogDTCwTQA0RoZJCUZEWA&usqp=CAU',
-    },
-    {
-      id: 7,
-      poster_src:
-        'https://st2.depositphotos.com/4431055/7495/i/600/depositphotos_74950191-stock-photo-men-latin-american-and-hispanic.jpg',
-    },
-    {
-      id: 8,
-      poster_src:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfaS70ALn_-Gf8xgogDTCwTQA0RoZJCUZEWA&usqp=CAU',
-    },
-  ];
-
   return (
     <StyledSwiper
       // onFromEdge={swiper => console.log('onFromEdge', swiper)}
@@ -73,7 +30,7 @@ const ActorSlider: React.FC<IActorSliderProps> = ({ movies }) => {
       {movies.map(movie => (
         <StyledSwiperSlide key={movie.id}>
           <Link to={`../movies/${movie.id}`}>
-            <Img src={movie.poster_src} />
+            <Img src={movie.wide_poster_src} />
           </Link>
         </StyledSwiperSlide>
       ))}

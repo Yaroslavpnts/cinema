@@ -24,7 +24,7 @@ const MoviesList: React.FC<SliderProps> = ({ movies, status }) => {
   return (
     <div>
       <StyledHeading variant="h2" sx={{ mb: 3 }}>
-        Список фільмів
+        Сьогодні у кіно
       </StyledHeading>
       <MoviesContainer>{status === fetchStatus.Pending ? skeletons : moviesList}</MoviesContainer>
     </div>

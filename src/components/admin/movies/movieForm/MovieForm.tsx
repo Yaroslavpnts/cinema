@@ -4,7 +4,7 @@ import { ICategory, IPosition } from '../../../../api/apiMethods';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   createMovieAction,
-  movieById,
+  movieByIdSelector,
   moviesErrorMessageSelector,
   moviesStatusSelector,
   updateMovieAction,
@@ -55,7 +55,7 @@ const defaultValues = {
   production_year: '',
   wide_poster_src: '',
   poster_src: '',
-  duration: 0,
+  duration: '',
 };
 
 export type TCreateMovie = typeof defaultValues;
@@ -128,7 +128,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
   const genres = useAppSelector(genresSelector);
   const actors = useAppSelector(actorsNamesSelector);
   const directors = useAppSelector(directorsNamesSelector);
-  const movie = useAppSelector(movieById(id));
+  const movie = useAppSelector(movieByIdSelector(id));
 
   const initialValues = movie ? movie : defaultValues;
 
@@ -333,13 +333,13 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
           </InputBlock>
           <InputBlock>
             <div>
-              <Field name="poster_src" placeholder="Афіша до фільму" />
+              <Field name="poster_src" placeholder="Постер до фільму" />
               <ErrorMessage name="poster_src" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>
           <InputBlock>
             <div>
-              <Field name="wide_poster_src" placeholder="Постер до фільму" />
+              <Field name="wide_poster_src" placeholder="Афіша до фільму" />
               <ErrorMessage name="wide_poster_src" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>

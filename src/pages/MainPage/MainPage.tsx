@@ -1,11 +1,10 @@
 import { Container } from '@mui/material';
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
-// import { getCookie } from '../../app/helpers/helperFunctions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import MoviesList from '../../components/movies/MoviesList';
 import MainPageSlider from '../../components/slider/MainPageSlider';
-// import { signIn } from '../../redux/slices/authorizationSlice';
-import { fetchMoviesAction, moviesStateSelector } from '../../redux/slices/moviesSlice';
+import { fetchMoviesByFilterAction, moviesStateSelector } from '../../redux/slices/moviesSlice';
 import { MainPageWrapper } from './MainPage.styled';
 
 const MainPage: React.FC = () => {
@@ -13,7 +12,12 @@ const MainPage: React.FC = () => {
   const movies = useAppSelector(moviesStateSelector);
 
   useEffect(() => {
-    dispatch(fetchMoviesAction());
+    const options = {
+      dateStart: dayjs().format('YYYY-MM-DD'),
+      dateEnd: dayjs().format('YYYY-MM-DD'),
+    };
+
+    dispatch(fetchMoviesByFilterAction(options));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

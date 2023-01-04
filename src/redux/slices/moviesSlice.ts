@@ -11,24 +11,70 @@ export type initialStateMoviesType = {
   movies: Array<IApiResponseMovie>;
 };
 
+export interface fetchMoviesFilters {
+  dateStart: string;
+  dateEnd: string;
+  cinemaHalls?: string;
+}
+
 const initialState: initialStateMoviesType = {
   status: fetchStatus.Idle,
   responseMessage: '',
   movies: [],
 };
 
-export const fetchMoviesAction = createAsyncThunk(
-  'movies/fetchMovies',
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await Api.fetchMovies();
-      return data;
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error);
-    }
+export const fetchMoviesAction = createAsyncThunk<
+  IApiResponseMovie[],
+  { page: number; size: number },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
   }
-);
+>('movies/fetchMovies', async (params, { rejectWithValue }) => {
+  try {
+    const { data } = await Api.fetchMovies(params.page, params.size);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    if (error instanceof Error) {
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Інша помилка');
+  }
+});
+
+export const fetchMoviesByFilterAction = createAsyncThunk<
+  IApiResponseMovie[],
+  fetchMoviesFilters,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>('movies/fetchMoviesByFilterAction', async (params, { rejectWithValue }) => {
+  try {
+    const halls = params?.cinemaHalls ? `&cinemaHalls=${params.cinemaHalls}'` : '';
+
+    const { data } = await Api.fetchMoviesByFilters(params.dateStart, params.dateEnd, halls);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Інша помилка');
+  }
+});
 
 export const createMovieAction = createAsyncThunk<
   IApiResponseMovie,
@@ -158,6 +204,16 @@ const moviesSlice = createSlice({
       })
       .addCase(deleteMovieAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
+      })
+      .addCase(fetchMoviesByFilterAction.pending, (state, action) => {
+        state.status = fetchStatus.Pending;
+      })
+      .addCase(fetchMoviesByFilterAction.fulfilled, (state, action) => {
+        state.status = fetchStatus.Success;
+        state.movies = action.payload;
+      })
+      .addCase(fetchMoviesByFilterAction.rejected, (state, action) => {
+        state.status = fetchStatus.Error;
       });
   },
 });
@@ -175,7 +231,7 @@ export const moviesForTable = createSelector(moviesSelector, movies => {
   }));
 });
 
-export const movieById = (id: number | undefined) => (state: RootState) => {
+export const movieByIdSelector = (id: number | undefined) => (state: RootState) => {
   if (!id) return null;
 
   let returnedMovie = {} as TCreateMovie;
