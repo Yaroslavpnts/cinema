@@ -23,7 +23,9 @@ export const FilteredSessions: React.FC<IFilteredSessionsProps> = ({ cityName })
 
   useEffect(() => {
     const fetchMovies = async (cinemaHalls: string) => {
-      const halls = `&cinemaHalls=${cinemaHalls}`;
+      const halls = cinemaHalls
+        ? `&cinemaHalls=${cinemaHalls}`
+        : `&cinemaHalls=${cinema?.cinema_halls?.map(c => c.cinemas_hall_id).join(',')}`;
       const { data: movies } = await Api.fetchMoviesByFilters(dateStart, dateEnd, halls);
 
       setMovies(movies);

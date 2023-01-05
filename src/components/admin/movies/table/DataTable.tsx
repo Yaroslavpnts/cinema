@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -236,17 +236,30 @@ interface IDataTableProps {
     id: number;
   }[];
   typeData: EnumTypeData;
+  // page: number;
+  // rowsPerPage: number;
+  // setPage: (page: number) => void;
+  // setRowsPerPage: (rowsPerPage: number) => void;
+  // totalMovies: number;
 }
 
-const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
+const DataTable: React.FC<IDataTableProps> = ({
+  rows,
+  typeData,
+  // page,
+  // rowsPerPage,
+  // setPage,
+  // setRowsPerPage,
+  // totalMovies,
+}) => {
   const dispatch = useAppDispatch();
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [modalContentKey, setModalContentKey] = React.useState<
     'movies' | 'actors' | 'directors' | ''
@@ -373,7 +386,6 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
   const handleDelete = async () => {
     deleteMethods[typeData]();
   };
-
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -475,6 +487,7 @@ const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
           component="div"
           labelRowsPerPage="Рядків на сторінку"
           count={rows.length}
+          // count={totalMovies}
           rowsPerPage={rowsPerPage}
           page={page}
           sx={{

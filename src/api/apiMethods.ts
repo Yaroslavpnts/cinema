@@ -129,6 +129,12 @@ export interface IApiResponseMovie extends IMovie {
   id: number;
 }
 
+export interface IApiResponseMovieWithPages {
+  content: IApiResponseMovie[];
+  totalPages: number;
+  totalCount: number;
+}
+
 export interface ICategory {
   name: string;
 }
@@ -146,8 +152,12 @@ export const Api = {
     return instance.post<ApiResponseToken>('auth/registration', data);
   },
 
-  fetchMovies(page: number, size: number) {
-    return instance.get<IApiResponseMovie[]>(`movies?page=${page}&size=${size}`);
+  fetchMoviesPagination(page: number, size: number) {
+    return instance.get<IApiResponseMovieWithPages>(`movies?page=${page}&size=${size}`);
+  },
+
+  fetchAllMovies() {
+    return instance.get<IApiResponseMovie[]>('movies/all');
   },
 
   fetchMoviesByFilters(dateStart: string, dateEnd: string, cinemaHalls: string) {
@@ -183,8 +193,13 @@ export const Api = {
   createCategory(name: ICategory) {
     return instance.post<IApiResponseCategory>('movies/categories', name);
   },
+
   fetchActors() {
-    return instance.get<IApiResponseActor[]>('actors');
+    return instance.get<IApiResponseActor[]>('actors/all');
+  },
+
+  fetchActorsPagination(page: number, size: number) {
+    return instance.get<IApiResponseActor[]>(`actors?page=${page}&size=${size}`);
   },
 
   fetchActor(id: number) {

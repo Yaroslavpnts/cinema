@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Api, IApiResponseFullActor } from '../../../api/apiMethods';
 import ActorHighchart from '../../Highcharts/ActorHighcharts/ActorHighchart';
 import {
@@ -16,6 +16,8 @@ import ActorSlider from './ActorSlider/ActorSlider';
 const Actor: React.FC = () => {
   const [actor, setActor] = useState<IApiResponseFullActor>();
 
+  const navigate = useNavigate();
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -23,7 +25,9 @@ const Actor: React.FC = () => {
       try {
         const { data } = await Api.fetchActor(id);
         setActor(data);
-      } catch (error) {}
+      } catch (error) {
+        navigate('/404');
+      }
     };
 
     if (id) getActor(+id);

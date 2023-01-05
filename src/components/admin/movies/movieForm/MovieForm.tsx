@@ -132,12 +132,6 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
 
   const initialValues = movie ? movie : defaultValues;
 
-  useEffect(() => {
-    dispatch(fetchGenresAction());
-    dispatch(fetchActorsAction());
-    dispatch(fetchDirectorsAction());
-  }, []);
-
   const createNewCategory = (category: ICategory) => {
     return dispatch(createGenreAction(category)).unwrap();
   };
@@ -327,7 +321,7 @@ const MovieForm: React.FC<IMovieFormProps> = ({ id, title }) => {
           </InputBlock>
           <InputBlock>
             <div>
-              <Field name="duration" placeholder="Тривалість фільму" type="number" min={0} />
+              <Field name="duration" placeholder="Тривалість фільму (хв)" type="number" min={0} />
               <ErrorMessage name="duration" render={msg => <Error>{msg}</Error>} />
             </div>
           </InputBlock>

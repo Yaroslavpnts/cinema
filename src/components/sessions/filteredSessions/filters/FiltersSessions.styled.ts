@@ -18,6 +18,7 @@ export const StyledHeaderFilters = styled('div')`
   line-height: 20px;
   text-transform: lowercase;
   color: #5a5b5b;
+  border-right: 1px solid #b0aaaa;
 `;
 
 export const StyledFiltersList = styled('ul')`
@@ -26,6 +27,7 @@ export const StyledFiltersList = styled('ul')`
 
 export const StyledFilterBlock = styled('div')`
   border-top: 1px solid #b0aaaa;
+  border-right: 1px solid #b0aaaa;
   padding: 15px 15px 15px 55px;
   padding-right: 55px;
 

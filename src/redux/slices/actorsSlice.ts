@@ -8,7 +8,7 @@ import { fetchStatus } from '../types';
 
 export const fetchActorsAction = createAsyncThunk(
   'actors/fetchActors',
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const { data } = await Api.fetchActors();
 
@@ -27,6 +27,35 @@ export const fetchActorsAction = createAsyncThunk(
     }
   }
 );
+
+export const fetchActorsPaginationAction = createAsyncThunk<
+  // Return type of the payload creator
+  IApiResponseActor[],
+  // First argument to the payload creator
+  { page: number; size: number },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: string;
+  }
+>('actors/fetchActorsPagination', async (params, { rejectWithValue }) => {
+  try {
+    const { data } = await Api.fetchActorsPagination(params.page, params.size);
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data.message);
+    }
+
+    if (error instanceof Error) {
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Інша помилка');
+  }
+});
 
 export const createActorAction = createAsyncThunk<
   // Return type of the payload creator
@@ -148,6 +177,16 @@ const actorsSlice = createSlice({
         state.actors = action.payload;
       })
       .addCase(fetchActorsAction.rejected, (state, action) => {
+        state.status = fetchStatus.Error;
+      })
+      .addCase(fetchActorsPaginationAction.pending, (state, action) => {
+        state.status = fetchStatus.Pending;
+      })
+      .addCase(fetchActorsPaginationAction.fulfilled, (state, action) => {
+        state.status = fetchStatus.Success;
+        state.actors = action.payload;
+      })
+      .addCase(fetchActorsPaginationAction.rejected, (state, action) => {
         state.status = fetchStatus.Error;
       })
       .addCase(deleteActorAction.pending, (state, action) => {

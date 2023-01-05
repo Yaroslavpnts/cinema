@@ -46,7 +46,7 @@ const MovieWithSessionsItem: React.FC<IMovieProps> = ({ movie, cinemaHalls }) =>
                   <h3>{parseJSX(date)}</h3>
                   {cinemaHalls?.map(cinemaHall => {
                     if (
-                      cinemaHall.checked &&
+                      // cinemaHall.checked &&
                       cinemaHall.sessions!.length > 0 &&
                       cinemaHall.sessions?.some(session => session.movie_id === movie.id) &&
                       cinemaHall.sessions.some(session => session.date === date)
