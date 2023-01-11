@@ -1,13 +1,13 @@
 import React from 'react';
 import { IApiResponseMovie } from '../../api/apiMethods';
-import { MoviesContainer, StyledHeading } from './MoviesList.styled';
+import { MoviesContainer } from './MoviesList.styled';
 import MoviesListItem from './MoviesListItem';
 import Skeleton from '@mui/material/Skeleton';
 import { fetchStatus } from '../../redux/types';
 import { SkeletonCard } from './MoviesListItem.styled';
 
 interface SliderProps {
-  movies: Array<IApiResponseMovie>;
+  movies: IApiResponseMovie[];
   status: fetchStatus;
 }
 
@@ -23,9 +23,6 @@ const MoviesList: React.FC<SliderProps> = ({ movies, status }) => {
 
   return (
     <div>
-      <StyledHeading variant="h2" sx={{ mb: 3 }}>
-        Сьогодні у кіно
-      </StyledHeading>
       <MoviesContainer>{status === fetchStatus.Pending ? skeletons : moviesList}</MoviesContainer>
     </div>
   );

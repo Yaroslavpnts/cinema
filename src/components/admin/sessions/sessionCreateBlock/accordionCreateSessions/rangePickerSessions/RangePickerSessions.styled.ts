@@ -1,5 +1,6 @@
 import { styled, css } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Switch from '@mui/material/Switch';
 import IconButton from '@mui/material/IconButton';
 
@@ -76,10 +77,8 @@ export const SessionBlock = styled('div')`
   }
 `;
 
-export const IconButtonStyled = styled(IconButton)`
-  svg {
-    color: ${props => props.theme.palette.customColor.main};
-  }
+export const RemoveCircleOutlineIconStyled = styled(RemoveCircleOutlineIcon)`
+  color: ${props => props.theme.palette.customColor.main};
 
   cursor: pointer;
 `;

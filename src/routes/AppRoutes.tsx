@@ -21,6 +21,7 @@ import {
   NotFoundPage,
 } from './routes';
 import SessionPage from '../pages/SessionsPage/SessionsPage';
+import MoviesPage from '../pages/MoviesPage/MoviesPage';
 
 const AppRoutes = () => {
   const dispatch = useAppDispatch();
@@ -48,6 +49,7 @@ const AppRoutes = () => {
         <Route index element={<MainPage />} />
 
         <Route path="auth/:type" element={<Authorization />} />
+        <Route path="movies" element={<MoviesPage />} />
         <Route path="movies/:id" element={<MoviePage />} />
         <Route path="actors/:id" element={<ActorPage />} />
         <Route path="directors/:id" element={<DirectorPage />} />

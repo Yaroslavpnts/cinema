@@ -137,3 +137,7 @@ export const MovieDirectors = styled('div')`
     ${SubTitle}
   }
 `;
+
+export const ListItemName = styled('span')`
+  color: #000;
+`;

@@ -7,11 +7,11 @@ export const MoviesContainer = styled('div')`
   gap: 30px;
 `;
 
-export const StyledHeading = styled(Typography)`
-  font-size: 40px;
-  text-align: center;
+// export const StyledHeading = styled(Typography)`
+//   font-size: 40px;
+//   text-align: center;
 
-  @media (max-width: 500px) {
-    font-size: 24px;
-  }
-`;
+//   @media (max-width: 500px) {
+//     font-size: 24px;
+//   }
+// `;

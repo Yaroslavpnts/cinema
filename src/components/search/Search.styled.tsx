@@ -47,6 +47,9 @@ export const StyledSearchResults = styled('div')`
 
   ul {
     background: #fff;
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 
     li {
       border-top: 1px solid rgba(0, 0, 0, 0.15);
@@ -56,6 +59,7 @@ export const StyledSearchResults = styled('div')`
       display: flex;
       align-items: center;
       padding: 5px 10px;
+      color: rgba(0, 0, 0, 0.87);
     }
 
     p {

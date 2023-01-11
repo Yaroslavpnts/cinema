@@ -167,7 +167,7 @@ export const AccordionCreteSessions: React.FC<IAccordionCreteSessionsProps> = ({
           <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
             <AccordionSummaryStyled expandIcon={<ExpandMoreIcon />}>
               <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                Оберіть дату та час сеансу (-ів)
+                Оберіть дату та час сеансу(-ів)
               </Typography>
               <Typography>
                 {parsePeriodString(formik.values.dayStart, formik.values.dayEnd, checkedPeriod)}

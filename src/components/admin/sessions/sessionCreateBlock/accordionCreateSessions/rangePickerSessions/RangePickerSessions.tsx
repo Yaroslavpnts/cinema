@@ -11,7 +11,8 @@ import {
   AddSessionBlockStyled,
   DateBlockStyled,
   DatePickerSessionStyled,
-  IconButtonStyled,
+  RemoveCircleOutlineIconStyled,
+  // IconButtonStyled,
   SessionBlock,
   SessionStyled,
   SwithStyled,
@@ -159,12 +160,10 @@ export const RangePickerSessions: React.FC<IRangePickerSessionsProps> = ({
                       return <TextField {...params} />;
                     }}
                   />
-                  <IconButtonStyled>
-                    <RemoveCircleOutlineIcon
-                      onClick={() => handleRemoveSession(key)}
-                      fontSize="large"
-                    />
-                  </IconButtonStyled>
+                  <RemoveCircleOutlineIconStyled
+                    onClick={() => handleRemoveSession(key)}
+                    fontSize="large"
+                  />
                 </SessionBlock>
 
                 <span>

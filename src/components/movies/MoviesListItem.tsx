@@ -8,6 +8,7 @@ import {
   CardImg,
   FrontSide,
   IconStyled,
+  ListItemName,
   MovieDirectors,
   MovieGenres,
   MovieImdb,
@@ -16,16 +17,19 @@ import {
   RotatingPart,
 } from './MoviesListItem.styled';
 import { theme } from '../../theme/theme';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type MoviesListItemProps = {
   movie: IApiResponseMovie;
 };
 
 const MoviesListItem: React.FC<MoviesListItemProps> = ({ movie }) => {
+  let { pathname } = useLocation();
+  console.log(pathname);
+
   return (
-    <Link to={`movies/${movie.id}`}>
-      <Card>
+    <Card>
+      <Link to={pathname !== '/movies' ? `movies/${movie.id}` : `${movie.id}`}>
         <RotatingPart>
           <FrontSide>
             <MovieImgWrapper url={movie.poster_src}>
@@ -45,21 +49,24 @@ const MoviesListItem: React.FC<MoviesListItemProps> = ({ movie }) => {
             <MovieGenres>
               <div>Жанр</div>
               {movie.genres.map((genre, i) => {
-                if (!(i === movie.genres.length - 1)) {
-                  return genre.name + ', ';
-                }
-                return genre.name;
+                return (
+                  <ListItemName key={genre.id}>
+                    {!(i === movie.genres.length - 1) ? genre.name + ', ' : genre.name}
+                  </ListItemName>
+                );
               })}
             </MovieGenres>
             <MovieDirectors>
               <div>Режисер</div>
-              {movie.directors.map(director => director.name)}
+              {movie.directors.map(director => (
+                <ListItemName key={director.id}>{director.name}</ListItemName>
+              ))}
             </MovieDirectors>
           </BackSide>
         </RotatingPart>
         <Typography variant="h4" sx={{ fontSize: '18px', textTransform: 'uppercase' }}></Typography>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 };
 
