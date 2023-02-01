@@ -19,10 +19,6 @@ body::-webkit-scrollbar-thumb {
   background-color: green;
 } */
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 /* anonymous-pro-regular - latin_cyrillic */
 @font-face {
   font-family: 'Anonymous Pro';

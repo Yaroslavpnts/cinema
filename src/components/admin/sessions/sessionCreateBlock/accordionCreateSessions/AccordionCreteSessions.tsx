@@ -32,7 +32,6 @@ dayjs.extend(dayOfYear);
 export interface initialStateCreateSessionsForm {
   dayStart: dayjs.Dayjs;
   dayEnd: dayjs.Dayjs;
-  // sessions: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs }[];
   sessions: {
     [index: string]: { sessionStart: dayjs.Dayjs; sessionEnd: dayjs.Dayjs };
   };

@@ -68,6 +68,7 @@ export const ButtonStyled = styled('button')`
   line-height: 18px;
   letter-spacing: 0.03em;
   color: #ffffff;
+  cursor: pointer;
 `;
 
 export const Error = styled('div')`
