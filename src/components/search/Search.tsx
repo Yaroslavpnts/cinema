@@ -1,5 +1,4 @@
 import React, { useMemo, useEffect, useRef, useState } from 'react';
-import debounce from 'lodash.debounce';
 import { Api, IApiResponseMovie } from '../../api/apiMethods';
 import {
   SearchStyled,
@@ -9,7 +8,7 @@ import {
   StyledSmallPosterBlock,
 } from './Search.styled';
 import { Link } from 'react-router-dom';
-import { useDebounce } from '../../app/hooks';
+import { useDebounce } from '../../hooks/useDebounceHook';
 
 const Search: React.FC = () => {
   const [isSearchActive, setSearchActive] = useState(false);

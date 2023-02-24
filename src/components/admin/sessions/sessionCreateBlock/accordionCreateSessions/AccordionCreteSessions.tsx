@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -97,6 +96,8 @@ export const AccordionCreteSessions: React.FC<IAccordionCreteSessionsProps> = ({
         if (!values.sessions[key].sessionEnd.isValid()) {
           return true;
         }
+
+        return false;
       })
     ) {
       errors.sessions = 'Потрібно вказати хоча б один сеанс';

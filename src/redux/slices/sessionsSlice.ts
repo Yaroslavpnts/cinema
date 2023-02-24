@@ -3,7 +3,6 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { Api, IApiResponseSessionWithMovieAndCinemaHall, ISession } from '../../api/apiMethods';
 import { TCreatePosition } from '../../components/admin/movies/movieForm/modalForm/PositionForm';
-import { initialStateCreateSessionsForm } from '../../components/admin/sessions/sessionCreateBlock/accordionCreateSessions/AccordionCreteSessions';
 import { AppDispatch, RootState } from '../store';
 import { fetchStatus } from '../types';
 
@@ -56,7 +55,7 @@ export const createSessionsAction = createAsyncThunk<
   for (let i = 0; i <= days; i += 1) {
     const newDate = data.dayStart.add(i, 'day');
 
-    Object.keys(data.sessions).map(key => {
+    Object.keys(data.sessions).forEach(key => {
       const session = {} as ISession;
 
       session.date = newDate.format('YYYY-MM-DD');
@@ -110,9 +109,7 @@ const actorsSlice = createSlice({
       })
       .addCase(createSessionsAction.fulfilled, (state, action) => {
         state.status = fetchStatus.Success;
-        const a = action.payload;
         action.payload.map(session => state.sessions.push(session));
-        // state.sessions.push(action.payload);
         state.responseMessage = 'Актор створений';
       })
       .addCase(createSessionsAction.rejected, (state, action) => {
