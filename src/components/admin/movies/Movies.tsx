@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { fetchAllMoviesAction, moviesStateStatusSelector } from '../../../redux/slices/moviesSlice';
 import { fetchStatus } from '../../../redux/types';
 import MovieForm from './movieForm/MovieForm';

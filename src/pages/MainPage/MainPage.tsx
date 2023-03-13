@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import MoviesList from '../../components/movies/MoviesList';
 import MainPageSlider from '../../components/slider/MainPageSlider';
 import {

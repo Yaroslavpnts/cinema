@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { citiesSelector, fetchCitiesAction } from '../../redux/slices/citiesSlice';
 import CitySelectorBlock from './citySelectorBlock/CitySelectorBlock';
 import { FilteredSessions } from './filteredSessions/FilteredSessions';

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useFormik } from 'formik';
 import { IApiResponseActor, IApiResponseDirector, IPosition } from '../../../../../api/apiMethods';
 import { actorById, actorsErrorMessageSelector } from '../../../../../redux/slices/actorsSlice';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../../../redux/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
@@ -112,7 +112,7 @@ const PositionForm: React.FC<IProps> = ({
         </Notification>
       ),
     }),
-    [status]
+    [status, setStatus, errorMessage, successMessage]
   );
 
   return (

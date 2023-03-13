@@ -16,7 +16,7 @@ import {
   parsePeriodString,
 } from '../../../../../app/helpers/helperFunctions';
 import SelectCinemaHall from './selectCinemaHall/SelectCinemaHall';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../redux/store';
 import { cinemasByCityNameSelector } from '../../../../../redux/slices/citiesSlice';
 import { createSessionsAction } from '../../../../../redux/slices/sessionsSlice';
 import {

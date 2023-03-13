@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Api, IApiResponseMovie } from '../../../api/apiMethods';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppSelector } from '../../../redux/store';
 import { ICinemaHallsChecked } from '../../../redux/slices/cinemaHallsSlice';
 import { cinemasByCityNameSelector } from '../../../redux/slices/citiesSlice';
 import { StyledFilteredSessions } from './FilteredSessions.styled';

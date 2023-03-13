@@ -3,8 +3,9 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { userDataType } from '../../api/apiMethods';
-import { useAppDispatch } from '../../app/hooks';
+
 import { logInAppAction, signUpAction } from '../../redux/slices/authorizationSlice';
+import { useAppDispatch } from '../../redux/store';
 import {
   BtnSendValues,
   BtnShowForm,
@@ -20,7 +21,6 @@ enum TypeAuth {
 
 const AuthForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  // const isAuth = useAppSelector(isAuthSelector);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -31,12 +31,6 @@ const AuthForm: React.FC = () => {
   const [isShowRegistration, setIsShowRegistration] = useState<boolean>(
     type === TypeAuth.REGISTRATION
   );
-
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     navigate('/');
-  //   }
-  // }, [isAuth]);
 
   const initialValues: userDataType = { email: '', password: '' };
 

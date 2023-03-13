@@ -1,17 +1,16 @@
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+
 import MoviesList from '../../components/movies/MoviesList';
 import { fetchMoviesPaginationAction, moviesStateSelector } from '../../redux/slices/moviesSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { StyledHeading, StyledMoviePage, StyledPagination } from './MoviesPage.style';
 
 const MoviesPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const movies = useAppSelector(moviesStateSelector);
   const [page, setPage] = useState(1);
-  // const [pageQuantity, setPageQuantity] = useState(0);
-  // const [query, setQuery] = useState('react');
 
   useEffect(() => {
     dispatch(fetchMoviesPaginationAction({ page: page - 1, size: 10 }));

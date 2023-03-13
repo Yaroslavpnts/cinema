@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { ButtonStyled, CreateBlockStyled, Error, FormStyled, InputBlock } from './modalForm.style';
 import { IApiResponseCategory, ICategory } from '../../../../../api/apiMethods';
 import Notification from '../../../../notification/Notification';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../../../redux/store';
 import { genresErrorMessageSelector } from '../../../../../redux/slices/genresSlice';
 import Typography from '@mui/material/Typography';
 
@@ -66,7 +66,7 @@ const GenreForm: React.FC<IProps> = ({ createNew, formTitle, btnTitle }) => {
         </Notification>
       ),
     }),
-    [status]
+    [status, setStatus, errorMessage]
   );
 
   return (

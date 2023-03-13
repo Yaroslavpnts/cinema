@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { useDebounce } from '../../../../../../app/hooks';
+
 import { Api, IApiResponseMovie } from '../../../../../../api/apiMethods';
 import { AutocompleteMoviesStyled } from './AutocompleteMovies.styled';
+import { useDebounce } from '../../../../../../hooks/useDebounceHook';
 
 interface AutocompleteMoviesProps {
   movie: IApiResponseMovie | null;

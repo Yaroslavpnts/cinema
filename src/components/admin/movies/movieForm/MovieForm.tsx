@@ -1,16 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { ICategory, IPosition } from '../../../../api/apiMethods';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import {
   createMovieAction,
   movieByIdSelector,
-  moviesErrorMessageSelector,
-  moviesStatusSelector,
   updateMovieAction,
 } from '../../../../redux/slices/moviesSlice';
-import { fetchStatus } from '../../../../redux/types';
-import Notification from '../../../notification/Notification';
 import {
   AddBoxIconStyled,
   ButtonStyled,
@@ -22,21 +18,12 @@ import {
   StyledTypography,
   YearField,
 } from './MovieForm.style';
-import {
-  createGenreAction,
-  fetchGenresAction,
-  genresSelector,
-} from '../../../../redux/slices/genresSlice';
+import { createGenreAction, genresSelector } from '../../../../redux/slices/genresSlice';
 import PositionForm from './modalForm/PositionForm';
-import {
-  actorsNamesSelector,
-  createActorAction,
-  fetchActorsAction,
-} from '../../../../redux/slices/actorsSlice';
+import { actorsNamesSelector, createActorAction } from '../../../../redux/slices/actorsSlice';
 import {
   createDirectorAction,
   directorsNamesSelector,
-  fetchDirectorsAction,
 } from '../../../../redux/slices/directorsSlice';
 import SelectFilmFields from '../select/multipleSelect/SelectFilmFields';
 import CreateModal from '../../../modal/Modal';

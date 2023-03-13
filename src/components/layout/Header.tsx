@@ -17,7 +17,7 @@ import {
   UserBlock,
 } from './Header.styled';
 import OutSvg from '../../assets/img/out.svg';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { adminRoleSelector, isAuthSelector, signOut } from '../../redux/slices/authorizationSlice';
 import Search from '../search/Search';
 import { deleteCookie } from '../../app/helpers/helperFunctions';

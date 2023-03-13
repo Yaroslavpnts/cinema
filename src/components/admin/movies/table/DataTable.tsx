@@ -18,7 +18,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../redux/store';
 import { deleteActorAction, updateActorAction } from '../../../../redux/slices/actorsSlice';
 import { deleteDirectorAction } from '../../../../redux/slices/directorsSlice';
 import { deleteMovieAction } from '../../../../redux/slices/moviesSlice';
@@ -32,17 +32,15 @@ import CreateModal from '../../../modal/Modal';
 import MovieForm from '../movieForm/MovieForm';
 import PositionForm from '../movieForm/modalForm/PositionForm';
 import { IPosition } from '../../../../api/apiMethods';
-
-export enum EnumTypeData {
-  MOVIES = 'movies',
-  ACTORS = 'actors',
-  DIRECTORS = 'directors',
-}
-
-enum ColumnType {
-  MOVIES = 'movies',
-  POSITION = 'position',
-}
+import {
+  ColumnType,
+  EnhancedTableProps,
+  EnhancedTableToolbarProps,
+  EnumTypeData,
+  HeadCell,
+  IDataTableProps,
+  Order,
+} from './dataTable.types';
 
 function descendingComparator(
   a: { [index: string]: string | number },
@@ -58,22 +56,12 @@ function descendingComparator(
   return 0;
 }
 
-type Order = 'asc' | 'desc';
-
 function getComparator(order: Order, orderBy: string) {
   return order === 'desc'
     ? (a: { [index: string]: number | string }, b: { [index: string]: number | string }) =>
         descendingComparator(a, b, orderBy)
     : (a: { [index: string]: number | string }, b: { [index: string]: number | string }) =>
         -descendingComparator(a, b, orderBy);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: string;
-  label: string;
-  numeric: boolean;
-  type: ColumnType;
 }
 
 const headCells: readonly HeadCell[] = [
@@ -128,16 +116,6 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  type: ColumnType;
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, type } = props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
@@ -188,11 +166,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  handleDelete: () => void;
-}
-
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const { numSelected, handleDelete } = props;
 
@@ -229,29 +202,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-interface IDataTableProps {
-  rows: {
-    [index: string]: string | number;
-    name: string;
-    id: number;
-  }[];
-  typeData: EnumTypeData;
-  // page: number;
-  // rowsPerPage: number;
-  // setPage: (page: number) => void;
-  // setRowsPerPage: (rowsPerPage: number) => void;
-  // totalMovies: number;
-}
-
-const DataTable: React.FC<IDataTableProps> = ({
-  rows,
-  typeData,
-  // page,
-  // rowsPerPage,
-  // setPage,
-  // setRowsPerPage,
-  // totalMovies,
-}) => {
+const DataTable: React.FC<IDataTableProps> = ({ rows, typeData }) => {
   const dispatch = useAppDispatch();
 
   const [order, setOrder] = React.useState<Order>('asc');
@@ -487,7 +438,6 @@ const DataTable: React.FC<IDataTableProps> = ({
           component="div"
           labelRowsPerPage="Рядків на сторінку"
           count={rows.length}
-          // count={totalMovies}
           rowsPerPage={rowsPerPage}
           page={page}
           sx={{
@@ -520,13 +470,8 @@ const DataTable: React.FC<IDataTableProps> = ({
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <CreateModal
-        handleClose={handleClose}
-        open={!!editFormId}
-        // modalTitle={modalContentKey && modalContent[typeData].title}
-      >
+      <CreateModal handleClose={handleClose} open={!!editFormId}>
         {modalContentKey && modalContent[modalContentKey].layout}
-        {/* {editMovieId && <MovieForm id={editMovieId} title="Редагування фільму" />} */}
       </CreateModal>
     </Box>
   );

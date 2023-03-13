@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { getCookie } from '../app/helpers/helperFunctions';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/store';
 import { signIn, TUserRole, UserRoles, userSelector } from '../redux/slices/authorizationSlice';
 import PrivateRoutes from './PrivateRoutes';
 import jwt_decode from 'jwt-decode';

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import {
-  cinemasByCityNameSelector,
-  citiesSelector,
-  fetchCitiesAction,
-} from '../../../redux/slices/citiesSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
+import { citiesSelector, fetchCitiesAction } from '../../../redux/slices/citiesSlice';
 import CitySelectorBlock from '../../sessions/citySelectorBlock/CitySelectorBlock';
 import SessionCreateBlock from './sessionCreateBlock/SessionCreateBlock';
 import { SessionBlockStyled, StyledContainer } from './Sessions.styled';
