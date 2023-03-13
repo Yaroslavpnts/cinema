@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/cinema/static/css/main.27056f91.css",
-    "main.js": "/cinema/static/js/main.fd017cf1.js",
+    "main.css": "/cinema/static/css/main.b07d1494.css",
+    "main.js": "/cinema/static/js/main.cbeaf38b.js",
     "static/media/auth_gest.png": "/cinema/static/media/auth_gest.9bda6ca30eac85ddd942.png",
     "static/media/anonymous-pro-v21-latin_cyrillic-regular.ttf": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-regular.9d04903207f8bc5690b2.ttf",
     "static/media/anonymous-pro-v21-latin_cyrillic-700.ttf": "/cinema/static/media/anonymous-pro-v21-latin_cyrillic-700.7ecf22ae01c3f9e0914c.ttf",
@@ -23,11 +23,11 @@
     "static/media/out.svg": "/cinema/static/media/out.2b456a7f0f3e96cef61a9f48fc96f811.svg",
     "index.html": "/cinema/index.html",
     "static/media/filter-icon.svg": "/cinema/static/media/filter-icon.e913fdb4c1f43c5ecf179554f7110665.svg",
-    "main.27056f91.css.map": "/cinema/static/css/main.27056f91.css.map",
-    "main.fd017cf1.js.map": "/cinema/static/js/main.fd017cf1.js.map"
+    "main.b07d1494.css.map": "/cinema/static/css/main.b07d1494.css.map",
+    "main.cbeaf38b.js.map": "/cinema/static/js/main.cbeaf38b.js.map"
   },
   "entrypoints": [
-    "static/css/main.27056f91.css",
-    "static/js/main.fd017cf1.js"
+    "static/css/main.b07d1494.css",
+    "static/js/main.cbeaf38b.js"
   ]
 }
